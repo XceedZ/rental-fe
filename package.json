@@ -1,0 +1,33 @@
+{
+  "name": "fe-ukk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 8080",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
+    "axios": "^1.7.9",
+    "bootstrap-icons": "^1.11.3",
+    "fe-ukk": "file:",
+    "mitt": "^3.0.1",
+    "moment": "^2.30.1",
+    "pinia": "^2.3.0",
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^3.53.1",
+    "quill": "^2.0.3",
+    "unplugin-vue-components": "^28.0.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.5",
+    "vite-plugin-vue-devtools": "^7.6.8"
+  }
+}
