@@ -28,8 +28,9 @@
                     </template>
                 </InputOtp>
                 <div class="flex justify-content-between mt-5 align-self-stretch gap-2">
-                    <Button icon="bi bi-envelope-arrow-up" label="Kirim Ulang" class="w-full" @click="resendOtp"
-                        :loading="context.loading['sendOtp']" outlined></Button>
+                    <Button icon="bi bi-envelope-arrow-up"
+                        :label="resendTimer > 0 ? `Kirim Ulang (${resendTimer})` : 'Kirim Ulang'" class="w-full"
+                        @click="resendOtp" :disabled="resendTimer > 0" :loading="context.loading['sendOtp']" outlined />
                     <Button icon="pi pi-check" label="Verifikasi" @click="submitOtp"
                         :loading="context.loading['verifyOtp']" class="w-full"></Button>
                 </div>
@@ -47,16 +48,34 @@ const emit = defineEmits(['update:visible', 'otp-verified']);
 const context = useAuthStore();
 const otp = ref('');
 
+const resendTimer = ref(0);
+let timerInterval = null;
+
+const startResendTimer = () => {
+    resendTimer.value = 30;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (resendTimer.value > 0) {
+            resendTimer.value--;
+        } else {
+            clearInterval(timerInterval);
+        }
+    }, 1000);
+};
+
 const resendOtp = async () => {
+    if (resendTimer.value > 0) return;
+
     const result = await context.sendOtp(context.email);
     if (result.isOk) {
-        showSuccessSendOtp(context.toast)
+        showSuccessSendOtp(context.toast);
+        startResendTimer();
     }
 };
 
 const submitOtp = async () => {
     const result = await context.verifyOtp(context.email, otp.value);
-    if (result && result.isOk) { 
+    if (result && result.isOk) {
         emit('update:visible', false);
         emit('otp-verified');
         context.router.push({ name: 'login' });
