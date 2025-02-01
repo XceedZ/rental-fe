@@ -109,5 +109,12 @@ export const useProductRentStore = defineStore({
       }
       this.loading["getCtgr"] = false;
     },
+    resetFilter() {
+      this.keyword = "";
+      this.ctgrId = -99;
+      this.brandId = [];
+      this.priceRange = [0, 2000000];
+      this.getProducts();
+    },
   },
 });

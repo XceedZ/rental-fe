@@ -20,7 +20,7 @@ export const useShoppingItemsStore = defineStore({
     nextCartItemId: 1, // Add a counter for the next cart item ID
   }),
   actions: {
-    async createRental() {
+    async createRental(router) {
       this.loading["createRental"] = true;
       const result = await callApi({
         api: this.addApi,
@@ -38,9 +38,12 @@ export const useShoppingItemsStore = defineStore({
       });
       if (result.isOk) {
         showSuccessRental(this.toast);
+        this.loading["createRental"] = false;
+        this.resetCart();
+        router.push({ name: 'history' });
+        return result;
       }
       this.loading["createRental"] = false;
-      return result;
     },
     addProductToCart(product, startDate, endDate, qty) {
       this.cartItems.push({ ...product, startDate, endDate, qty, id: this.nextCartItemId++ });
@@ -48,5 +51,14 @@ export const useShoppingItemsStore = defineStore({
     removeProductFromCart(cartItemId) {
       this.cartItems = this.cartItems.filter(item => item.id !== cartItemId);
     },
+    resetCart() {
+      this.cartItems = [];
+      this.nextCartItemId = 1;
+    },
+  },
+  getters: {
+    hasZeroQuantity: (state) => {
+      return state.cartItems.some(item => item.qty === 0);
+    }
   },
 });

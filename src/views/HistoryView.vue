@@ -19,7 +19,15 @@
                 </IconField>
             </span>
         </div>
-        <div >
+        <Divider class="w-full"></Divider>
+        <div v-if="context.trxProductList.length === 0"
+            class="flex flex-column align-items-center justify-content-center p-6">
+            <i class="bi bi-clock-history text-6xl text-primary mb-4"></i>
+            <h3 class="text-900 font-medium text-xl text-center mb-2">Tidak ada riwayat penyewaan</h3>
+            <p class="text-600 mb-4 text-center">Coba ubah filter pencarian atau cari dengan kata kunci lain.</p>
+            <Button label="Reset Filter" icon="pi pi-refresh" outlined @click="context.resetFilter()" />
+        </div>
+        <div v-else>
             <div v-for="trx in context.trxProductList" :key="trx.trxCode"
                 class="surface-card grid grid-nogutter border-round shadow-2 mt-5">
                 <div class="col-12 flex p-2 surface-100 border-round-top">
@@ -31,25 +39,29 @@
                     </Divider>
                     <div class="p-2 flex-auto text-center md:text-left">
                         <span class="text-700 block">Tanggal sewa</span>
-                        <span class="text-900 font-medium block mt-2">{{ YYYYMMDDtoDMMMMYYYY(trx.rentStartDate) }}</span>
+                        <span class="text-900 font-medium block mt-2">{{ YYYYMMDDtoDMMMMYYYY(trx.rentStartDate)
+                            }}</span>
                     </div>
                     <Divider align="center" type="dashed" layout="vertical" class="h-full mx-0 lg:mx-3 surface-border">
                     </Divider>
                     <div class="p-2 flex-auto text-center md:text-left">
                         <span class="text-700 block">Total Harga</span>
-                        <span v-if="trx.amountWithFine > 0" class="text-900 font-medium block mt-2">{{ toCurrencyLocale(trx.amountWithFine) }}</span>
-                        <span v-else class="text-900 font-medium block mt-2">{{ toCurrencyLocale(trx.totalAmount) }}</span>
+                        <span v-if="trx.amountWithFine > 0" class="text-900 font-medium block mt-2">{{
+                            toCurrencyLocale(trx.amountWithFine) }}</span>
+                        <span v-else class="text-900 font-medium block mt-2">{{ toCurrencyLocale(trx.totalAmount)
+                            }}</span>
                     </div>
                 </div>
                 <div class="col-12" v-for="product in trx.products" :key="product.product_code">
                     <div class="p-2 my-4 flex flex-column lg:flex-row justify-content-between align-items-center">
                         <div class="flex flex-column lg:flex-row justify-content-center align-items-center px-2">
-                            <img :src="product.urlImg" alt="product" class="w-8rem h-auto mr-3 flex-shrink-0 object-cover"
-                                style="aspect-ratio: 4 / 3;" />
+                            <img :src="product.urlImg" alt="product"
+                                class="w-8rem h-auto mr-3 flex-shrink-0 object-cover" style="aspect-ratio: 4 / 3;" />
                             <div class="flex flex-column my-auto text-center md:text-left">
                                 <span class="text-900 font-medium mb-3 mt-3 lg:mt-0">
                                     {{ product.productName }}
-                                    <i v-tooltip.right="'Lihat Selengkapnya'" @click="openDialogInfoTrx(product)" class="pi pi-info-circle transition-colors transition-duration-150 text-600 ml-1 hover:text-900 text-sm cursor-pointer"></i>
+                                    <i v-tooltip.right="'Lihat Selengkapnya'" @click="openDialogInfoTrx(product)"
+                                        class="pi pi-info-circle transition-colors transition-duration-150 text-600 ml-1 hover:text-900 text-sm cursor-pointer"></i>
                                 </span>
                                 <span class="text-700 text-sm mb-3">
                                     <span class="font-semibold">{{ product.brandName }}</span> | {{ product.ctgrName }}
@@ -67,13 +79,15 @@
                                 style="min-width:2rem; min-height: 2rem">
                                 <i :class="getStatusIcon(product.status)"></i>
                             </span>
-                            <span :class="getStatusTextClass(product.status)">{{ getStatusLabel(product.status) }}</span>
+                            <span :class="getStatusTextClass(product.status)">{{ getStatusLabel(product.status)
+                                }}</span>
                         </div>
                     </div>
                     <Divider class="w-full block lg:hidden surface-border"></Divider>
                 </div>
                 <div class="col-12 p-0 flex border-top-1 surface-border" v-if="isAllPending(trx.products)">
-                    <Button icon="pi pi-times" label="Batalkan Semua" :loading="context.loading['cancelAll']" tabindex="0" @click="cancelAll(trx.trxCode)"
+                    <Button icon="pi pi-times" label="Batalkan Semua" :loading="context.loading['cancelAll']"
+                        tabindex="0" @click="cancelAll(trx.trxCode)"
                         class="border-noround py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center font-medium w-full border-none hover:bg-primary hover:text-0 transition-duration-150"
                         outlined>
                     </Button>

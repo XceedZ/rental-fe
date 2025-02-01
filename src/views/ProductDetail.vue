@@ -110,7 +110,7 @@ import { onMounted, ref, watch, computed } from "vue";
 import { toCurrencyLocale } from '@/utils/currency';
 import { useProductDetailStore } from '@/stores/product-detail.store';
 import { useShoppingItemsStore } from '@/stores/shopping-items.store';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { YYYYMMDD } from '@/utils/date-convert';
 import { showSuccessAddCart } from '@/utils/toast-service';
 import local from '@/utils/local-storage';
@@ -121,6 +121,7 @@ const dates = ref([]);
 const startDate = ref("");
 const endDate = ref("");
 const route = useRoute();
+const router = useRouter();
 
 const isLoggedIn = computed(() => {
     const user = local.getUser();
@@ -142,7 +143,7 @@ const addToCart = async () => {
 };
 
 const createRental = async () => {
-    await context.createRental();
+    await context.createRental(router);
 };
 
 onMounted(async () => {

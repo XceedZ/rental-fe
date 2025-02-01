@@ -2,8 +2,10 @@
     <div class="surface-section sticky top-0 px-3 lg:px-6 flex align-items-stretch relative border-bottom-1 surface-border"
         style="min-height: 80px;">
         <div class="flex align-items-center justify-content-center">
-            <img src="../assets/logo2.jpg" alt="Image" height="50" class="hidden lg:inline mr-3 lg:mr-6" style="border-radius: 50%; object-fit: cover;">
-            <img src="../assets/logo2.jpg" alt="Image" height="40" class="inline lg:hidden mr-3 lg:mr-6" style="border-radius: 50%; object-fit: cover;">
+            <img src="../assets/logo2.jpg" alt="Image" height="50" class="hidden lg:inline mr-3 lg:mr-6"
+                style="border-radius: 50%; object-fit: cover;">
+            <img src="../assets/logo2.jpg" alt="Image" height="40" class="inline lg:hidden mr-3 lg:mr-6"
+                style="border-radius: 50%; object-fit: cover;">
         </div>
         <div class="flex align-items-center flex-auto">
             <template v-if="isLoggedIn">
@@ -21,13 +23,10 @@
                     <li class="inline-flex relative">
                         <a v-ripple
                             class="text-900 font-medium inline-flex align-items-center cursor-pointer px-1 lg:px-3 mr-2 lg:mr-0 border-bottom-2 border-transparent select-none p-ripple"
-                            v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', leaveToClass: 'hidden', leaveActiveClass: 'fadeout', hideOnOutsideClick: true }">
+                            @click="toggleShoppingCard">
                             <i class="pi pi-shopping-cart text-2xl"></i>
                         </a>
-                        <div :class="['absolute z-1 w-auto top-100 sm:w-30rem shadow-2 origin-top surface-overlay border-round p-3', { 'hidden': !shoppingCardVisible }]"
-                            style="left: 50%; transform: translateX(-64%);">
-                            <ShoppingCard />
-                        </div>
+                        <ShoppingCard class="z-1" :visible="shoppingCardVisible" @close="toggleShoppingCard" />
                     </li>
                     <li class="inline-flex relative">
                         <a v-ripple
@@ -101,4 +100,9 @@ const isActive = (routeName) => {
 const isLoggedIn = computed(() => {
     return local.getUser() && local.get('token');
 });
+
+const toggleShoppingCard = () => {
+    shoppingCardVisible.value = !shoppingCardVisible.value;
+};
+
 </script>

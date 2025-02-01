@@ -1,51 +1,106 @@
 <template>
-    <div class="surface-card border-round select-none">
-        <div class="text-900 text-xl pb-3 border-bottom-1 surface-border">Keranjang</div>
-            <ul class="list-none p-0 m-0" style="max-height: 300px; overflow-y: auto;">
-                <li v-if="context.cartItems.length === 0" class="flex py-3 align-items-center justify-content-center">
-                    <span class="text-600">Data tidak tersedia</span>
-                </li>
-                <li v-else v-for="item in context.cartItems" :key="item.id" class="flex py-3 align-items-center">
-                    <img :src="item.url_img" class="w-4rem h-auto flex-shrink-0 object-cover" style="aspect-ratio: 4 / 3;"/>
-                    <div class="pl-3 mr-8">
-                        <span class="text-900 font-medium">{{ item.product_name }}</span>
-                        <div class="text-600 mt-2">{{ item.brand_name }}</div>
-                        <div class="text-600 mt-2">x{{ item.qty }}</div>
-                        <div class="text-600 mt-2">{{ YYYYMMDDtoDMMMYYYY(item.startDate) }} s/d {{ YYYYMMDDtoDMMMYYYY(item.endDate) }}</div>
-                    </div>
-                    <div class="text-900 font-medium ml-auto">{{ toCurrencyLocale(item.price) }}</div>
-                    <Button icon="pi pi-trash" class="ml-2 text-red-500 p-button-text" @click="removeFromCart(item.id)"></Button>
-                </li>
-            </ul>
-        <div v-if="context.cartItems.length > 0" class="py-3 border-bottom-1 surface-border">
-            <div class="flex align-items-center justify-content-between mb-3">
-                <span class="text-900 font-medium">Total</span>
-                <div class="text-900 font-medium">{{ toCurrencyLocale(totalPrice) }}</div>
+    <div v-if="visible" id="slideover-cart-ext"
+        class="surface-overlay fixed top-0 right-0 shadow-2 h-full w-full lg:w-max transition-transform duration-300">
+        <div class="flex flex-column h-full">
+            <div class="surface-overlay p-4 flex align-items-center justify-content-between">
+                <span class="text-900 text-xl font-medium">Keranjang Kamu!😍</span>
+                <Button icon="pi pi-times" class="p-button-text p-button-plain p-button-rounded"
+                    @click="$emit('close')"></Button>
             </div>
-        </div>
-        <div v-if="context.cartItems.length > 0" class="py-3 flex align-items-center p-fluid">
-            <Button :loading="context.loading['createRental']" icon="pi pi-credit-card" class="ml-2" label="Sewa" @click="createRental"></Button>
+            <div class="flex flex-auto overflow-y-auto">
+                <div class="w-full md:w-12 p-4 flex flex-column">
+                    <template v-if="context.cartItems.length > 0">
+                        <div v-for="(item, index) in context.cartItems" :key="item.id"
+                            class="flex align-items-start md:align-items-center border-top-1 surface-border pt-4 mb-4">
+                            <div class="pl-3 flex-auto">
+                                <div class="flex align-items-center justify-content-between mb-2">
+                                    <img :src="item.url_img" class="w-8rem h-auto mr-3 flex-shrink-0 object-cover"
+                                        style="aspect-ratio: 4 / 3;" />
+                                    <div class="flex flex-column">
+                                        <span class="text-900 font-medium">{{ item.product_name }}</span>
+                                        <span class="text-700 text-sm mt-2">
+                                            <span class="font-semibold">{{ item.brand_name }}</span> | {{ item.ctgr_name
+                                            }}
+                                        </span> <span class="text-500 mt-2">{{ YYYYMMDDtoDMMMYYYY(item.startDate) }} -
+                                            {{
+                                                YYYYMMDDtoDMMMYYYY(item.endDate) }}</span>
+                                    </div>
+                                    <a class="cursor-pointer text-pink-500 hover:text-pink-700 transition-colors transition-duration-300 ml-5"
+                                        @click="removeFromCart(item.id)"><i class="pi pi-trash"></i></a>
+                                </div>
+                                <div class="flex align-items-center justify-content-between mt-2">
+                                    <InputNumber :showButtons="true" buttonLayout="horizontal" spinnerMode="horizontal"
+                                        :min="0" inputClass="w-2rem md:w-3rem text-center py-2 px-1 border-transparent"
+                                        v-model="item.qty" class="border-1 surface-border border-round"
+                                        decrementButtonClass="p-button-text py-1 px-1"
+                                        incrementButtonClass="p-button-text py-1 px-1" incrementButtonIcon="pi pi-plus"
+                                        decrementButtonIcon="pi pi-minus"></InputNumber>
+                                    <span class="text-900 font-medium">{{ toCurrencyLocale(item.price) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="flex align-items-center justify-content-between text-xl text-900">
+                                <span>Total</span>
+                                <span>{{ toCurrencyLocale(totalPrice) }}</span>
+                            </div>
+                            <Button icon="pi pi-credit-card" label="Sewa Sekarang" class="w-full mt-4"
+                                @click="createRental" :loading="context.loading['createRental']"
+                                :disabled="context.hasZeroQuantity"></Button>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="flex flex-column align-items-center justify-content-center p-6">
+                            <i class="bi bi-basket3 text-6xl text-primary mb-4"></i>
+                            <h3 class="text-900 font-medium text-xl text-center mb-2">Keranjang Kosong</h3>
+                            <p class="text-600 mb-4 text-center">Tambahkan barang ke keranjang untuk memulai penyewaan.
+                            </p>
+                            <Button label="Cari Barang" icon="pi pi-search" outlined @click="goToHome" />
+                        </div>
+                    </template>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { useShoppingItemsStore } from '@/stores/shopping-items.store';
 import { toCurrencyLocale } from '@/utils/currency';
-import { YYYYMMDDtoDMMMYYYY } from '@/utils/date-convert';
+import { YYYYMMDDtoDMMMYYYY, calculateTotalPrice } from '@/utils/date-convert';
 
 const context = useShoppingItemsStore();
+const router = useRouter();
+const emit = defineEmits();
 
 const removeFromCart = (cartItemId) => {
     context.removeProductFromCart(cartItemId);
 };
 
 const createRental = async () => {
-    await context.createRental();
+    const result = await context.createRental(router);
+    if (result.isOk) {
+        emit('close');
+    }
 };
 
 const totalPrice = computed(() => {
-    return context.cartItems.reduce((total, item) => total + Number(item.price), 0);
+    return calculateTotalPrice(context.cartItems);
+});
+
+const goToHome = () => {
+    emit('close');
+    router.push({ name: 'home' });
+};
+
+
+
+defineProps({
+    visible: {
+        type: Boolean,
+        default: false
+    }
 });
 </script>

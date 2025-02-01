@@ -59,6 +59,16 @@ export const ApiConstant = {
         method: 'GET',
         keyList: ''
     },
+    GET_MANAGE_BRAND: {
+        path: 'getManageBrand',
+        method: 'POST',
+        keyList: ''
+    },
+    GET_MANAGE_CTGR: {
+        path: 'getManageCtgr',
+        method: 'POST',
+        keyList: ''
+    },
     PASSWORD_EMAIL: {
         path: 'password/email',
         method: 'POST',
