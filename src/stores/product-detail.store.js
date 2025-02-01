@@ -72,6 +72,7 @@ export const useProductDetailStore = defineStore({
       if (result.isOk) {
         showSuccessRental(this.toast);
         this.loading["createRental"] = false;
+        router.push({ name: 'history' });
         return result;
       }
       this.loading["createRental"] = false;

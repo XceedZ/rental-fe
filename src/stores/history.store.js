@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessCancel } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import { showSuccessCancel } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import local from '@/utils/local-storage';
+import local from "@/utils/local-storage";
 
 export const useHistoryStore = defineStore({
   id: "history.store",
@@ -33,54 +33,58 @@ export const useHistoryStore = defineStore({
       this.offset = event.page * event.rows;
       this.limit = event.rows;
       this.getProducts();
-  },
-  async getTrxProductList() {
-    this.loading["getTrxProductList"] = true;
-    const result = await callApi({
-      api: this.getApi,
-      body: {
-        userId: this.user.id,
-        keyword: this.keyword,
-      },
-    });
-    if (result.isOk) {
-      this.trxProductList = result.body.trxProductList;
-    }
-    this.loading["getTrxProductList"] = false;
-    return result;
-  },
-  async rejectTransaction(trxRentProductId, trxCode) {
-    this.loading["reject"] = true;
-    const payload = {
-      api: this.rejectApi,
-      body: {
-        trx_rent_product_id: trxRentProductId,
-      },
-    };
-    const result = await callApi(payload);
-    if (result.isOk) {
-      showSuccessReject(this.toast);
+    },
+    async getTrxProductList() {
+      this.loading["getTrxProductList"] = true;
+      const result = await callApi({
+        api: this.getApi,
+        body: {
+          userId: this.user.id,
+          keyword: this.keyword,
+        },
+      });
+      if (result.isOk) {
+        this.trxProductList = result.body.trxProductList;
+      }
+      this.loading["getTrxProductList"] = false;
+      return result;
+    },
+    async rejectTransaction(trxRentProductId, trxCode) {
+      this.loading["reject"] = true;
+      const payload = {
+        api: this.rejectApi,
+        body: {
+          trx_rent_product_id: trxRentProductId,
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessReject(this.toast);
+        this.loading["reject"] = false;
+        await this.getManageTransaction();
+        await this.getDetailManageTransaction(trxCode);
+      }
       this.loading["reject"] = false;
-      await this.getManageTransaction();
-      await this.getDetailManageTransaction(trxCode);
-    }
-    this.loading["reject"] = false;
-  },
-  async cancelAllTransaction(trxCode) {
-    this.loading["cancelAll"] = true;
-    const payload = {
-      api: this.cancelAllApi,
-      body: {
-        trx_code: trxCode,
-      },
-    };
-    const result = await callApi(payload);
-    if (result.isOk) {
-      showSuccessCancel(this.toast);
+    },
+    async cancelAllTransaction(trxCode) {
+      this.loading["cancelAll"] = true;
+      const payload = {
+        api: this.cancelAllApi,
+        body: {
+          trx_code: trxCode,
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessCancel(this.toast);
+        this.loading["cancelAll"] = false;
+        await this.getTrxProductList();
+      }
       this.loading["cancelAll"] = false;
-      await this.getTrxProductList();
-    }
-    this.loading["cancelAll"] = false;
-  },
+    },
+    resetFilter() {
+      this.keyword = "";
+      this.getTrxProductList();
+    },
   },
 });

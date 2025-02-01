@@ -10,26 +10,30 @@
                 </div>
                 <span class="text-600 text-xl">Kamu dapat dengan mudah mengelola tim di halaman ini!😎</span>
             </div>
-            <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
-                <IconField iconPosition="left">
-                    <InputIcon class="pi pi-search"> </InputIcon>
-                    <InputText v-model="context.keyword" placeholder="Nama Lengkap / Email" class="w-full"
-                        @keyup.enter="context.getManageAdmin" />
-                </IconField>
-            </span>
         </div>
-        <section class="flex-wrap gap-3 justify-content-between border-bottom-1 surface-border">
+        <section class="flex flex-wrap gap-3 justify-content-between border-bottom-1 surface-border">
             <Divider class="w-full"></Divider>
-            <div class="flex-shrink-0">
-                <h3 class="mb-4 mt-0 text-900 font-medium text-xl border-primary border-bottom-2 inline-block"
-                    style="padding-bottom: 0.5rem;">
-                    Anggota
-                </h3>
-                <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola anggota tim Kamu di sini!</p>
-                <Button icon="pi pi-users" label="Undang Anggota" class="w-auto"
-                    @click="showDialogInvite = true"></Button>
+            <div class="w-full flex justify-content-between items-center flex-wrap">
+                <div class="flex-shrink-0">
+                    <h3 class="mb-4 mt-0 text-900 font-medium text-xl border-primary border-bottom-2 inline-block"
+                        style="padding-bottom: 0.5rem;">
+                        Anggota
+                    </h3>
+                    <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola anggota tim Kamu di sini!</p>
+                    <Button icon="pi pi-plus" label="Anggota" class="w-auto"
+                        @click="showDialogInvite = true"></Button>
+                </div>
+                <div class="mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
+                    <span class="p-input-icon-right w-full">
+                        <IconField iconPosition="left">
+                            <InputIcon class="pi pi-search"></InputIcon>
+                            <InputText v-model="context.keyword" placeholder="Nama Lengkap / Email" class="w-full"
+                                @keyup.enter="context.getManageAdmin" />
+                        </IconField>
+                    </span>
+                </div>
             </div>
-            <div class="mt-3">
+            <div class="mt-3 w-full">
                 <DataTable :value="context.dataTableAdmin" :tabStyle="{ 'min-width': '60rem' }" rowHover>
                     <template #empty>
                         <p class="text-center w-full">Data tidak tersedia</p>
@@ -88,7 +92,8 @@
                     <Column style="min-width:8rem">
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getAdmin']" height="2rem"></Skeleton>
-                            <Button v-else type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-secondary"
+                            <Button v-else type="button" icon="pi pi-ellipsis-v"
+                                class="p-button-text p-button-secondary"
                                 @click="$refs['menu-' + data.id].toggle($event)"></Button>
                             <Menu :ref="'menu-' + data.id" appendTo="body" popup :model="getMenuAdminItems(data)">
                             </Menu>
@@ -97,18 +102,32 @@
                 </DataTable>
             </div>
         </section>
-        <section class="flex-wrap gap-3 py-6 justify-content-between surface-border">
-            <div class="flex-shrink-0">
-                <h3 class="mb-4 mt-0 text-900 font-medium text-xl border-primary border-bottom-2 inline-block"
-                    style="padding-bottom: 0.5rem;">
-                    Peran & Izin
-                </h3>
-                <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola peran dan izin di sini!</p>
-                <Button icon="pi pi-plus" label="Tambah Peran" class="w-auto"
-                    @click="showDialogAddRoles = true"></Button>
+        <section class="flex flex-wrap gap-3 py-6 justify-content-between surface-border">
+            <div class="w-full flex justify-content-between items-center flex-wrap">
+                <div class="flex-shrink-0">
+                    <h3 class="mb-4 mt-0 text-900 font-medium text-xl border-primary border-bottom-2 inline-block"
+                        style="padding-bottom: 0.5rem;">
+                        Peran & Izin
+                    </h3>
+                    <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola peran dan izin di sini!</p>
+                    <Button icon="pi pi-plus" label="Peran" class="w-auto"
+                        @click="showDialogAddRoles = true"></Button>
+                </div>
+                <div class="mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
+                    <span class="p-input-icon-right w-full">
+                        <IconField iconPosition="left">
+                            <InputIcon class="pi pi-search"></InputIcon>
+                            <InputText v-model="context.keywordRoles" placeholder="Cari Peran" class="w-full"
+                                @keyup.enter="context.getRolePermission" />
+                        </IconField>
+                    </span>
+                </div>
             </div>
-            <div class="mt-3">
+            <div class="mt-3 w-full">
                 <DataTable :value="context.dataTableRoles" rowHover>
+                    <template #empty>
+                        <p class="text-center w-full">Data tidak tersedia</p>
+                    </template>
                     <Column style="min-width:20rem">
                         <template #header>
                             <span class="font-semibold text-sm text-color-secondary">Nama Peran</span>
@@ -153,7 +172,8 @@
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getRole']" height="2rem"></Skeleton>
                             <!-- Comment out the button that triggers the menu -->
-                            <Button v-else type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-secondary"
+                            <Button v-else type="button" icon="pi pi-ellipsis-v"
+                                class="p-button-text p-button-secondary"
                                 @click="$refs['menu2' + data.id].toggle($event)"></Button>
                             <Menu :ref="'menu2' + data.id" appendTo="body" popup :model="getMenuRoleItems(data)"></Menu>
                         </template>

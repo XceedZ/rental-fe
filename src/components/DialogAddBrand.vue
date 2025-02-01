@@ -1,7 +1,7 @@
 <template>
     <Dialog closeOnEscape v-model:visible="visible5" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-        :style="{ width: '40vw', maxWidth: '90vw', minWidth: '380px', height: '21rem' }">
+        :style="{ width: '30vw', maxWidth: '90vw', minWidth: '380px', height: '21rem' }">
         <template #header>
             <div class="flex w-full justify-content-between align-items-center">
                 <div class="flex align-items-center">

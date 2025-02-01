@@ -14,7 +14,8 @@
             <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
                 <IconField iconPosition="left">
                     <InputIcon class="pi pi-search"> </InputIcon>
-                    <InputText v-model="context.keyword" placeholder="Nama Barang" class="w-full" @keyup.enter="context.getProducts"/>
+                    <InputText v-model="context.keyword" placeholder="Nama Barang" class="w-full"
+                        @keyup.enter="context.getProducts" />
                 </IconField>
             </span>
         </div>
@@ -30,7 +31,7 @@
                     <div v-for="category in context.ctgrOptions" :key="category.id" class="mb-2">
                         <Skeleton v-if="context.loading['getCtgr']" class="mb-2 w-10rem"></Skeleton>
                         <a v-else tabindex="0" @click="filterByCategory(category.id)"
-                            :class="{'text-primary': context.ctgrId === category.id, 'text-900': context.ctgrId !== category.id}"
+                            :class="{ 'text-primary': context.ctgrId === category.id, 'text-900': context.ctgrId !== category.id }"
                             class="cursor-pointer font-medium mb-3 hover:text-primary transition-duration-150">
                             {{ category.ctgrName }}
                         </a>
@@ -65,11 +66,12 @@
                                 max="2000000" @change="filterByPriceRange"></Slider>
                             <div class="flex my-4">
                                 <InputNumber inputId="currency-id" mode="currency" :minFractionDigits="0" currency="IDR"
-                                    locale="id-ID" :allowEmpty="false" v-model="rangeValues[0]" :min="0"
+                                    locale="id-ID" :allowEmpty="false" v-model="rangeValues[0]" :min="0" :max="2000000"
                                     inputClass="w-full mr-3">
                                 </InputNumber>
                                 <InputNumber inputId="currency-id" mode="currency" :minFractionDigits="0" currency="IDR"
-                                    locale="id-ID" :allowEmpty="false" v-model="rangeValues[1]" inputClass="w-full">
+                                    locale="id-ID" :allowEmpty="false" v-model="rangeValues[1]" :min="0" :max="2000000"
+                                    inputClass="w-full">
                                 </InputNumber>
                             </div>
                         </div>
@@ -80,6 +82,17 @@
                 style="max-height: 50rem">
                 <ScrollPanel style="width: 100%; height: 100%">
                     <DataView :value="context.dataTable" :layout="layout" class="h-full">
+                        <template #empty>
+                            <div class="flex flex-column align-items-center justify-content-center p-6">
+                                <i class="bi bi-box-seam text-6xl text-primary mb-4"></i>
+                                <h3 class="text-900 font-medium text-xl text-center mb-2">Tidak ada barang ditemukan
+                                </h3>
+                                <p class="text-600 mb-4 text-center">Coba ubah filter pencarian atau cari dengan
+                                    kata kunci lain.</p>
+                                <Button label="Reset Filter" icon="pi pi-refresh" outlined
+                                    @click="context.resetFilter()" />
+                            </div>
+                        </template>
                         <template #header>
                             <div class="flex justify-content-end w-full align-item-center">
                                 <DataViewLayoutOptions v-model="layout" />
@@ -92,12 +105,14 @@
                                     <div class="flex flex-column sm:flex-row sm:align-items-center p-4 pb-6 gap-3"
                                         :class="{ 'border-top-1 surface-border': index !== 0 }">
                                         <div class="surface-border surface-card border-round flex flex-column">
-                                            <Skeleton v-if="context.loading['getProducts']" width="13rem" height="10rem"></Skeleton>
+                                            <Skeleton v-if="context.loading['getProducts']" width="13rem"
+                                                height="10rem"></Skeleton>
                                             <div v-else
                                                 class="surface-0 flex justify-content-center align-items-center border-round p-3 w-full h-10rem">
                                                 <div class="relative mx-auto">
-                                                    <img class="border-round w-full max-h-10rem md:max-h-8rem" :src="item.urlImg"
-                                                        :alt="item.productName" style="max-width: 300px" />
+                                                    <img class="border-round w-full max-h-10rem md:max-h-8rem"
+                                                        :src="item.urlImg" :alt="item.productName"
+                                                        style="max-width: 300px" />
                                                 </div>
                                             </div>
                                         </div>
@@ -106,22 +121,33 @@
                                             <div
                                                 class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
                                                 <div>
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-10rem mb-2"></Skeleton>
-                                                    <span v-else class="font-bold text-secondary text-sm">{{ item.brandName }}</span>
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem mb-2"></Skeleton>
-                                                    <span v-else class="font-medium text-secondary text-sm"> | {{ item.ctgrName }}</span>
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem mb-2"></Skeleton>
-                                                    <div v-else class="text-lg font-medium text-900 mt-2">{{ item.productName }}</div>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-10rem mb-2"></Skeleton>
+                                                    <span v-else class="font-bold text-secondary text-sm">{{
+                                                        item.brandName }}</span>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-8rem mb-2"></Skeleton>
+                                                    <span v-else class="font-medium text-secondary text-sm"> | {{
+                                                        item.ctgrName }}</span>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-8rem mb-2"></Skeleton>
+                                                    <div v-else class="text-lg font-medium text-900 mt-2">{{
+                                                        item.productName }}</div>
                                                 </div>
-                                                <Tag v-if="!context.loading['getProducts']" :value="item.active === 'Y' ? 'TERSEDIA' : 'TIDAK TERSEDIA'"
+                                                <Tag v-if="!context.loading['getProducts']"
+                                                    :value="item.active === 'Y' ? 'TERSEDIA' : 'TIDAK TERSEDIA'"
                                                     :severity="getSeverity(item)"></Tag>
                                             </div>
                                             <div class="flex flex-column md:align-items-end gap-5">
-                                                <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem"></Skeleton>
-                                                <span v-else class="text-xl font-semibold text-900">{{ toCurrencyLocale(item.price) }}</span>
+                                                <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem">
+                                                </Skeleton>
+                                                <span v-else class="text-xl font-semibold text-900">{{
+                                                    toCurrencyLocale(item.price) }}</span>
                                                 <div class="flex flex-row-reverse md:flex-row gap-2">
-                                                    <Button v-if="!context.loading['getProducts']" icon="pi pi-external-link" label="Lihat Detail" outlined
-                                                        class="flex-auto white-space-nowrap p-button-sm" @click="viewDetail(item.productCode)"></Button>
+                                                    <Button v-if="!context.loading['getProducts']"
+                                                        icon="pi pi-external-link" label="Lihat Detail" outlined
+                                                        class="flex-auto white-space-nowrap p-button-sm"
+                                                        @click="viewDetail(item.productCode)"></Button>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,8 +161,9 @@
                                 <div v-for="(item, index) in context.dataTable" :key="index"
                                     class="col-12 sm:col-6 md:col-4 p-2">
                                     <div class="p-4 border-1 surface-border surface-card border-round flex flex-column">
-                                        <Skeleton v-if="context.loading['getProducts']" width="15rem" height="10rem"></Skeleton>
-                                        <div v-else 
+                                        <Skeleton v-if="context.loading['getProducts']" width="100%" height="10rem">
+                                        </Skeleton>
+                                        <div v-else
                                             class="surface-50 flex justify-content-center align-items-center border-round p-3 w-full h-10rem">
                                             <div class="relative mx-auto">
                                                 <img class="border-round w-full max-h-8rem" :src="item.urlImg"
@@ -146,22 +173,34 @@
                                         <div class="pt-4">
                                             <div class="flex flex-row justify-content-between align-items-start gap-2">
                                                 <div class="relative w-full">
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-10rem mb-2"></Skeleton>
-                                                    <span v-else class="font-bold text-secondary text-sm">{{ item.brandName }}</span>
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem mb-2"></Skeleton>
-                                                    <span v-else class="font-medium text-secondary text-sm"> | {{ item.ctgrName }}</span>
-                                                    <Tag v-if="!context.loading['getProducts']" :value="item.active === 'Y' ? 'TERSEDIA' : 'TIDAK TERSEDIA'"
-                                                        :severity="getSeverity(item)" class="absolute" style="right: 0; top: 0"></Tag>
-                                                    <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-12rem mt-2"></Skeleton>
-                                                    <div v-else class="text-lg font-medium text-900 mt-3">{{ item.productName }}</div>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-10rem mb-2"></Skeleton>
+                                                    <span v-else class="font-bold text-secondary text-sm">{{
+                                                        item.brandName }}</span>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-8rem mb-2"></Skeleton>
+                                                    <span v-else class="font-medium text-secondary text-sm"> | {{
+                                                        item.ctgrName }}</span>
+                                                    <Tag v-if="!context.loading['getProducts']"
+                                                        :value="item.active === 'Y' ? 'TERSEDIA' : 'TIDAK TERSEDIA'"
+                                                        :severity="getSeverity(item)" class="absolute"
+                                                        style="right: 0; top: 0"></Tag>
+                                                    <Skeleton v-if="context.loading['getProducts']"
+                                                        class="h-1rem w-12rem mt-2"></Skeleton>
+                                                    <div v-else class="text-lg font-medium text-900 mt-3">{{
+                                                        item.productName }}</div>
                                                 </div>
                                             </div>
                                             <div class="flex flex-column gap-4 mt-4">
-                                                <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem"></Skeleton>
-                                                <span v-else class="text-2xl font-semibold text-900">{{ toCurrencyLocale(item.price) }}</span>
+                                                <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-8rem">
+                                                </Skeleton>
+                                                <span v-else class="text-2xl font-semibold text-900">{{
+                                                    toCurrencyLocale(item.price) }}</span>
                                                 <div class="flex gap-2">
-                                                    <Button v-if="!context.loading['getProducts']" icon="pi pi-external-link" label="Lihat Detail" outlined
-                                                        class="flex-auto white-space-nowrap p-button-sm" @click="viewDetail(item.productCode)"></Button>
+                                                    <Button v-if="!context.loading['getProducts']"
+                                                        icon="pi pi-external-link" label="Lihat Detail" outlined
+                                                        class="flex-auto white-space-nowrap p-button-sm"
+                                                        @click="viewDetail(item.productCode)"></Button>
                                                 </div>
                                             </div>
                                         </div>

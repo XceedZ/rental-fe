@@ -83,5 +83,5 @@ const props = defineProps({
 import { computed } from 'vue';
 
 const formattedRentStartDate = computed(() => YYYYMMDDtoDMMMMYYYY(props.product.rentStartDate));
-const formattedRentEndDate = computed(() => YYYYMMDDtoDMMMMYYYY(props.product.rentStartDate));
+const formattedRentEndDate = computed(() => YYYYMMDDtoDMMMMYYYY(props.product.rentEndDate));
 </script>
