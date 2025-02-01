@@ -3,7 +3,8 @@
         <div class="surface-section w-full md:w-6 p-6 md:p-8">
             <div class="mb-5">
                 <div class="flex align-items-center gap-2 mb-3">
-                    <img src="../assets/logo2.jpg" alt="Image" height="50" style="border-radius: 50%; object-fit: cover;">
+                    <img src="../assets/logo2.jpg" alt="Image" height="50"
+                        style="border-radius: 50%; object-fit: cover;">
                     <span class="philosopher-regular text-2xl">Landscape Aero</span>
                 </div>
                 <div class="text-2xl font-semibold mb-2 mt-2">Yuk, Daftarin Akun Kamu!🤗</div>
@@ -42,7 +43,7 @@
                     <div class="w-full">
                         <label for="phone" class="block text-900 font-medium mb-2">Telepon</label>
                         <InputText id="phone" v-model="context.phone" type="number" placeholder="08123456789"
-                            class="w-full no-spinner" />
+                            class="w-full no-spinner" @keyup.enter="register"/>
                     </div>
                 </div>
                 <Button label="Daftar" :loading="context.loading['sendOtp']" @click="register" icon="pi pi-sign-in"
@@ -80,6 +81,5 @@ const register = async () => {
 
 const completeRegistration = async () => {
     await context.register();
-    router.push({ name: 'login' });
 };
 </script>

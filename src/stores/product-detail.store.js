@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessRental } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import { showSuccessRental, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import local from '@/utils/local-storage';
-import moment from 'moment';
+import local from "@/utils/local-storage";
+import moment from "moment";
 
 export const useProductDetailStore = defineStore({
   id: "product-detail.store",
@@ -27,12 +27,12 @@ export const useProductDetailStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: [],
-    startDate: moment().format('YYYY-MM-DD'),
+    startDate: moment().format("YYYY-MM-DD"),
     endDate: "",
     qty: 1,
     dates: [],
     product: {},
-    productCode: "", 
+    productCode: "",
   }),
   actions: {
     async getDetailProducts() {
@@ -40,7 +40,7 @@ export const useProductDetailStore = defineStore({
       const payload = {
         api: this.getApi,
         body: {
-          product_code: this.productCode, 
+          product_code: this.productCode,
         },
       };
       const result = await callApi(payload);
@@ -50,7 +50,7 @@ export const useProductDetailStore = defineStore({
         return this.selectedProduct;
       }
       this.loading["getProducts"] = false;
-    },    
+    },
     async createRental(router) {
       this.loading["createRental"] = true;
       const result = await callApi({
@@ -64,23 +64,32 @@ export const useProductDetailStore = defineStore({
               rent_start_date: this.startDate,
               rent_end_date: this.endDate,
               qty: this.qty,
-              desc: '',
-            }
-          ]
+              desc: "",
+            },
+          ],
         },
       });
       if (result.isOk) {
         showSuccessRental(this.toast);
         this.loading["createRental"] = false;
-        router.push({ name: 'history' });
+        router.push({ name: "history" });
         return result;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["createRental"] = false;
       }
       this.loading["createRental"] = false;
     },
   },
   getters: {
     isActionDisabled: (state) => {
-      return !state.startDate || !state.endDate || state.startDate === "" || state.endDate === "";
+      return (
+        !state.startDate ||
+        !state.endDate ||
+        state.startDate === "" ||
+        state.endDate === "" ||
+        state.selectedProduct.active === "N"
+      );
     },
   },
 });

@@ -6,7 +6,7 @@
         <!-- <BannerAccount class="z-5 h-full" v-if="!route.meta.hideNavbarFooter" /> -->
         <Navbar class="z-5" v-if="!route.meta.hideNavbarFooter" />
       </div>
-      <Toast class="w-auto"/>
+      <Toast style="max-width: 90vw;" />
       <router-view />
       <Footer v-if="!route.meta.hideNavbarFooter" />
     </div>
@@ -17,8 +17,10 @@
 import { useRoute } from 'vue-router'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const route = useRoute()
+
 </script>
 
 <style scoped>

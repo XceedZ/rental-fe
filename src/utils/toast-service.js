@@ -57,3 +57,7 @@ export const showSuccessAddCart = (toast) => {
 export const showSuccessAddTrx = (toast) => {
   toast.add({ severity: 'success', summary: 'Sukses', detail: 'Berhasil menambah transaksi secara manual!', life: 2000 });
 };
+
+export const showErrorApi = (toast, message) => {
+  toast.add({ severity: 'error', summary: 'Gagal', detail: message, life: 4000 });
+};
