@@ -1,6 +1,6 @@
 <template>
     <Dialog :visible="visible" @update:visible="onHide" dismissableMask modal :showHeader="false"
-        :breakpoints="{ '960px': '75vw', '640px': '100vw' }" :style="{ width: '50vw', minWidth: '350px' }"
+        :breakpoints="{ '960px': '75vw', '640px': '100vw' }" :style="{ width: '40vw', minWidth: '350px' }"
         contentClass="border-round-top p-0" appendTo="body">
         <div class="flex w-full surface-section align-items-center justify-content-between px-1">
             <span class="p-input-icon-left w-full">

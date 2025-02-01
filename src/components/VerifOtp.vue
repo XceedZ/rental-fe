@@ -1,7 +1,8 @@
 <template>
     <Dialog closeOnEscape v-model:visible="visible5" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-        :style="{ width: '40vw', maxWidth: '90vw', minWidth: '380px', height: '24rem' }">
+        :style="{ width: '40vw', maxWidth: '90vw', minWidth: '380px', height: '24rem' }"
+        @hide="emit('update:visible', false)">
         <template #header>
             <div class="flex w-full justify-content-between align-items-center">
                 <div class="flex align-items-center">
@@ -78,7 +79,6 @@ const submitOtp = async () => {
     if (result && result.isOk) {
         emit('update:visible', false);
         emit('otp-verified');
-        context.router.push({ name: 'login' });
     }
 };
 </script>

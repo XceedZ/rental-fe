@@ -1,5 +1,5 @@
 import axios from 'axios';
-import local from '../utils/local-storage';
+import local from '@/utils/local-storage';
 
 const callApiConnect = axios.create({
   baseURL: `${import.meta.env.VITE_BASE_URL}v1/rent/`,

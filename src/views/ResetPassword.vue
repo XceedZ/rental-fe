@@ -10,11 +10,13 @@
 
             <div v-if="!token" class="mt-5">
                 <FloatLabel class="mb-3">
-                    <InputText id="email" v-model="email" class="w-full" />
+                    <InputText id="email" v-model="email" class="w-full" @keyup.enter="sendResetLink" />
                     <label for="email">Email</label>
                 </FloatLabel>
-                <Button label="Setel Ulang" icon="bi bi-envelope-arrow-up" class="w-full" @click="sendResetLink"
-                    :loading="context.loading['sendResetLink']"></Button>
+                <Button
+                    :label="context.resendResetLinkTimer > 0 ? `Kirim Ulang (${context.resendResetLinkTimer})` : 'Kirim Instruksi'"
+                    icon="bi bi-envelope-arrow-up" class="w-full" @click="sendResetLink"
+                    :loading="context.loading['sendResetLink']" :disabled="context.resendResetLinkTimer > 0" />
                 <div class="mt-3 text-center">
                     <Button label="Kembali ke login" icon="pi pi-arrow-left" class="p-button-text"
                         @click="goToLogin"></Button>
@@ -24,20 +26,20 @@
             <div v-else class="mt-5">
                 <div class="w-full"></div>
                 <label for="password" class="block text-900 font-medium mb-2">Kata Sandi</label>
-                <Password id="password" v-model="password" type="password" placeholder="••••••••" toggleMask required
+                <InputText id="password" v-model="password" type="password" placeholder="••••••••" toggleMask required
                     class="mb-3" style="width: 100%;" />
                 <label for="passwordConfirmation" class="block text-900 font-medium mb-2">Konfirmasi Kata Sandi</label>
-                <Password id="passwordConfirmation" v-model="passwordConfirmation" toggleMask :feedback="false" required
+                <InputText id="passwordConfirmation" v-model="passwordConfirmation" required type="password"
                     placeholder="••••••••" class="mb-3" style="width: 100%;" />
-                <Button label="Tetapkan Kata Sandi" icon="pi pi-lock" class="w-full p-3"
-                    @click="resetPassword"></Button>
+                <Button label="Setel Ulang" icon="pi pi-lock" class="w-full p-3" @click="resetPassword"
+                    :loading="context.loading['resetPassword']"></Button>
             </div>
             <div class="hidden md:block w-6 bg-no-repeat bg-cover"
                 style="background-image: url('http://semar.taskhub.id:4444/images/blocks/signin/signin.jpg')"></div>
         </div>
     </div>
-    <DialogConfirm v-if="context.showDialogConfirm" v-model:visible="context.showDialogConfirm" :header="context.confirmHeader"
-        :message="context.confirmMessage" :acceptLabel="'OK'" :onAccept="closeDialog"
+    <DialogConfirm v-if="context.showDialogConfirm" v-model:visible="context.showDialogConfirm"
+        :header="context.confirmHeader" :message="context.confirmMessage" :acceptLabel="'OK'" :onAccept="closeDialog"
         :onReject="closeDialog" :icon="context.confirmIcon" :iconColor="context.confirmIconColor"
         :bgColor="context.confirmBgColor" :acceptColor="context.confirmAcceptColor" />
 </template>
