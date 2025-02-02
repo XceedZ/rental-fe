@@ -62,7 +62,6 @@ export const useManageCtgrBrandStore = defineStore({
         this.totalBrandRecords = result.body.totalRecords;
         this.dataTableBrand = brands;
 
-        console.log("keyword", payload.body.keyword);
         return brands;
       }
       this.loading["getManageBrand"] = false;

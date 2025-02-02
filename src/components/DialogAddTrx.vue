@@ -27,31 +27,32 @@
                     <label for="city" class="font-medium text-900">Nama Lengkap</label>
                     <Dropdown v-if="value === 'Dengan Akun'" showClear filter :emptyMessage="'Data tidak tersedia'"
                         :emptyFilterMessage="'Tidak ada hasil yang ditemukan'" :options="context.userOptions"
-                        v-model="context.selectedMember" optionLabel="name" appendTo="body" styleClass="w-full"
-                        class="align-items-center w-full">
+                        v-model="context.selectedUser" optionLabel="name" appendTo="body" styleClass="w-full"
+                        :loading="context.loading['getUsersManual']" class="align-items-center w-full">
                     </Dropdown>
-                    <InputText v-else v-model="context.selectedMember.name" class="w-full" />
+                    <InputText v-else v-model="context.name" class="w-full" />
                 </div>
                 <div v-if="value === 'Tanpa Akun'" class="field mb-4 col-12 md:col-6">
                     <label for="address" class="font-medium text-900">Alamat</label>
-                    <InputText v-model="context.selectedMember.address" class="w-full" />
+                    <InputText v-model="context.address" class="w-full" />
                 </div>
                 <div v-if="value === 'Tanpa Akun'" class="field mb-4 col-12 md:col-6">
                     <label for="phone" class="font-medium text-900">Telepon</label>
-                    <InputText id="phone" v-model="context.selectedMember.phone" type="number" placeholder="08123456789"
+                    <InputText id="phone" v-model="context.phone" type="number" placeholder="08123456789"
                         class="w-full no-spinner" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="city" class="font-medium text-900">Barang</label>
                     <Dropdown showClear filter :emptyMessage="'Data tidak tersedia'"
                         :emptyFilterMessage="'Tidak ada hasil yang ditemukan'" :options="context.productOptions"
-                        v-model="context.selectedProduct" optionLabel="productName" optionValue="id" appendTo="body" styleClass="w-full"
-                        class="align-items-center w-full">
+                        v-model="context.selectedProduct" optionLabel="productName" optionValue="id" appendTo="body" :loading="context.loading['getProducts']"
+                        styleClass="w-full" class="align-items-center w-full">
                     </Dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900">Tanggal Penyewaan</label>
-                    <Calendar showIcon v-model="context.dates" selectionMode="range" :manualInput="false" dateFormat="d M yy" />
+                    <Calendar showIcon v-model="context.dates" selectionMode="range" :manualInput="false"
+                        dateFormat="d M yy" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="city" class="font-medium text-900">Qty</label>
@@ -74,8 +75,8 @@
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
                 <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button :loading="context.loading['addTrx']" :disabled="context.isAddButtonDisabled" icon="pi pi-check" @click="handleAddProduct"
-                    label="Selesai" class="w-full p-button-primary"></Button>
+                <Button :loading="context.loading['addTrx']" :disabled="context.isAddButtonDisabled" icon="pi pi-check"
+                    @click="handleAddProduct" label="Tambah" class="w-full p-button-primary"></Button>
             </div>
         </template>
     </Dialog>
@@ -93,8 +94,8 @@ const context = useAddTransactionStore();
 const emit = defineEmits();
 
 onMounted(async () => {
-    await context.getProducts();
     await context.getUsersManual();
+    await context.getProducts();
 })
 
 const handleAddProduct = async () => {

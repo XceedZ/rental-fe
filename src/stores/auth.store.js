@@ -79,7 +79,7 @@ export const useAuthStore = defineStore({
         }
         this.router.push({ name: "home" });
 
-        setTimeout(() => window.location.reload(), 100);
+        setTimeout(() => window.location.reload(), 50);
         this.loading["login"] = false;
 
         return user;

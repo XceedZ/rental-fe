@@ -23,11 +23,10 @@ export const useAddTransactionStore = defineStore({
     selectedProduct: null,
     productOptions: [],
     userOptions: [],
-    selectedMember: {
-      name: "",
-      address: "",
-      phone: "",
-    },
+    selectedUser: null,
+    name: "",
+    address: "",
+    phone: "",
     stock: 1,
     desc: "",
     dates: [],
@@ -91,7 +90,7 @@ export const useAddTransactionStore = defineStore({
       const payload = {
         api: this.addTrxManualWithAccountApi,
         body: {
-          userId: this.selectedMember.user_id,
+          userId: this.selectedUser.user_id,
           productId: this.selectedProduct,
           rentStartDate: YYYYMMDD(this.dates[0]),
           rentEndDate: YYYYMMDD(this.dates[1]),
@@ -116,9 +115,9 @@ export const useAddTransactionStore = defineStore({
       const payload = {
         api: this.addTrxManualWithoutAccountApi,
         body: {
-          name: this.selectedMember.name,
-          address: this.selectedMember.address,
-          phone: this.selectedMember.phone,
+          name: this.name,
+          address: this.address,
+          phone: this.phone,
           productId: this.selectedProduct,
           rentStartDate: YYYYMMDD(this.dates[0]),
           rentEndDate: YYYYMMDD(this.dates[1]),
@@ -139,20 +138,31 @@ export const useAddTransactionStore = defineStore({
   },
   getters: {
     isAddButtonDisabled(state) {
-      return (
-        !state.selectedProduct ||
-        !state.dates.length ||
-        state.stock < 1 ||
-        (state.selectedMember.name === "" &&
-          state.selectedMember.address === "" &&
-          state.selectedMember.phone === "")
-      );
+      if (state.selectedUser) {
+        return (
+          !state.selectedProduct ||
+          !state.dates.length ||
+          state.stock < 1
+        );
+      } else {
+        return (
+          !state.selectedProduct ||
+          !state.dates.length ||
+          state.stock < 1 ||
+          state.name === "" ||
+          state.address === "" ||
+          state.phone === ""
+        );
+      }
     },
     resetInput(state) {
       return () => {
         state.keyword = "";
         state.selectedProduct = null;
-        state.selectedMember = { name: "", address: "", phone: "" };
+        state.selectedUser = null;
+        state.name = "";
+        state.address = "";
+        state.phone = "";
         state.stock = 1;
         state.desc = "";
         state.dates = [];
