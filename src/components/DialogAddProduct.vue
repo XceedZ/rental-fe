@@ -106,6 +106,7 @@ onMounted(async () => {
 })
 
 const onFileSelect = (event) => {
+    console.log('Selected files:', event.files); // Debugging: Log the selected files
     selectedFiles.value = event.files;
 };
 
@@ -152,6 +153,7 @@ const handleAddProduct = async () => {
         brandName: formData.get('brandName'),
         ctgrId: formData.get('ctgrId'),
         ctgrName: formData.get('ctgrName'),
+        urlImg: formData.get('urlImg'),
     });
 
     await context.addProduct(formData);

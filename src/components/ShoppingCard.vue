@@ -1,6 +1,5 @@
 <template>
-    <div v-if="visible" id="slideover-cart-ext"
-        class="surface-overlay fixed top-0 right-0 shadow-2 h-full w-full lg:w-max transition-transform duration-300">
+    <div v-if="visible" :class="['surface-overlay fixed top-0 right-0 shadow-2 h-full w-full lg:w-max cart-wrapper', { 'hidden': !visible }]" id="slideover-cart">
         <div class="flex flex-column h-full">
             <div class="surface-overlay p-4 flex align-items-center justify-content-between">
                 <span class="text-900 text-xl font-medium">Keranjang Kamu!😍</span>
@@ -21,8 +20,7 @@
                                         <span class="text-700 text-sm mt-2">
                                             <span class="font-semibold">{{ item.brand_name }}</span> | {{ item.ctgr_name
                                             }}
-                                        </span> <span class="text-500 mt-2">{{ YYYYMMDDtoDMMMYYYY(item.startDate) }} -
-                                            {{
+                                        </span> <span class="text-500 mt-2">{{ YYYYMMDDtoDMMMYYYY(item.startDate) }} - {{
                                                 YYYYMMDDtoDMMMYYYY(item.endDate) }}</span>
                                     </div>
                                     <a class="cursor-pointer text-pink-500 hover:text-pink-700 transition-colors transition-duration-300 ml-5"
@@ -104,3 +102,57 @@ defineProps({
     }
 });
 </script>
+
+<style scoped>
+.cart-wrapper {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#slideover-cart {
+    z-index: 1001;
+    animation: slideIn 0.2s ease-out;
+}
+
+#slideover-cart {
+    animation: slideIn 0.2s ease-out;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+#slideover-cart.hidden {
+    animation: slideOut 0.2s ease-in forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+</style>
