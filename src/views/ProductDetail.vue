@@ -5,13 +5,15 @@
                 <div class="flex justify-content-center align-items-center h-full w-full">
                     <div class="flex flex-column align-items-center">
                         <Skeleton v-if="context.loading['getProducts']" width="100%" height="300px" />
-                        <img v-else v-for="(image, i) of images2" :key="image" :src="context.selectedProduct.url_img"
+                        <img v-else v-for="(image, i) of images2" :key="image"
+                            :src="getFullImageUrl(context.selectedProduct.url_img)"
                             class="w-full cursor-pointer border-2 border-round border-transparent transition-colors transition-duration-150"
                             :class="{ 'border-primary': selectedImageIndex2 === i }" @click="selectedImageIndex2 = i" />
                     </div>
                     <div class="pl-3 w-10">
                         <Skeleton v-if="context.loading['getProducts']" width="100%" height="300px" />
-                        <img v-else :src="context.selectedProduct.url_img" class="w-full" />
+                        <Image preview v-else :src="getFullImageUrl(context.selectedProduct.url_img)"
+                        imageClass="w-30rem h-auto flex-shrink-0 object-cover" imageStyle="max-width: 90%;" />
                     </div>
                 </div>
             </div>
@@ -54,11 +56,11 @@
                         decrementButtonIcon="pi pi-minus">
                     </InputNumber>
                     <div class="flex align-items-center flex-1 mt-3 sm:mt-0 ml-0 gap-2">
-                        <Button v-if="isLoggedIn" outlined :loading="context.loading['addToCart']" icon="pi pi-cart-arrow-down"
-                            label="Tambah Keranjang" class="flex-1" @click="addToCart"
+                        <Button v-if="isLoggedIn" outlined :loading="context.loading['addToCart']"
+                            icon="pi pi-cart-arrow-down" label="Tambah Keranjang" class="flex-1" @click="addToCart"
                             :disabled="context.isActionDisabled"></Button>
-                        <Button :loading="context.loading['createRental']" icon="pi pi-credit-card" label="Sewa Sekarang"
-                            class="flex-1" @click="createRental"
+                        <Button :loading="context.loading['createRental']" icon="pi pi-credit-card"
+                            label="Sewa Sekarang" class="flex-1" @click="createRental"
                             :disabled="context.isActionDisabled"></Button>
                     </div>
                 </div>
@@ -127,6 +129,10 @@ const isLoggedIn = computed(() => {
     const user = local.getUser();
     return Array.isArray(user) && user.length > 0 && user[0].id;
 });
+
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
+};
 
 watch(dates, (newDates) => {
     if (newDates.length === 2) {

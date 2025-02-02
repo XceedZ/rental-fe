@@ -111,7 +111,7 @@
                                                 class="surface-0 flex justify-content-center align-items-center border-round p-3 w-full h-10rem">
                                                 <div class="relative mx-auto">
                                                     <img class="border-round w-full max-h-10rem md:max-h-8rem"
-                                                        :src="item.urlImg" :alt="item.productName"
+                                                        :src="getFullImageUrl(item.urlImg)" :alt="item.productName"
                                                         style="max-width: 300px" />
                                                 </div>
                                             </div>
@@ -166,7 +166,7 @@
                                         <div v-else
                                             class="surface-50 flex justify-content-center align-items-center border-round p-3 w-full h-10rem">
                                             <div class="relative mx-auto">
-                                                <img class="border-round w-full max-h-8rem" :src="item.urlImg"
+                                                <img class="border-round w-full max-h-8rem" :src="getFullImageUrl(item.urlImg)"
                                                     :alt="item.productName" style="max-width: 300px" />
                                             </div>
                                         </div>
@@ -263,5 +263,9 @@ const getSeverity = (product) => {
     } else {
         return 'danger';
     }
+};
+
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
 </script>

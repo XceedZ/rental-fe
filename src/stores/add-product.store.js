@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessAdd } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import { showSuccessAdd, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import { useManageProductStore } from '@/stores/manage-product.store';
+import { useManageProductStore } from "@/stores/manage-product.store";
 
 export const useAddProductStore = defineStore({
   id: "add-product.store",
@@ -15,9 +15,9 @@ export const useAddProductStore = defineStore({
     toast: useToast(),
     productId: -99,
     productName: "",
-    brandId: '',
+    brandId: "",
     brandName: "",
-    ctgrId: '',
+    ctgrId: "",
     ctgrName: "",
     stock: 1,
     price: 0,
@@ -58,9 +58,14 @@ export const useAddProductStore = defineStore({
         const context = useManageProductStore();
         context.getProducts();
 
-        return product;
+        return { isOk: true, product };
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["addProduct"] = false;
+        return { isOk: false };
       }
       this.loading["addProduct"] = false;
+      return { isOk: false };
     },
     async getBrand() {
       this.loading["getBrand"] = true;
@@ -91,7 +96,7 @@ export const useAddProductStore = defineStore({
       if (result.isOk) {
         const categories = result.body.categories.map((data) => ({
           id: data.ctgr_product_id,
-          ctgrName: data.ctgr_product_name
+          ctgrName: data.ctgr_product_name,
         }));
         this.loading["getCtgr"] = false;
         this.ctgrOptions = categories;
@@ -99,6 +104,11 @@ export const useAddProductStore = defineStore({
         return categories;
       }
       this.loading["getCtgr"] = false;
+    },
+  },
+  getters: {
+    isSubmitDisabled: (state) => {
+      return !state.productName || !state.brandId || !state.ctgrId || !state.stock || !state.price || !state.fineBill;
     },
   },
 });

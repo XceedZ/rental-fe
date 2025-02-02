@@ -55,8 +55,8 @@
                 <div class="col-12" v-for="product in trx.products" :key="product.product_code">
                     <div class="p-2 my-4 flex flex-column lg:flex-row justify-content-between align-items-center">
                         <div class="flex flex-column lg:flex-row justify-content-center align-items-center px-2">
-                            <img :src="product.urlImg" alt="product"
-                                class="w-8rem h-auto mr-3 flex-shrink-0 object-cover" style="aspect-ratio: 4 / 3;" />
+                            <img :src="getFullImageUrl(product.urlImg)" alt="product"
+                                class="w-8rem h-auto mr-3 flex-shrink-0 object-cover" />
                             <div class="flex flex-column my-auto text-center md:text-left">
                                 <span class="text-900 font-medium mb-3 mt-3 lg:mt-0">
                                     {{ product.productName }}
@@ -213,6 +213,10 @@ const goToProduct = (productCode) => {
 
 const cancelAll = async (trxCode) => {
     await context.cancelAllTransaction(trxCode);
+};
+
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
 
 onMounted(async () => {

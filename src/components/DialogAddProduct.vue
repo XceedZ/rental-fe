@@ -85,7 +85,7 @@
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
                 <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button :loading="context.loading['addProduct']" icon="pi pi-check" @click="handleAddProduct"
+                <Button :loading="context.loading['addProduct']" :disabled="context.isSubmitDisabled" icon="pi pi-check" @click="handleAddProduct"
                     label="Selesai" class="w-full p-button-primary"></Button>
             </div>
         </template>
@@ -106,7 +106,6 @@ onMounted(async () => {
 })
 
 const onFileSelect = (event) => {
-    console.log('Selected files:', event.files); // Debugging: Log the selected files
     selectedFiles.value = event.files;
 };
 
@@ -114,28 +113,22 @@ const handleAddProduct = async () => {
     const formData = new FormData();
     formData.append('productName', context.productName);
 
-    // Logika untuk brandId dan brandName
     const selectedBrand = context.brandOptions.find((brand) => brand.id === context.brandId);
     if (selectedBrand) {
-        // Jika brandId valid dari dropdown
         formData.append('brandId', selectedBrand.id);
         formData.append('brandName', selectedBrand.brandName);
     } else {
-        // Jika input manual (brandId tidak ditemukan)
         formData.append('brandId', -99);
-        formData.append('brandName', context.brandId); // Brand input manual masuk ke v-model brandId
+        formData.append('brandName', context.brandId);
     }
 
-    // Logika untuk ctgrId dan ctgrName
     const selectedCategory = context.ctgrOptions.find((ctgr) => ctgr.id === context.ctgrId);
     if (selectedCategory) {
-        // Jika ctgrId valid dari dropdown
         formData.append('ctgrId', selectedCategory.id);
         formData.append('ctgrName', selectedCategory.ctgrName);
     } else {
-        // Jika input manual (ctgrId tidak ditemukan)
         formData.append('ctgrId', -99);
-        formData.append('ctgrName', context.ctgrId); // Category input manual masuk ke v-model ctgrId
+        formData.append('ctgrName', context.ctgrId);
     }
 
     formData.append('stock', context.stock);
@@ -147,19 +140,10 @@ const handleAddProduct = async () => {
         formData.append('urlImg', file);
     });
 
-    console.log('FormData:', {
-        productName: formData.get('productName'),
-        brandId: formData.get('brandId'),
-        brandName: formData.get('brandName'),
-        ctgrId: formData.get('ctgrId'),
-        ctgrName: formData.get('ctgrName'),
-        urlImg: formData.get('urlImg'),
-    });
-
-    await context.addProduct(formData);
-
-    if (!context.loading['addProduct']) {
-        emit('update:visible', false);  
+    const result = await context.addProduct(formData);
+    if (result && result.isOk) {
+        emit('update:visible', false);
+        context.visible = false;
     }
 };
 

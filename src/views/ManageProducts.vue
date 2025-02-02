@@ -38,7 +38,7 @@
                             <div class="flex flex-column">
                                 <div class="flex align-items-center gap-3">
                                     <Skeleton v-if="context.loading['getProducts']" size="3rem" class="mr-2"></Skeleton>
-                                    <Image v-else preview width="50" :src="data.urlImg" alt="Product Image"
+                                    <Image v-else preview width="50" :src="getFullImageUrl(data.urlImg)" alt="Product Image"
                                         style="height: 2.5rem;" />
                                     <div>
                                         <Skeleton v-if="context.loading['getProducts']"
@@ -208,6 +208,10 @@ const confirmDelete = () => {
 
 const cancelDelete = () => {
     showDialogConfirm.value = false;
+};
+
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
 
 onMounted(async () => {

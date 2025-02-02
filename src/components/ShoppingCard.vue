@@ -2,19 +2,19 @@
     <div v-if="visible" :class="['surface-overlay fixed top-0 right-0 shadow-2 h-full w-full lg:w-max cart-wrapper', { 'hidden': !visible }]" id="slideover-cart">
         <div class="flex flex-column h-full">
             <div class="surface-overlay p-4 flex align-items-center justify-content-between">
-                <span class="text-900 text-xl font-medium">Keranjang Kamu!😍</span>
+                <span class="text-900 text-xl font-medium">Keranjang</span>
                 <Button icon="pi pi-times" class="p-button-text p-button-plain p-button-rounded"
                     @click="$emit('close')"></Button>
             </div>
             <div class="flex flex-auto overflow-y-auto">
-                <div class="w-full md:w-12 p-4 flex flex-column">
+                <div class="w-full md:w-12 px-4 pb-4 flex flex-column">
                     <template v-if="context.cartItems.length > 0">
                         <div v-for="(item, index) in context.cartItems" :key="item.id"
                             class="flex align-items-start md:align-items-center border-top-1 surface-border pt-4 mb-4">
                             <div class="pl-3 flex-auto">
                                 <div class="flex align-items-center justify-content-between mb-2">
-                                    <img :src="item.url_img" class="w-8rem h-auto mr-3 flex-shrink-0 object-cover"
-                                        style="aspect-ratio: 4 / 3;" />
+                                    <img :src="getFullImageUrl(item.url_img)" class="w-8rem h-auto mr-3 flex-shrink-0 object-cover"
+                                         />
                                     <div class="flex flex-column">
                                         <span class="text-900 font-medium">{{ item.product_name }}</span>
                                         <span class="text-700 text-sm mt-2">
@@ -93,7 +93,9 @@ const goToHome = () => {
     router.push({ name: 'home' });
 };
 
-
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
+};
 
 defineProps({
     visible: {
