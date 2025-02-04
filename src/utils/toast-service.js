@@ -61,3 +61,7 @@ export const showSuccessAddTrx = (toast) => {
 export const showErrorApi = (toast, message) => {
   toast.add({ severity: 'error', summary: 'Gagal', detail: message, life: 4000 });
 };
+
+export const showSuccessApi = (toast, message) => {
+  toast.add({ severity: 'success', summary: 'Sukses', detail: message, life: 4000 });
+};

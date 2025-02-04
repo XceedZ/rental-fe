@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import local from '../utils/local-storage';
+import Landing from '@/views/Landing.vue';
 import HomeView from '../views/HomeView.vue'
 import History from '../views/HistoryView.vue'
 import NotFound from '../views/NotFoundView.vue'
@@ -15,6 +16,11 @@ import ResetPassword from '@/views/ResetPassword.vue';
 const routes = [
   {
     path: '/',
+    name: 'landing',
+    component: Landing,
+  },
+  {
+    path: '/rent',
     name: 'home',
     component: HomeView,
   },

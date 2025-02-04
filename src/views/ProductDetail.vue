@@ -45,7 +45,7 @@
 
                 <div class="font-bold text-900 mb-3">Tanggal Penyewaan</div>
                 <div class="flex align-items-center mb-5">
-                    <Calendar showIcon v-model="dates" selectionMode="range" :manualInput="false" dateFormat="d M yy" />
+                    <Calendar :minDate="minDate" showIcon v-model="dates" selectionMode="range" :manualInput="false" dateFormat="d M yy" />
                 </div>
 
                 <div class="font-bold text-900 mb-3">Quantity</div>
@@ -124,6 +124,8 @@ const startDate = ref("");
 const endDate = ref("");
 const route = useRoute();
 const router = useRouter();
+
+const minDate = ref(new Date());
 
 const isLoggedIn = computed(() => {
     const user = local.getUser();

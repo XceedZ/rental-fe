@@ -18,7 +18,7 @@
                 </IconField>
             </span>
         </div>
-        <section class="flex-wrap gap-3 justify-content-between border-bottom-1 surface-border">
+        <section class="flex-wrap gap-3 justify-content-between">
             <Divider class="w-full"></Divider>
             <div class="flex-shrink-0">
                 <Button icon="pi pi-plus" label="Barang" class="w-auto"
