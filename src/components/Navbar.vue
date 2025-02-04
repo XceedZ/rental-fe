@@ -103,6 +103,11 @@ const isLoggedIn = computed(() => {
 
 const toggleShoppingCard = () => {
     shoppingCardVisible.value = !shoppingCardVisible.value;
+    if (!shoppingCardVisible.value) {
+        document.getElementById('slideover-cart').classList.add('hidden');
+    } else {
+        document.getElementById('slideover-cart').classList.remove('hidden');
+    }
 };
 
 </script>

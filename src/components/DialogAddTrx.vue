@@ -51,7 +51,7 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900">Tanggal Penyewaan</label>
-                    <Calendar showIcon v-model="context.dates" selectionMode="range" :manualInput="false"
+                    <Calendar :minDate="minDate" showIcon v-model="context.dates" selectionMode="range" :manualInput="false"
                         dateFormat="d M yy" />
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
@@ -87,6 +87,7 @@ import { ref, onMounted } from 'vue';
 import { useAddTransactionStore } from '@/stores/add-transaction.store';
 import { YYYYMMDD } from '@/utils/date-convert';
 
+const minDate = ref(new Date());
 const value = ref('Dengan Akun');
 const options = ref(['Dengan Akun', 'Tanpa Akun']);
 

@@ -164,4 +164,9 @@ export const ApiConstant = {
         method: 'GET',
         keyList: ''
     },
+    SEND_LATE_RETURN_NOTIFICATION: {
+        path: 'sendLateReturnNotif',
+        method: 'GET',
+        keyList: ''
+    },
 };

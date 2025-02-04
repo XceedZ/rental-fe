@@ -1,9 +1,15 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessApproved, showSuccessReject, showSuccessFinish } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import {
+  showSuccessApproved,
+  showSuccessReject,
+  showSuccessFinish,
+  showSuccessApi,
+} from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
+import { supabase } from "@/utils/supabase-client"; // Import Supabase client
 
 export const useManageTransactionStore = defineStore({
   id: "manage-transaction.store",
@@ -14,6 +20,7 @@ export const useManageTransactionStore = defineStore({
     rejectApi: ApiConstant.REJECT_TRANSACTION,
     finishApi: ApiConstant.FINISH_TRANSACTION,
     finishAllApi: ApiConstant.FINISH_ALL_TRANSACTION,
+    sendNotifApi: ApiConstant.SEND_LATE_RETURN_NOTIFICATION,
     toast: useToast(),
     keyword: "",
     loading: {},
@@ -84,10 +91,10 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessApproved(this.toast);
         this.loading["approve"] = false;
-        await this.getManageTransaction();
+        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
-      
+
       this.loading["approve"] = false;
     },
     async rejectTransaction(trxRentProductId, trxCode) {
@@ -102,7 +109,7 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessReject(this.toast);
         this.loading["reject"] = false;
-        await this.getManageTransaction();
+        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["reject"] = false;
@@ -119,7 +126,7 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessFinish(this.toast);
         this.loading["finish"] = false;
-        await this.getManageTransaction();
+        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["finish"] = false;
@@ -136,10 +143,33 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessFinish(this.toast);
         this.loading["finishAll"] = false;
-        await this.getManageTransaction();
+        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["finishAll"] = false;
+    },
+    async sendNotification() {
+      this.loading["sendNotif"] = true;
+      const payload = {
+        api: this.sendNotifApi,
+        body: {},
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessApi(this.toast, result.body.message);
+        this.loading["sendNotif"] = false;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+      }
+    },
+    subscribeToRealtimeUpdates() {
+      supabase
+        .channel('public:trx_rent_products')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'trx_rent_products' }, payload => {
+          console.log('Change received!', payload);
+          this.getManageTransaction();
+        })
+        .subscribe();
     },
   },
 });

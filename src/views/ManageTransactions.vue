@@ -22,6 +22,8 @@
             <Divider class="w-full"></Divider>
             <Button icon="pi pi-plus" label="Transaksi" class="w-auto"
             @click="showDialogAddTrx = true"></Button>
+            <Button icon="pi pi-sync" outlined label="Kirim Notifikasi" class="w-auto ml-2"
+            @click="sendNotif" :loading="context.loading['sendNotif']"></Button>
             <div class="mt-3">
                 <DataTable scrollHeight="500px" :value="context.dataTable" v-model:expandedRows="expandedRows"
                     @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" dataKey="trx_code"
@@ -301,8 +303,12 @@ const onRowExpand = async (event) => {
 
 onMounted(async () => {
     await context.getManageTransaction();
+    context.subscribeToRealtimeUpdates(); // Subscribe to real-time updates
 });
 
+const sendNotif = async () => {
+    await context.sendNotification();
+};
 const getStatusLabel = (status) => {
     switch (status) {
         case 'P':

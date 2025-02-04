@@ -5,6 +5,7 @@ import { showSuccessRental, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
+import Cookies from "js-cookie";
 
 export const useShoppingItemsStore = defineStore({
   id: "shopping-items.store",
@@ -20,6 +21,10 @@ export const useShoppingItemsStore = defineStore({
     nextCartItemId: 1, // Add a counter for the next cart item ID
   }),
   actions: {
+    hydrate() {
+      this.cartItems = JSON.parse(Cookies.get('cartItems') || '[]');
+      this.nextCartItemId = parseInt(Cookies.get('nextCartItemId') || '1');
+    },
     async createRental(router) {
       this.loading["createRental"] = true;
       const result = await callApi({
@@ -49,20 +54,32 @@ export const useShoppingItemsStore = defineStore({
       this.loading["createRental"] = false;
     },
     addProductToCart(product, startDate, endDate, qty) {
-      this.cartItems.push({
-        ...product,
-        startDate,
-        endDate,
-        qty,
-        id: this.nextCartItemId++,
-      });
+      const existingItem = this.cartItems.find(
+        (item) => item.product_code === product.product_code && item.startDate === startDate && item.endDate === endDate
+      );
+      if (existingItem) {
+        existingItem.qty += qty;
+      } else {
+        this.cartItems.push({
+          ...product,
+          startDate,
+          endDate,
+          qty,
+          id: this.nextCartItemId++,
+        });
+      }
+      Cookies.set('cartItems', JSON.stringify(this.cartItems));
+      Cookies.set('nextCartItemId', this.nextCartItemId.toString());
     },
     removeProductFromCart(cartItemId) {
       this.cartItems = this.cartItems.filter((item) => item.id !== cartItemId);
+      Cookies.set('cartItems', JSON.stringify(this.cartItems));
     },
     resetCart() {
       this.cartItems = [];
       this.nextCartItemId = 1;
+      Cookies.set('cartItems', JSON.stringify(this.cartItems));
+      Cookies.set('nextCartItemId', this.nextCartItemId.toString());
     },
   },
   getters: {
@@ -70,4 +87,8 @@ export const useShoppingItemsStore = defineStore({
       return state.cartItems.some((item) => item.qty === 0);
     },
   },
+  // Call hydrate when the store is initialized
+  hydrate() {
+    this.hydrate();
+  }
 });

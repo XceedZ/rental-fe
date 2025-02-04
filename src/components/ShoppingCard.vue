@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useShoppingItemsStore } from '@/stores/shopping-items.store';
 import { toCurrencyLocale } from '@/utils/currency';
@@ -96,6 +96,10 @@ const goToHome = () => {
 const getFullImageUrl = (urlImg) => {
     return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
+
+onMounted(() => {
+    context.hydrate();
+});
 
 defineProps({
     visible: {
