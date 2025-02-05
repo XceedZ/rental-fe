@@ -20,10 +20,11 @@
         </div>
         <section class="flex-wrap gap-3 justify-content-between">
             <Divider class="w-full"></Divider>
-            <Button icon="pi pi-plus" label="Transaksi" class="w-auto"
-            @click="showDialogAddTrx = true"></Button>
-            <Button icon="pi pi-sync" outlined label="Kirim Notifikasi" class="w-auto ml-2"
-            @click="sendNotif" :loading="context.loading['sendNotif']"></Button>
+            <div class="w-full flex gap-2">
+                <Button icon="pi pi-plus" label="Transaksi" class="w-auto" @click="showDialogAddTrx = true"></Button>
+                <Button icon="pi pi-sync" outlined label="Kirim Notifikasi" class="w-auto ml-2" @click="sendNotif"
+                    :loading="context.loading['sendNotif']"></Button>
+            </div>
             <div class="mt-3">
                 <DataTable scrollHeight="500px" :value="context.dataTable" v-model:expandedRows="expandedRows"
                     @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" dataKey="trx_code"
@@ -42,7 +43,8 @@
                     <Column expander style="width: 5rem" />
                     <Column header="#" class="font-semibold text-sm text-color-secondary">
                         <template #body="slotProps">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="2rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="2rem" height="1rem"
+                                class="mb-2" />
                             <span v-else>{{ slotProps.index + 1 }}</span>
                         </template>
                     </Column>
@@ -52,13 +54,18 @@
                         </template>
                         <template #body="{ data }">
                             <div class="flex align-items-center gap-3">
-                                <Skeleton v-if="context.loading['getManageTransaction']" width="2.5rem" height="2.5rem" shape="circle" class="mb-2" />
+                                <Skeleton v-if="context.loading['getManageTransaction']" width="2.5rem" height="2.5rem"
+                                    shape="circle" class="mb-2" />
                                 <Avatar v-else :name="data.name" alt="User Avatar" style="height: 2.5rem;" />
                                 <div>
-                                    <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem" class="mb-2" />
-                                    <p v-else class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.name }}</p>
-                                    <Skeleton v-if="context.loading['getManageTransaction']" width="8rem" height="1rem" class="mb-2" />
-                                    <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.email }}</p>
+                                    <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
+                                        class="mb-2" />
+                                    <p v-else class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.name }}
+                                    </p>
+                                    <Skeleton v-if="context.loading['getManageTransaction']" width="8rem" height="1rem"
+                                        class="mb-2" />
+                                    <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.email
+                                        }}</p>
                                 </div>
                             </div>
                         </template>
@@ -68,9 +75,11 @@
                             <span class="font-semibold text-sm text-color-secondary">Alamat / Ponsel</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem"
+                                class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.address }}</p>
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
+                                class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.phone }}</p>
                         </template>
                     </Column>
@@ -79,10 +88,14 @@
                             <span class="font-semibold text-sm text-color-secondary">Nama Barang / Transaksi</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem" class="mb-2" />
-                            <p v-else class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.product_names }}</p>
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem" class="mb-2" />
-                            <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.trx_code }}</p>
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem"
+                                class="mb-2" />
+                            <p v-else class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.product_names }}
+                            </p>
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
+                                class="mb-2" />
+                            <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.trx_code }}
+                            </p>
                         </template>
                     </Column>
                     <Column style="min-width:5rem">
@@ -90,8 +103,10 @@
                             <span class="font-semibold text-sm text-color-secondary">Qty</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="3rem" height="1rem" class="mb-2" />
-                            <p v-else class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{ data.total_qty
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="3rem" height="1rem"
+                                class="mb-2" />
+                            <p v-else class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
+                                data.total_qty
                                 }}
                             </p>
                         </template>
@@ -101,7 +116,8 @@
                             <span class="font-semibold text-sm text-color-secondary">Tanggal Penyewaan</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem"
+                                class="mb-2" />
                             <p v-else class="mt-0 mb-2 text-color-secondary">{{
                                 YYYYMMDDtoDMMMMYYYY(data.rent_start_dates) }}</p>
                         </template>
@@ -111,7 +127,8 @@
                             <span class="font-semibold text-sm text-color-secondary">Total Harga</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
+                                class="mb-2" />
                             <template v-else>
                                 <p v-if="data.amount_w_fine > 0"
                                     class="mt-0 mb-2 text-color-secondary text-right line-through">{{
@@ -129,7 +146,8 @@
                             <span class="font-semibold text-sm text-color-secondary">Status</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="5rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="5rem" height="1rem"
+                                class="mb-2" />
                             <Tag v-else :severity="getStatusSeverity(data.status)"
                                 class="mt-0 mb-2 font-semibold uppercase text-sm p-2">
                                 <i :class="getStatusIcon(data.status)" class="mr-2"></i>{{ getStatusLabel(data.status)
@@ -142,7 +160,8 @@
                             <span class="font-semibold text-sm text-color-secondary">Keterangan</span>
                         </template>
                         <template #body="{ data }">
-                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem" class="mb-2" />
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="15rem" height="1rem"
+                                class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.desc }}</p>
                         </template>
                     </Column>
@@ -186,7 +205,7 @@
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                             data.qty
-                                        }}
+                                            }}
                                         </p>
                                     </template>
                                 </Column>
@@ -266,7 +285,8 @@
                                                 }}
                                             </Tag>
                                             <Button outlined icon="pi pi-check-circle" v-if="data.status === 'D'"
-                                                label="Selesaikan" class="mt-0 mb-2 ml-2 p-button-text" :loading="loading[data.trx_rent_product_id]?.finish"
+                                                label="Selesaikan" class="mt-0 mb-2 ml-2 p-button-text"
+                                                :loading="loading[data.trx_rent_product_id]?.finish"
                                                 @click="completeTransaction(data.trx_rent_product_id, data.trx_code)" />
                                         </div>
                                     </template>
