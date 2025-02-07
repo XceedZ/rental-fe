@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessRemove } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import { showSuccessRemove, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 
@@ -30,7 +30,7 @@ export const useManageProductStore = defineStore({
       this.offset = event.page * event.rows;
       this.limit = event.rows;
       this.getProducts();
-  },
+    },
     async getProducts() {
       this.loading["getProducts"] = true;
       const payload = {
@@ -41,7 +41,7 @@ export const useManageProductStore = defineStore({
           brandId: this.brandId,
           priceRange: this.priceRange,
           limit: this.limit,
-          offset:this.offset
+          offset: this.offset,
         },
       };
       const result = await callApi(payload);
@@ -100,7 +100,7 @@ export const useManageProductStore = defineStore({
       if (result.isOk) {
         const categories = result.body.categories.map((data) => ({
           id: data.ctgr_product_id,
-          ctgrName: data.ctgr_product_name
+          ctgrName: data.ctgr_product_name,
         }));
         this.loading["getCtgr"] = false;
         this.ctgrOptions = categories;
@@ -111,15 +111,22 @@ export const useManageProductStore = defineStore({
     },
     async removeProduct(productId) {
       this.loading["removeProduct"] = true;
-      const payload = {
+      const result = await callApi({
         api: ApiConstant.REMOVE_PRODUCT,
         body: { productId },
-      };
-      const result = await callApi(payload);
-      showSuccessRemove(this.toast);
-      this.getProducts();
+      });
+      if (result.isOk) {
+        showSuccessRemove(this.toast);
+        this.getProducts();
+        this.loading["removeProduct"] = false;
+        return true;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["removeProduct"] = false;
+        return false;
+      }
       this.loading["removeProduct"] = false;
-      return result.isOk;
+      return false;
     },
   },
 });

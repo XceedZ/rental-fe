@@ -169,4 +169,9 @@ export const ApiConstant = {
         method: 'GET',
         keyList: ''
     },
+    GET_WIDGET_TOTAL_PENYEWAAN: {
+        path: 'getWidgetTotalPenyewaan',
+        method: 'GET',
+        keyList: ''
+    },
 };

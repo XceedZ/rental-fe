@@ -158,9 +158,9 @@ const handleEditProduct = async () => {
         formData.append('urlImg', file);
     });
 
-    const isValid = await context.editProduct(formData);
+    const result = await context.editProduct(formData);
 
-    if (isValid && !context.loading['editProduct']) {
+    if (result) {
         emit('update:visible', false);
     }
 };

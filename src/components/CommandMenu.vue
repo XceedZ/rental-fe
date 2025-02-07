@@ -1,7 +1,7 @@
 <template>
     <Dialog :visible="visible" @update:visible="onHide" dismissableMask modal :showHeader="false"
         :breakpoints="{ '960px': '75vw', '640px': '100vw' }" :style="{ width: '40vw', minWidth: '350px' }"
-        contentClass="border-round-top p-0" appendTo="body">
+        contentClass="border-round-top p-0" appendTo="body" :data-theme="theme">
         <div class="flex w-full surface-section align-items-center justify-content-between px-1">
             <span class="p-input-icon-left w-full">
                 <IconField iconPosition="left" class="w-full">
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import local from '@/utils/local-storage';
 import { useAuthStore } from '@/stores/auth.store';
@@ -43,6 +43,7 @@ const isDarkMode = ref(false);
 const search = ref('');
 const visible = ref(true);
 const emit = defineEmits();
+const theme = ref(localStorage.getItem('theme') || 'light');
 
 const articles = computed(() => {
     return [
@@ -78,12 +79,14 @@ function switchTheme() {
 
     if (isDarkMode.value) {
         themeLink.href = 'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-dark-blue/theme.css';
-        primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
+        // primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
         local.set('theme', 'dark'); 
+        theme.value = 'dark';
     } else {
         themeLink.href = 'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-light-blue/theme.css';
-        primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-light.css';
+        // primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-light.css';
         local.set('theme', 'light');
+        theme.value = 'light';
     }
 }
 
@@ -97,10 +100,31 @@ onMounted(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         isDarkMode.value = true;
+        theme.value = 'dark';
         document.getElementById('theme-link').href =
             'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-dark-blue/theme.css';
-        document.getElementById('primeflex-link').href =
-            'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
+        // document.getElementById('primeflex-link').href =
+        //     'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
     }
 });
+
+watch(theme, (newTheme) => {
+  document.documentElement.setAttribute('data-theme', newTheme);
+});
 </script>
+
+<style scoped>
+:root {
+  --text-color: #111827; /* Default color */
+}
+
+[data-theme='dark'] {
+  --text-color: #ffffff; /* White color for dark mode */
+}
+
+[data-theme='dark'] .p-input-icon-left,
+[data-theme='dark'] .p-3,
+[data-theme='dark'] .p-2 {
+  color: #ffffff; /* Ensure text color is white in dark mode */
+}
+</style>

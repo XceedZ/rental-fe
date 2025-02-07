@@ -20,7 +20,7 @@
 
         <div class="surface-section px-4 py-2 md:px-6 lg:px-8">
             <div class="text-center px-6 py-8">
-                <div class="text-900 text-4xl font-semibold mb-3">Layanan Kami</div>
+                <div class="text-900 text-4xl font-semibold mb-3">Keuntungan</div>
                 <p class="text-700 text-xl my-0 line-height-3">Kami permudah untuk melakukan transaksi penyewaan barang
                     dengan berbagai kategori dan merk kamera lengkap.</p>
             </div>

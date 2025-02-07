@@ -11,7 +11,7 @@
         <p class="mb-0 text-center">{{ message }}</p>
         <template #footer>
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
-                <Button class="p-button-text w-full p-button-secondary" icon="pi pi-times" label="Batal" outlined
+                <Button class="p-button-text border-none w-full p-button-secondary" icon="pi pi-times" label="Batal" outlined
                     @click="rejectCallback"></Button>
                 <Button :class="acceptColor" :label="acceptLabel" :icon="acceptIcon"
                     @click="acceptCallback" :loading="acceptLoading"></Button>

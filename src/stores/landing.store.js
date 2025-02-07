@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import { showSuccessRemove } from '@/utils/toast-service';
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
+import router from '@/router';
 
 export const useLandingStore = defineStore({
   id: "landing.store",
@@ -115,6 +116,7 @@ export const useLandingStore = defineStore({
       this.brandId = [];
       this.priceRange = [0, 2000000];
       this.getProducts();
+      router.push({ name: 'home' });
     },
   },
 });
