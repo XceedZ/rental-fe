@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import callApi from "@/utils/api-connect";
-import { useToast } from 'primevue/usetoast';
-import { showSuccessEdit, showErrorStock } from '@/utils/toast-service';
+import { useToast } from "primevue/usetoast";
+import { showSuccessEdit, showErrorStock, showErrorApi } from "@/utils/toast-service";
 import { ApiConstant } from "@/api-constant";
 import { useRouter } from "vue-router";
-import { useManageProductStore } from '@/stores/manage-product.store';
+import { useManageProductStore } from "@/stores/manage-product.store";
 
 export const useEditProductStore = defineStore({
   id: "edit-product.store",
@@ -16,20 +16,20 @@ export const useEditProductStore = defineStore({
     keyword: "",
     productId: -99,
     productName: "",
-    brandId: '',
+    brandId: "",
     brandName: "",
-    ctgrId: '',
+    ctgrId: "",
     ctgrName: "",
     stock: 1,
     price: 0,
     fineBill: 0,
     desc: "",
     urlImg: "",
-    active: 'Y',
+    active: "Y",
     statusOptions: [
-      { label: 'TERSEDIA', value: 'Y' },
-      { label: 'TIDAK TERSEDIA', value: 'N' }
-    ],    
+      { label: "TERSEDIA", value: "Y" },
+      { label: "TIDAK TERSEDIA", value: "N" },
+    ],
     router: useRouter(),
     loading: {},
     keyword: "",
@@ -41,7 +41,7 @@ export const useEditProductStore = defineStore({
   }),
   actions: {
     async editProduct(formData) {
-      if (this.stock === 0 && this.active === 'Y') {
+      if (this.stock === 0 && this.active === "Y") {
         showErrorStock(this.toast);
         return false;
       }
@@ -59,10 +59,14 @@ export const useEditProductStore = defineStore({
         const context = useManageProductStore();
         context.getProducts();
 
-        return product;
+        return true;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["editProduct"] = false;
+        return false;
       }
       this.loading["editProduct"] = false;
-      return true;
+      return false;
     },
     async getBrand() {
       this.loading["getBrand"] = true;
@@ -93,7 +97,7 @@ export const useEditProductStore = defineStore({
       if (result.isOk) {
         const categories = result.body.categories.map((data) => ({
           id: data.ctgr_product_id,
-          ctgrName: data.ctgr_product_name
+          ctgrName: data.ctgr_product_name,
         }));
         this.loading["getCtgr"] = false;
         this.ctgrOptions = categories;

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import local from '../utils/local-storage';
+import Dashboard from '@/views/dashboard/Dashboard.vue';
 import Landing from '@/views/Landing.vue';
 import HomeView from '../views/HomeView.vue'
 import History from '../views/HistoryView.vue'
@@ -18,6 +19,11 @@ const routes = [
     path: '/',
     name: 'landing',
     component: Landing,
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
   },
   {
     path: '/rent',

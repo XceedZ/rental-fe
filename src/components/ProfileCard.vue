@@ -19,6 +19,17 @@
                     <li class="mb-2" v-if="hasAccess('manageAdmin')">
                         <a v-ripple
                             class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
+                            @click="goToDashboard">
+                            <i class="pi pi-chart-line text-500 mr-3 text-xl"></i>
+                            <span>
+                                <span class="block text-700 font-medium">Dashboard</span>
+                                <p class="mt-1 mb-0 text-600 text-sm">Lihat profit pemasukan</p>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="mb-2" v-if="hasAccess('manageAdmin')">
+                        <a v-ripple
+                            class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
                             @click="goToAdminRoles">
                             <i class="pi pi-users text-500 mr-3 text-xl"></i>
                             <span>
@@ -83,7 +94,8 @@
                 <a v-ripple
                     class="block p-2 font-medium text-700 flex align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
                     @click="logout">
-                    <i :class="{'pi pi-sign-out mr-2': !isLoggingOut, 'pi pi-spin pi-spinner mr-2': isLoggingOut}"></i>
+                    <i
+                        :class="{ 'pi pi-sign-out mr-2': !isLoggingOut, 'pi pi-spin pi-spinner mr-2': isLoggingOut }"></i>
                     <span>Keluar</span>
                 </a>
             </li>
@@ -107,12 +119,17 @@ const userName = ref('Tamu');
 const userRole = ref('Pengunjung');
 const isLoggingOut = ref(false);
 
+const goToDashboard = () => {
+    if (hasAccess('manageProduct') || hasAccess('manageAdmin')) {
+        router.push({ name: 'dashboard' });
+    }
+};
+
 const goToAdminRoles = () => {
     if (hasAccess('manageAdmin')) {
         router.push({ name: 'adminRoles' });
     }
 };
-
 
 const goToBrandCtgr = () => {
     if (hasAccess('manageProduct') || hasAccess('manageAdmin')) {

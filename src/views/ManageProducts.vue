@@ -201,9 +201,11 @@ const getMenuItems = (data) => {
     ];
 };
 
-const confirmDelete = () => {
-    context.removeProduct(selectedProductId.value);
-    showDialogConfirm.value = false;
+const confirmDelete = async () => {
+    const result = await context.removeProduct(selectedProductId.value);
+    if (result) {
+        showDialogConfirm.value = false;
+    }
 };
 
 const cancelDelete = () => {
