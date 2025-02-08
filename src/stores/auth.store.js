@@ -77,11 +77,12 @@ export const useAuthStore = defineStore({
           local.remove("email");
           local.remove("password");
         }
-        this.router.push({ name: "home" });
-
-        setTimeout(() => window.location.reload(), 50);
+        if (this.permissions.length > 0) {
+          this.router.push({ name: "dashboard" });
+        } else {
+          this.router.push({ name: "home" });
+        }
         this.loading["login"] = false;
-
         return user;
       } else if (result.error && result.error.response) {
         showErrorApi(this.toast, result.error.response.data.message);
@@ -226,6 +227,7 @@ export const useAuthStore = defineStore({
         local.remove("permissions");
         local.remove("token");
         local.remove("user");
+        setTimeout(() => window.location.reload(), 50);
         this.router.push({ name: "login" });
       }
       this.loading["logout"] = false;

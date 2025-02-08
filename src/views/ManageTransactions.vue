@@ -304,7 +304,7 @@
 </template>
 
 <script setup>
-import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
+import { defineAsyncComponent, ref, onMounted, reactive, onUnmounted } from 'vue';
 import Avatar from '../components/Avatar.vue';
 import { toCurrencyLocale } from '../utils/currency';
 import { useManageTransactionStore } from '@/stores/manage-transaction.store';
@@ -324,6 +324,10 @@ const onRowExpand = async (event) => {
 onMounted(async () => {
     await context.getManageTransaction();
     context.subscribeToRealtimeUpdates(); // Subscribe to real-time updates
+});
+
+onUnmounted(() => {
+    context.unsubscribeFromRealtimeUpdates(); // Unsubscribe from real-time updates
 });
 
 const sendNotif = async () => {

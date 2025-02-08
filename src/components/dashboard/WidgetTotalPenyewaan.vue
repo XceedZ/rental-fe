@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import ApexCharts from 'apexcharts';
 import { useTotalPenyewaanStore } from '@/stores/dashboard/total-penyewaan.store';
 
@@ -8,9 +8,7 @@ const chartRef = ref(null);
 const theme = ref(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
 let chart = null;
 
-onMounted(async () => {
-  await context.getWidgetTotalPenyewaan();
-
+const renderChart = () => {
   if (chartRef.value) {
     const data = context.dailyRentals;
 
@@ -18,11 +16,18 @@ onMounted(async () => {
       chart: {
         type: 'area',
         height: 100,
+        zoom: {
+          enabled: true,
+          type: 'x'
+        },
         sparkline: {
           enabled: true // Menghilangkan grid dan label untuk desain minimalis
+        },
+        toolbar: {
+          show: false,
         }
       },
-      colors: ['#22C55E'],
+      colors: ['#6B46C1'], // Changed to purple
       dataLabels: {
         enabled: false
       },
@@ -41,12 +46,15 @@ onMounted(async () => {
       },
       series: [
         {
-          name: 'Total Penyewaan',
+          name: 'Total Transaksi',
           data: data
         }
       ],
       tooltip: {
-        theme: theme.value
+        theme: theme.value,
+        x: {
+          format: 'yyyy-MM-dd' // Tooltip format
+        }
       },
       legend: {
         labels: {
@@ -55,10 +63,40 @@ onMounted(async () => {
       }
     };
 
-    chart = new ApexCharts(chartRef.value, options);
-    chart.render();
+    if (chart) {
+      chart.updateOptions(options);
+      chart.updateSeries([{ data }]);
+    } else {
+      chart = new ApexCharts(chartRef.value, options);
+      chart.render();
+    }
   }
+};
+
+onMounted(async () => {
+  await context.getWidgetTotalPenyewaan();
+  renderChart();
 });
+
+const downloadCSV = () => {
+  if (!context.dailyRentals || context.dailyRentals.length === 0) {
+    alert('Tidak ada data untuk diunduh');
+    return;
+  }
+
+  let csvContent = 'Tanggal,Total Transaksi\n';
+  context.dailyRentals.forEach((entry) => {
+    const formattedDate = entry.x;
+    const total = entry.y;
+    csvContent += `${formattedDate},${total}\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'total_transaksi.csv';
+  link.click();
+};
 
 watch(theme, (newTheme) => {
   document.documentElement.setAttribute('data-theme', newTheme);
@@ -75,93 +113,42 @@ watch(theme, (newTheme) => {
     });
   }
 });
+
+watch(() => context.dailyRentals, (newData) => {
+  if (chart) {
+    chart.updateSeries([{ name: 'Total Transaksi', data: newData }]);
+  }
+}, { deep: true });
 </script>
 
 <template>
-  <div class="card" :data-theme="theme">
-    <div class="card-header">
-      <span>Total Penyewaan</span>
-      <span class="growth">
-        <span class="icon">↑</span> {{ context.growthPercentage }}%
-      </span>
+  <div class="card p-4">
+    <div class="text-900 card-header flex justify-content-between align-items-center mb-3">
+      <span>Total Transaksi</span>
+      <div class="header-right flex align-items-center gap-2">
+        <span class="growth font-bold text-sm" style="color: #6B46C1">
+          <span class="icon">↑</span> {{ context.growthPercentage }}%
+        </span>
+        <button class="chart-toolbar p-button p-component p-button-text" v-tooltip.right="'Unduh CSV'" @click="downloadCSV">
+          <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
+        </button>
+      </div>
     </div>
-    <div class="card-body">
-      <div class="total">{{ context.totalRentals.toLocaleString() }}</div>
-      <div ref="chartRef" class="chart"></div>
+    <div class="card-body text-900 text-left">
+      <div class="total text-4xl font-bold mb-3">{{ context.totalRentals }}</div>
+      <div ref="chartRef" class="chart w-full h-8"></div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 .card {
-  width: 100%; /* Responsive width */
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
   padding: 16px;
-  color: var(--text-color);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px; /* Updated to match WidgetTotalPendapatan */
-  color: var(--text-color); /* Updated to use CSS variable */
-  margin-bottom: 8px;
-}
-
-.growth {
-  display: flex;
-  align-items: center;
-  color: #22C55E; /* Hijau */
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.growth .icon {
-  font-size: 16px;
-  margin-right: 4px;
-}
-
-.card-body {
-  text-align: left;
-  color: var(--text-color); /* Updated to use CSS variable */
-}
-
-.total {
-  font-size: 32px;
-  font-weight: bold;
-  color: var(--text-color); /* Updated to use CSS variable */
-  margin-bottom: 8px;
 }
 
 .chart {
   width: 100%;
-  height: 50px; /* Ukuran minimalis untuk sparkline chart */
-}
-
-:root {
-  --text-color: #111827; /* Default color */
-}
-
-[data-theme='dark'] {
-  --text-color: #ffffff; /* White color for dark mode */
-}
-
-[data-theme='light'] {
-  --text-color: #111827; /* Black color for light mode */
-}
-
-[data-theme='dark'] .card-header,
-[data-theme='dark'] .card-body,
-[data-theme='dark'] .total {
-  color: var(--text-color); /* Ensure text color is white in dark mode */
-}
-
-[data-theme='light'] .card-header,
-[data-theme='light'] .card-body,
-[data-theme='light'] .total {
-  color: var(--text-color); /* Ensure text color is black in light mode */
+  height: 50px;
 }
 </style>

@@ -12,15 +12,16 @@
       </div>
     </div>
     <Divider class="w-full"></Divider>
-    <div class="flex flex-wrap lg:flex-nowrap">
-      <div class="flex p-0 flex-column w-full">
-        <WidgetTotalPenyewaan class="surface-50" />
+    <div class="flex flex-wrap lg:flex-nowrap mt-5">
+      <div class="flex flex-column lg:flex-row w-full gap-4">
+        <WidgetTotalPendapatan class="border-round border-1 surface-border surface-50 shadow-bottom" />
+        <WidgetTotalPenyewaan class="border-round border-1 surface-border surface-50 shadow-bottom" />
       </div>
     </div>
     <div class="flex flex-wrap lg:flex-nowrap mt-5">
       <div class="flex flex-column lg:flex-row w-full gap-4">
-        <WidgetTotalPendapatan class="surface-50" />
-        <WidgetPendapatanCtgr class="surface-50" />
+        <WidgetStatusPenyewaan class="border-round border-1 surface-border surface-50 shadow-bottom" />
+        <WidgetPendapatanCtgr class="border-round border-1 surface-border surface-50 shadow-bottom" />
       </div>
     </div>
   </div>
@@ -28,9 +29,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import WidgetTotalPendapatan from '@/components/dashboard/WidgetTotalPendapatan.vue';
+import WidgetStatusPenyewaan from '@/components/dashboard/WidgetStatusPenyewaan.vue';
 import WidgetTotalPenyewaan from '@/components/dashboard/WidgetTotalPenyewaan.vue';
 import WidgetPendapatanCtgr from '@/components/dashboard/WidgetPendapatanCtgr.vue';
+import WidgetTotalPendapatan from '@/components/dashboard/WidgetTotalPendapatan.vue';
 
 const theme = ref(localStorage.getItem('theme') || 'light');
 
@@ -41,3 +43,9 @@ onMounted(() => {
   }
 });
 </script>
+
+<style>
+.shadow-bottom {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+</style>

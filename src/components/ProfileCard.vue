@@ -23,7 +23,7 @@
                             <i class="pi pi-chart-line text-500 mr-3 text-xl"></i>
                             <span>
                                 <span class="block text-700 font-medium">Dashboard</span>
-                                <p class="mt-1 mb-0 text-600 text-sm">Lihat profit pemasukan</p>
+                                <p class="mt-1 mb-0 text-600 text-sm">Lihat statistik perusahaan</p>
                             </span>
                         </a>
                     </li>

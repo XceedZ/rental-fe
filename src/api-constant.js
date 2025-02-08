@@ -174,4 +174,14 @@ export const ApiConstant = {
         method: 'GET',
         keyList: ''
     },
+    GET_WIDGET_STATUS_PENYEWAAN: {
+        path: 'getWidgetStatusPenyewaan',
+        method: 'GET',
+        keyList: ''
+    },
+    GET_WIDGET_TOTAL_PENDAPATAN: {
+        path: 'getWidgetTotalPendapatan',
+        method: 'GET',
+        keyList: ''
+    },
 };
