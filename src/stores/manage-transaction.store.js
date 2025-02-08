@@ -163,13 +163,21 @@ export const useManageTransactionStore = defineStore({
       }
     },
     subscribeToRealtimeUpdates() {
-      supabase
-        .channel('public:trx_rent_products')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'trx_rent_products' }, payload => {
-          console.log('Change received!', payload);
-          this.getManageTransaction();
-        })
+      this.subscription = supabase
+        .channel("public:trx_rent_products")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "trx_rent_products" },
+          (payload) => {
+            this.getManageTransaction();
+          }
+        )
         .subscribe();
+    },
+    unsubscribeFromRealtimeUpdates() {
+      if (this.subscription) {
+        supabase.removeChannel(this.subscription);
+      }
     },
   },
 });

@@ -1,161 +1,161 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, onUnmounted } from 'vue';
 import ApexCharts from 'apexcharts';
+import { useTotalPendapatanStore } from '@/stores/dashboard/total-pendapatan.store';
+import { toCurrencyLocale } from '@/utils/currency';
 
+const context = useTotalPendapatanStore();
 const chartRef = ref(null);
 const theme = ref(localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+let chart = null;
 
-const generateFakeData = () => {
-  const data1 = [];
-  const data2 = [];
-  const data3 = [];
-  const labels = [];
-  let currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 9); // Data dari 9 hari terakhir
+onMounted(async () => {
+  await context.getWidgetTotalPendapatan();
+  context.subscribeToRealtimeUpdates();
 
-  for (let i = 0; i < 9; i++) {
-    labels.push(currentDate.toISOString().split('T')[0]);
-    data1.push(Math.floor(Math.random() * 3000) + 1000); // Data 1 antara 1000-4000
-    data2.push(Math.floor(Math.random() * 2000) + 500); // Data 2 antara 500-2500
-    data3.push(Math.floor(Math.random() * 1000) + 200); // Data 3 antara 200-1200
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-
-  return { labels, data1, data2, data3 };
-};
-
-onMounted(() => {
   if (chartRef.value) {
-    const { labels, data1, data2, data3 } = generateFakeData();
+    const data = context.dailyPendapatan.map(entry => ({
+      x: entry.date,
+      y: entry.total
+    }));
 
     const options = {
       chart: {
         type: 'area',
-        height: 400,
+        height: 100,
         zoom: {
           enabled: true,
           type: 'x'
         },
+        sparkline: {
+          enabled: true
+        },
         toolbar: {
-          show: false
+          show: false,
         }
       },
-      colors: ['#6B46C1', '#D53F8C', '#EF4444'], // Added red color for "Dibatalkan"
+      colors: ['#22C55E'],
       dataLabels: {
         enabled: false
       },
       stroke: {
         curve: 'smooth',
-        width: 3
+        width: 2
       },
       fill: {
         type: 'gradient',
         gradient: {
           shadeIntensity: 0.5,
-          opacityFrom: 0.6,
+          opacityFrom: 0.7,
           opacityTo: 0,
           stops: [0, 100]
         }
       },
       series: [
         {
-          name: 'Selesai',
-          data: data1.map((value, index) => ({ x: labels[index], y: value }))
-        },
-        {
-          name: 'Ditolak',
-          data: data2.map((value, index) => ({ x: labels[index], y: value }))
-        },
-        {
-          name: 'Dibatalkan',
-          data: data3.map((value, index) => ({ x: labels[index], y: value }))
+          name: 'Total Pendapatan',
+          data: data
         }
       ],
-      xaxis: {
-        type: 'datetime',
-        labels: {
-          style: {
-            colors: theme.value === 'dark' ? '#ffffff' : '#888',
-            fontSize: '12px'
-          }
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            colors: theme.value === 'dark' ? '#ffffff' : '#888',
-            fontSize: '12px'
-          }
+      tooltip: {
+        theme: theme.value,
+        x: {
+          format: 'yyyy-MM-dd'
         }
       },
       legend: {
-        position: 'top',
-        horizontalAlign: 'right',
         labels: {
-          colors: theme.value === 'dark' ? '#ffffff' : '#111827'
+          colors: theme.value === 'dark'
         }
-      },
-      tooltip: {
-        theme: theme.value
       }
     };
-    
-    const chart = new ApexCharts(chartRef.value, options);
+
+    chart = new ApexCharts(chartRef.value, options);
     chart.render();
   }
 });
 
+watch(() => context.dailyPendapatan, (newData) => {
+  if (chart) {
+    const updatedData = newData.map(entry => ({
+      x: entry.date,
+      y: entry.total
+    }));
+    chart.updateSeries([{ name: 'Total Pendapatan', data: updatedData }]);
+  }
+}, { deep: true });
+
+onUnmounted(() => {
+  context.unsubscribeFromRealtimeUpdates();
+});
+
+const downloadCSV = () => {
+  if (!context.dailyPendapatan || context.dailyPendapatan.length === 0) {
+    alert('Tidak ada data untuk diunduh');
+    return;
+  }
+
+  let csvContent = 'Tanggal,Total Pendapatan\n';
+  context.dailyPendapatan.forEach((entry) => {
+    const formattedDate = entry.date;
+    const total = entry.total;
+    csvContent += `${formattedDate},${total}\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'total_pendapatan.csv';
+  link.click();
+};
+
+
 watch(theme, (newTheme) => {
   document.documentElement.setAttribute('data-theme', newTheme);
+  if (chart) {
+    chart.updateOptions({
+      tooltip: {
+        theme: newTheme
+      },
+      legend: {
+        labels: {
+          colors: newTheme === 'dark'
+        }
+      }
+    });
+  }
 });
 </script>
 
 <template>
-  <div class="card" :data-theme="theme">
-    <div class="card-header">
-      <span>Rasio Penyewaan</span>
+  <div class="card p-4">
+    <div class="text-900 card-header flex justify-content-between align-items-center mb-3">
+      <span>Total Pendapatan</span>
+      <div class="header-right flex align-items-center gap-2">
+        <span class="growth text-green-500 font-bold text-sm">
+          <span class="icon">↑</span> {{ context.growthPercentage }}%
+        </span>
+        <button class="chart-toolbar p-button p-component p-button-text" v-tooltip.top="'Unduh CSV'"
+          @click="downloadCSV">
+          <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
+        </button>
+      </div>
     </div>
-    <div class="chart-container">
-      <div ref="chartRef"></div>
+    <div class="card-body text-900 text-left">
+      <div class="total text-4xl font-bold mb-3">{{ toCurrencyLocale(context.totalPendapatan) }}</div>
+      <div ref="chartRef" class="chart w-full h-8"></div>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style>
 .card {
-  width: 100%; /* Responsive width */
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  color: var(--text-color);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 16px; /* Updated to match WidgetTotalPendapatan */
-  color: var(--text-color); /* Updated to use CSS variable */
-  margin-bottom: 8px;
-}
-
-.chart-container {
   width: 100%;
-  height: 400px;
-  color: var(--text-color); /* Updated to use CSS variable */
+  padding: 16px;
 }
 
-:root {
-  --text-color: #111827; /* Default color */
-}
-
-[data-theme='dark'] {
-  --text-color: #ffffff; /* White color for dark mode */
-}
-
-[data-theme='dark'] .card-header,
-[data-theme='dark'] .chart-container {
-  color: #ffffff; /* Ensure text color is white in dark mode */
+.chart {
+  width: 100%;
+  height: 50px;
 }
 </style>

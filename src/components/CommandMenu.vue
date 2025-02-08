@@ -112,19 +112,3 @@ watch(theme, (newTheme) => {
   document.documentElement.setAttribute('data-theme', newTheme);
 });
 </script>
-
-<style scoped>
-:root {
-  --text-color: #111827; /* Default color */
-}
-
-[data-theme='dark'] {
-  --text-color: #ffffff; /* White color for dark mode */
-}
-
-[data-theme='dark'] .p-input-icon-left,
-[data-theme='dark'] .p-3,
-[data-theme='dark'] .p-2 {
-  color: #ffffff; /* Ensure text color is white in dark mode */
-}
-</style>

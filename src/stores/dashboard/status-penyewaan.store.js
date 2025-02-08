@@ -6,10 +6,10 @@ import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
 
-export const useTotalPenyewaanStore = defineStore({
-  id: "total-penyewaan.store",
+export const useStatusPenyewaanStore = defineStore({
+  id: "status-penyewaan.store",
   state: () => ({
-    getApi: ApiConstant.GET_WIDGET_TOTAL_PENYEWAAN,
+    getApi: ApiConstant.GET_WIDGET_STATUS_PENYEWAAN,
     toast: useToast(),
     keyword: "",
     loading: false,
@@ -28,25 +28,24 @@ export const useTotalPenyewaanStore = defineStore({
     totalRentals: 0,
     growthPercentage: 0,
     dailyRentals: [],
-    currentDate: "", // Added currentDate state
+    statusRentals: {
+      Selesai: [],
+      Dibatalkan: [],
+      Ditolak: []
+    },
+    currentDate: '', // Added currentDate state
   }),
   actions: {
-    async getWidgetTotalPenyewaan() {
+    async getWidgetStatusPenyewaan() {
       this.loading = true;
       const result = await callApi({
         api: this.getApi,
       });
       if (result.isOk) {
-        this.totalRentals = result.body.totalRentals;
-        this.growthPercentage = result.body.growthPercentage;
-        this.dailyRentals = result.body.dailyRentals;
-        this.currentDate = result.body.currentDate;
+        this.statusRentals = result.body.statusData;
+        this.currentDate = result.body.currentDate; // Set currentDate from API response
       } else {
-        this.toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to fetch data",
-        });
+        this.toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch data' });
       }
       this.loading = false;
     },
