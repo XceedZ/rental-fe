@@ -26,7 +26,7 @@
                     :loading="context.loading['sendNotif']"></Button>
             </div>
             <div class="mt-3">
-                <DataTable scrollHeight="500px" :value="context.dataTable" v-model:expandedRows="expandedRows"
+                <DataTable scrollable scrollHeight="500px" :value="context.dataTable" v-model:expandedRows="expandedRows"
                     @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" dataKey="trx_code"
                     :tabStyle="{ 'min-width': '60rem' }" rowHover>
                     <template #loading>
@@ -149,7 +149,7 @@
                             <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
                                 class="mb-2" />
                             <template v-else>
-                                <p class="mt-0 mb-2 font-semibold text-color-secondary">{{ data.payment_type }}</p>
+                                <p class="mt-0 mb-2 font-medium text-color-primary">{{ data.payment_type }}</p>
                                 <p class="mt-0 mb-2 text-color-secondary">{{ data.payment_name }}</p>
                             </template>
                         </template>
