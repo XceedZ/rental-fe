@@ -60,7 +60,7 @@
                             <div class="flex flex-column my-auto text-center md:text-left">
                                 <span class="text-900 font-medium mb-3 mt-3 lg:mt-0">
                                     {{ product.productName }}
-                                    <i v-tooltip.right="'Lihat Selengkapnya'" @click="openDialogInfoTrx(product)"
+                                    <i v-tooltip.right="'Lihat Selengkapnya'" @click="openDialogInfoTrx(product, trx)"
                                         class="pi pi-info-circle transition-colors transition-duration-150 text-600 ml-1 hover:text-900 text-sm cursor-pointer"></i>
                                 </span>
                                 <span class="text-700 text-sm mb-3">
@@ -83,18 +83,36 @@
                                 }}</span>
                         </div>
                     </div>
+
+                    <div class="align-items-center flex justify-content-center pl-4 pr-4">
+                        <Message v-if="trx.flgPayment === 'N' && isAllPending(trx.products)" :closable="false"
+                            severity="info" icon="pi pi-info-circle" class="w-full mt-2 border-noround ">
+                            Silakan melakukan pembayaran
+                        </Message>
+                        <Message v-if="trx.flgPayment === 'Y' && isAllPending(trx.products)" :closable="false"
+                            severity="success" icon="pi pi-check-circle" class="w-full mt-2 border-noround">
+                            Berhasil melakukan pembayaran
+                        </Message>
+                    </div>
                     <Divider class="w-full block lg:hidden surface-border"></Divider>
                 </div>
                 <div class="col-12 p-0 flex border-top-1 surface-border" v-if="isAllPending(trx.products)">
-                    <Button icon="pi pi-times" label="Batalkan Semua" :loading="context.loading['cancelAll']"
-                        tabindex="0" @click="cancelAll(trx.trxCode)"
+                    <Button v-if="trx.flgPayment === 'N'" icon="pi pi-times" label="Batalkan Semua"
+                        :loading="context.loading['cancelAll']" tabindex="0" @click="cancelAll(trx.trxCode)"
+                        class="border-right-1 surface-border border-noround py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center font-medium w-full border-none hover:bg-primary hover:text-0 transition-duration-150"
+                        outlined>
+                    </Button>
+                    <Button v-if="trx.flgPayment === 'N'" icon="pi pi-wallet" label="Pembayaran"
+                        :loading="context.loading['createInvoice']" tabindex="0"
+                        @click="createInvoice(trx.trxCode, trx.totalAmount, context.user.email, `${trx.products[0].brandName} - ${trx.products[0].productName}`)"
                         class="border-noround py-4 flex flex-column md:flex-row text-center justify-content-center align-items-center font-medium w-full border-none hover:bg-primary hover:text-0 transition-duration-150"
                         outlined>
                     </Button>
                 </div>
             </div>
         </div>
-        <DialogInfoTrx v-if="showDialogInfoTrx" v-model:visible="showDialogInfoTrx" :product="selectedProduct" />
+        <DialogInfoTrx v-if="showDialogInfoTrx" v-model:visible="showDialogInfoTrx" :product="selectedProduct"
+            :trx="selectedTrx" />
     </div>
 </template>
 
@@ -104,6 +122,7 @@ import { useRouter } from 'vue-router';
 import { useHistoryStore } from '@/stores/history.store';
 import { toCurrencyLocale } from '@/utils/currency';
 import { YYYYMMDDtoDMMMMYYYY } from '@/utils/date-convert';
+import local from '@/utils/local-storage';
 
 const context = useHistoryStore();
 const router = useRouter();
@@ -111,9 +130,11 @@ const router = useRouter();
 const DialogInfoTrx = defineAsyncComponent(() => import('../components/DialogInfoTrx.vue'));
 const showDialogInfoTrx = ref(false);
 const selectedProduct = ref(null);
+const selectedTrx = ref(null);
 
-const openDialogInfoTrx = (product) => {
+const openDialogInfoTrx = (product, trx) => {
     selectedProduct.value = product;
+    selectedTrx.value = trx;
     showDialogInfoTrx.value = true;
 };
 
@@ -215,11 +236,35 @@ const cancelAll = async (trxCode) => {
     await context.cancelAllTransaction(trxCode);
 };
 
+const createInvoice = async (trxCode, amount, payerEmail, description) => {
+    const customer = {
+        given_names: context.user.name,
+        surname: context.user.surname,
+        email: payerEmail,
+        mobile_number: context.user.phone,
+        addresses: [
+            {
+                country: context.user.address,
+            }
+        ]
+    };
+    await context.createInvoice(trxCode, amount, payerEmail, description, customer);
+};
+
 const getFullImageUrl = (urlImg) => {
     return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
 
+const checkPaymentStatus = async () => {
+    const invoiceId = local.get("invoice_id");
+    if (invoiceId) {
+        await context.getInvoiceById(invoiceId);
+        local.remove("invoice_id");
+    }
+};
+
 onMounted(async () => {
     await context.getTrxProductList();
+    await checkPaymentStatus();
 });
 </script>

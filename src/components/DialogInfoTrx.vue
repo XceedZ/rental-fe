@@ -38,14 +38,15 @@
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900">Harga / hari</label>
-                    <InputNumber disabled v-model="product.price" inputId="currency-id" mode="currency" :minFractionDigits="0"
-                        currency="IDR" locale="id-ID" :allowEmpty="false" :min="0" inputClass="w-full">
+                    <InputNumber disabled v-model="product.price" inputId="currency-id" mode="currency"
+                        :minFractionDigits="0" currency="IDR" locale="id-ID" :allowEmpty="false" :min="0"
+                        inputClass="w-full">
                     </InputNumber>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900">Denda (%)</label>
-                    <InputNumber disabled v-model="product.fineBill" inputId="percent" suffix="%" :allowEmpty="false" :min="0"
-                        :max="100" inputClass="w-full">
+                    <InputNumber disabled v-model="product.fineBill" inputId="percent" suffix="%" :allowEmpty="false"
+                        :min="0" :max="100" inputClass="w-full">
                     </InputNumber>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
@@ -56,10 +57,20 @@
                     <label for="endRentDate" class="font-medium text-900">Sampai Tanggal</label>
                     <InputText disabled v-model="formattedRentEndDate" id="endRentDate" type="text" />
                 </div>
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="paymentType" class="font-medium text-900">Metode Pembayaran</label>
+                    <InputText disabled v-model="trx.paymentType" id="paymentType" type="text" />
+                </div>
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="paymentName" class="font-medium text-900">Nama Pembayaran</label>
+                    <InputText disabled v-model="trx.paymentName" id="paymentName" type="text" />
+                </div>
                 <div class="field mb-4 col-12">
                     <label for="remarkLate" class="font-medium text-900">Keterangan</label>
-                    <Textarea v-if="!product.remark" disabled id="remarkLate" v-model="product.remarkLate" :rows="6" :autoResize="true"></Textarea>
-                    <Textarea v-else disabled id="remark" v-model="product.remark" :rows="6" :autoResize="true"></Textarea>
+                    <Textarea v-if="!product.remark" disabled id="remarkLate" v-model="product.remarkLate" :rows="6"
+                        :autoResize="true"></Textarea>
+                    <Textarea v-else disabled id="remark" v-model="product.remark" :rows="6"
+                        :autoResize="true"></Textarea>
                 </div>
             </div>
         </section>
@@ -78,7 +89,8 @@ import { YYYYMMDDtoDMMMMYYYY } from '@/utils/date-convert';
 
 
 const props = defineProps({
-    product: Object
+    product: Object,
+    trx: Object
 });
 import { computed } from 'vue';
 

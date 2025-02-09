@@ -184,4 +184,14 @@ export const ApiConstant = {
         method: 'GET',
         keyList: ''
     },
+    CREATE_INVOICE: {
+        path: 'createInvoice',
+        method: 'POST',
+        keyList: ''
+    },
+    GET_INVOICE_BY_ID: {
+        path: 'getInvoiceById',
+        method: 'POST',
+        keyList: ''
+    },
 };

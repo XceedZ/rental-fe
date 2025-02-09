@@ -107,11 +107,11 @@
                                 class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                 data.total_qty
-                                }}
+                            }}
                             </p>
                         </template>
                     </Column>
-                    <Column style="min-width:20rem">
+                    <Column style="min-width:13rem">
                         <template #header>
                             <span class="font-semibold text-sm text-color-secondary">Tanggal Penyewaan</span>
                         </template>
@@ -138,6 +138,19 @@
                                         toCurrencyLocale(data.amount_w_fine) }}</p>
                                 <p v-else class="mt-0 mb-2 text-color-secondary text-right">{{
                                     toCurrencyLocale(data.total_amount) }}</p>
+                            </template>
+                        </template>
+                    </Column>
+                    <Column style="min-width:14rem">
+                        <template #header>
+                            <span class="font-semibold text-sm text-color-secondary">Pembayaran</span>
+                        </template>
+                        <template #body="{ data }">
+                            <Skeleton v-if="context.loading['getManageTransaction']" width="10rem" height="1rem"
+                                class="mb-2" />
+                            <template v-else>
+                                <p class="mt-0 mb-2 font-semibold text-color-secondary">{{ data.payment_type }}</p>
+                                <p class="mt-0 mb-2 text-color-secondary">{{ data.payment_name }}</p>
                             </template>
                         </template>
                     </Column>
@@ -205,7 +218,7 @@
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                             data.qty
-                                            }}
+                                        }}
                                         </p>
                                     </template>
                                 </Column>

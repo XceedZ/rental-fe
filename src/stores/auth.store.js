@@ -77,7 +77,7 @@ export const useAuthStore = defineStore({
           local.remove("email");
           local.remove("password");
         }
-        if (this.permissions.length > 0) {
+        if (this.permissions.length > 0 && this.permissions[0] !== "") {
           this.router.push({ name: "dashboard" });
         } else {
           this.router.push({ name: "home" });

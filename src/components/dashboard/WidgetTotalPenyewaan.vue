@@ -129,7 +129,7 @@ watch(() => context.dailyRentals, (newData) => {
         <span class="growth font-bold text-sm" style="color: #6B46C1">
           <span class="icon">↑</span> {{ context.growthPercentage }}%
         </span>
-        <button class="chart-toolbar p-button p-component p-button-text" v-tooltip.right="'Unduh CSV'" @click="downloadCSV">
+        <button class="chart-toolbar p-button p-component p-button-text" v-tooltip.top="'Unduh CSV'" @click="downloadCSV">
           <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
         </button>
       </div>
