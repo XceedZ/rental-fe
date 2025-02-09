@@ -19,6 +19,8 @@ onMounted(async () => {
       y: entry.total
     }));
 
+    const chartColor = context.growthPercentage >= 0 ? '#22C55E' : '#EF4444';
+
     const options = {
       chart: {
         type: 'area',
@@ -34,7 +36,7 @@ onMounted(async () => {
           show: false,
         }
       },
-      colors: ['#22C55E'],
+      colors: [chartColor],
       dataLabels: {
         enabled: false
       },
@@ -132,10 +134,10 @@ watch(theme, (newTheme) => {
     <div class="text-900 card-header flex justify-content-between align-items-center mb-3">
       <span>Total Pendapatan</span>
       <div class="header-right flex align-items-center gap-2">
-        <span class="growth text-green-500 font-bold text-sm">
-          <span class="icon">↑</span> {{ context.growthPercentage }}%
+        <span :class="{'growth text-green-500 font-bold text-sm': context.growthPercentage >= 0, 'growth text-red-500 font-bold text-sm': context.growthPercentage < 0}">
+          <span class="icon">{{ context.growthPercentage >= 0 ? '↑' : '↓' }}</span> {{ Math.abs(context.growthPercentage) }}%
         </span>
-        <button class="chart-toolbar p-button p-component p-button-text" v-tooltip.top="'Unduh CSV'"
+        <button class="chart-toolbar p-button p-component p-button-text hidden sm:inline-block" v-tooltip.top="'Unduh CSV'"
           @click="downloadCSV">
           <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
         </button>
