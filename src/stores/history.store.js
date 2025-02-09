@@ -27,6 +27,8 @@ export const useHistoryStore = defineStore({
     selectedProduct: {},
     user: local.getUser()[0],
     trxProductList: [],
+    createInvoiceApi: ApiConstant.CREATE_INVOICE,
+    getInvoiceByIdApi: ApiConstant.GET_INVOICE_BY_ID,
   }),
   actions: {
     onPage(event) {
@@ -81,6 +83,41 @@ export const useHistoryStore = defineStore({
         await this.getTrxProductList();
       }
       this.loading["cancelAll"] = false;
+    },
+    async createInvoice(trxCode, amount, payerEmail, description, customer) {
+      this.loading["createInvoice"] = true;
+      const payload = {
+        api: this.createInvoiceApi,
+        body: {
+          trx_code: trxCode,
+          amount: amount,
+          payer_email: payerEmail,
+          description: description,
+          customer: customer
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        local.set("invoice_id", result.body.id);
+        window.location.href = result.body.invoice_url;
+      }
+      this.loading["createInvoice"] = false;
+      return result;
+    },
+    async getInvoiceById(invoiceId) {
+      this.loading["getInvoiceById"] = true;
+      const payload = {
+        api: this.getInvoiceByIdApi,
+        body: {
+          invoice_id: invoiceId,
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        await this.getTrxProductList();
+      }
+      this.loading["getInvoiceById"] = false;
+      return result;
     },
     resetFilter() {
       this.keyword = "";
