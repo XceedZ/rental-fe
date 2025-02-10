@@ -20,8 +20,7 @@
                         Anggota
                     </h3>
                     <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola anggota tim Kamu di sini!</p>
-                    <Button icon="pi pi-plus" label="Anggota" class="w-auto"
-                        @click="showDialogInvite = true"></Button>
+                    <Button icon="pi pi-plus" label="Anggota" class="w-auto" @click="showDialogInvite = true"></Button>
                 </div>
                 <div class="mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
                     <span class="p-input-icon-right w-full">
@@ -100,6 +99,9 @@
                         </template>
                     </Column>
                 </DataTable>
+                <Paginator :rows="context.defaultRows" :rowsPerPageOptions="context.rowPerPageOptions"
+                    :totalRecords="context.totalAdminRecords" :first="context.adminLimit"
+                    @page="context.onAdminPage($event)" />
             </div>
         </section>
         <section class="flex flex-wrap gap-3 py-6 justify-content-between surface-border">
@@ -110,14 +112,13 @@
                         Peran & Izin
                     </h3>
                     <p class="mb-4 mt-0 text-700 font-normal text-base">Kelola peran dan izin di sini!</p>
-                    <Button icon="pi pi-plus" label="Peran" class="w-auto"
-                        @click="showDialogAddRoles = true"></Button>
+                    <Button icon="pi pi-plus" label="Peran" class="w-auto" @click="showDialogAddRoles = true"></Button>
                 </div>
                 <div class="mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
                     <span class="p-input-icon-right w-full">
                         <IconField iconPosition="left">
                             <InputIcon class="pi pi-search"></InputIcon>
-                            <InputText v-model="context.keywordRoles" placeholder="Cari Peran" class="w-full"
+                            <InputText v-model="context.keywordRoles" placeholder="Nama Peran" class="w-full"
                                 @keyup.enter="context.getRolePermission" />
                         </IconField>
                     </span>
@@ -154,13 +155,12 @@
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getRole']" height="2rem"></Skeleton>
                             <p v-else class="mt-0 mb-0 font-normal text-right text-base text-color-secondary">{{
-                                data.userCount }}
-                            </p>
+                                data.userCount }}</p>
                         </template>
                     </Column>
                     <Column style="min-width:14rem">
                         <template #header>
-                            <span class="font-semibold text-sm text-color-secondary">Tanggal Pembaruan</span>
+                            <span class="font-semibold text-sm text-color-secondary">Pembaruan Terakhir</span>
                         </template>
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getRole']" height="2rem"></Skeleton>
@@ -171,14 +171,17 @@
                     <Column style="min-width:8rem">
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getRole']" height="2rem"></Skeleton>
-                            <!-- Comment out the button that triggers the menu -->
                             <Button v-else type="button" icon="pi pi-ellipsis-v"
                                 class="p-button-text p-button-secondary"
-                                @click="$refs['menu2' + data.id].toggle($event)"></Button>
-                            <Menu :ref="'menu2' + data.id" appendTo="body" popup :model="getMenuRoleItems(data)"></Menu>
+                                @click="$refs['menu2' + data.roleId].toggle($event)"></Button>
+                            <Menu :ref="'menu2' + data.roleId" appendTo="body" popup :model="getMenuRoleItems(data)">
+                            </Menu>
                         </template>
                     </Column>
                 </DataTable>
+                <Paginator :rows="context.defaultRows" :rowsPerPageOptions="context.rowPerPageOptions"
+                    :totalRecords="context.totalRoleRecords" :first="context.roleLimit"
+                    @page="context.onRolePage($event)" />
             </div>
         </section>
         <DialogInviteAdmin v-if="showDialogInvite" v-model:visible="showDialogInvite" />
@@ -187,6 +190,9 @@
         <DialogConfirm v-if="showDialogConfirm" v-model:visible="showDialogConfirm" :acceptLabel="'Keluarkan'"
             :onAccept="confirmDelete" :onReject="cancelDelete" :header="confirmHeader" :message="confirmMessage"
             :acceptLoading="context.loading['removeAdmin']" />
+        <DialogConfirm v-if="showDialogConfirmRole" v-model:visible="showDialogConfirmRole" :acceptLabel="'Hapus'"
+            :onAccept="confirmDeleteRole" :onReject="cancelDeleteRole" :header="confirmHeader" :message="confirmMessage"
+            :acceptLoading="context.loading['removeRole']" />
 
     </div>
 </template>
@@ -209,6 +215,10 @@ const selectedUserId = ref(null);
 const confirmHeader = ref('');
 const confirmMessage = ref('');
 
+const showDialogConfirmRole = ref(false);
+const selectedRoleId = ref(null);
+const showDialogEditRole = ref(false);
+
 onMounted(async () => {
     await context.getManageAdmin();
     await context.getRolePermission();
@@ -221,6 +231,15 @@ const confirmDelete = () => {
 
 const cancelDelete = () => {
     showDialogConfirm.value = false;
+};
+
+const confirmDeleteRole = () => {
+    context.removeRolePermissions(selectedRoleId.value);
+    showDialogConfirmRole.value = false;
+};
+
+const cancelDeleteRole = () => {
+    showDialogConfirmRole.value = false;
 };
 
 const getMenuAdminItems = (data) => {
@@ -267,7 +286,12 @@ const getMenuRoleItems = (data) => {
                 {
                     label: 'Hapus',
                     icon: 'pi pi-trash',
-                    command: () => deleteRole(data.id)
+                    command: () => {
+                        selectedRoleId.value = data.roleId;
+                        confirmHeader.value = 'Konfirmasi Hapus';
+                        confirmMessage.value = `Apakah Kamu yakin ingin menghapus peran ${data.roleName}?`;
+                        showDialogConfirmRole.value = true;
+                    }
                 }
             ]
         }
