@@ -19,12 +19,13 @@
             <div class="flex flex-row gap-2 mt-3">
                 <FloatLabel class="w-6">
                     <label for="rolename">Nama Peran</label>
-                    <InputText id="rolename" v-model="value1" class="w-full" @click="showCommandMenu" />
+                    <InputText id="rolename" v-model="context.roleName" class="w-full" @click="showCommandMenu" />
                 </FloatLabel>
                 <FloatLabel class="w-6">
-                    <MultiSelect display="chip" id="ms-cities" v-model="selectedCities" :options="cities"
-                        optionLabel="name" :maxSelectedLabels="3" class="w-full" />
-                    <label for="ms-cities">Pilih Izin</label>
+                    <MultiSelect :loading="context.loading['getPermissions']" display="chip" id="ms-permissions" v-model="context.selectedPermissions"
+                        :options="context.permissionsOptions" optionLabel="permissionName" :maxSelectedLabels="3"
+                        class="w-full" />
+                    <label for="ms-permissions">Pilih Izin</label>
                 </FloatLabel>
             </div>
         </section>
@@ -32,19 +33,27 @@
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
                 <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button icon="pi pi-check" @click="$emit('update:visible', false)" label="Selesai"
-                    class="w-full p-button-primary"></Button>
+                <Button icon="pi pi-check" @click="submitRole" label="Selesai" :loading="context.loading['addRole']" class="w-full p-button-primary"></Button>
             </div>
         </template>
     </Dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted } from 'vue';
+import { useAddProductStore } from '@/stores/add-roles.store';
 
-const selectedCities = ref();
-const cities = ref([
-    { name: 'Kelola Barang Sewa', code: 'manageProduct' },
-    { name: 'Kelola Admin', code: 'manageAdmin' }
-]);
+const context = useAddProductStore();
+
+const submitRole = async () => {
+    const response = await context.addRolePermissions();
+    if (response.isOk) {
+        context.resetInput();
+        $emit('update:visible', false);
+    }
+};
+
+onMounted(async () => {
+    await context.getPermissions();
+});
 </script>
