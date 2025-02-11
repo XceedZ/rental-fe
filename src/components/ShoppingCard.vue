@@ -53,7 +53,7 @@
                             <h3 class="text-900 font-medium text-xl text-center mb-2">Keranjang Kosong</h3>
                             <p class="text-600 mb-4 text-center">Tambahkan barang ke keranjang untuk memulai penyewaan.
                             </p>
-                            <Button label="Cari Barang" icon="pi pi-search" outlined @click="goToHome" />
+                            <Button label="Temukan Barang" icon="pi pi-search" outlined @click="goToHome" />
                         </div>
                     </template>
                 </div>

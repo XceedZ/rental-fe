@@ -26,9 +26,9 @@
                     :loading="context.loading['sendNotif']"></Button>
             </div>
             <div class="mt-3">
-                <DataTable scrollable scrollHeight="500px" :value="context.dataTable" v-model:expandedRows="expandedRows"
-                    @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" dataKey="trx_code"
-                    :tabStyle="{ 'min-width': '60rem' }" rowHover>
+                <DataTable scrollable scrollHeight="500px" :value="context.dataTable"
+                    v-model:expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse"
+                    dataKey="trx_code" :tabStyle="{ 'min-width': '60rem' }" rowHover>
                     <template #loading>
                         <tr>
                             <td colspan="9">

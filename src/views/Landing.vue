@@ -1,115 +1,141 @@
 <template>
-    <div>
-        <div class="parallax-container">
-            <!-- Teks ada di belakang -->
-            <div class="content">
-                <span class="text-center font-semibold text-xs md:text-sm text-black-alpha-60 mb-4">ABADIKAN MOMEN
-                    TERBAIKMU</span>
-                <h3 class="text-center font-bold text-3xl md:text-6xl text-black-alpha-80 mt-0 mt-4">Sewa Kamera dengan
-                    Mudah<br /> <span
-                        style="background: radial-gradient(circle farthest-corner at center center, #CFCFCF 0%, #FFFFFF 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kualitas
-                        Terbaik, Harga Terjangkau</span></h3>
-                <Button type="button" label="Sewa Sekarang" icon="pi pi-arrow-right" iconPos="right"
-                    class="bg-gray-300 border-none hover:bg-gray-200 text-black-alpha-90 transition-linear transition-duration-200"
-                    @click="goToHome" />
-            </div>
-
-            <!-- Gambar tetap di atas -->
-            <div class="parallax-background"></div>
-        </div>
-
-        <div class="surface-section px-4 py-2 md:px-6 lg:px-8">
-            <div class="text-center px-6 py-8">
-                <div class="text-900 text-4xl font-semibold mb-3">Keuntungan</div>
-                <p class="text-700 text-xl my-0 line-height-3">Kami permudah untuk melakukan transaksi penyewaan barang
-                    dengan berbagai kategori dan merk kamera lengkap.</p>
-            </div>
-            <div class="grid mb-4">
-                <div class="col-12 md:col-4 mb-4 px-5">
-                    <button
-                        class="bg-bluegray-100 p-link p-3 shadow-2 mb-3 inline-block hover:bg-white hover:text-black transition-linear transition-duration-200"
-                        style="border-radius: 10px">
-                        <i class="pi pi-sign-in text-4xl"></i>
-                    </button>
-                    <div class="text-bluegray-500 mb-3 font-medium">Daftar / Masuk</div>
-                    <div class="text-900 mb-3 font-medium text-xl">Hanya perlu mendaftar atau masuk</div>
-                    <span class="text-600 line-height-3">Buat akun atau masuk, hanya dalam hitungan detik!</span>
-                </div>
-                <div class="col-12 md:col-4 mb-4 px-5">
-                    <button
-                        class="bg-bluegray-100 p-link p-3 shadow-2 mb-3 inline-block hover:bg-white hover:text-black transition-linear transition-duration-200"
-                        style="border-radius: 10px">
-                        <i class="pi pi-box text-4xl"></i>
-                    </button>
-                    <div class="text-bluegray-400 mb-3 font-medium">Pilih Barang</div>
-                    <div class="text-900 mb-3 font-medium text-xl">Hanya satu kali ketuk</div>
-                    <span class="text-600 line-height-3">Temukan kamera impianmu hanya dengan sekali klik!</span>
-                </div>
-                <div class="col-12 md:col-4 mb-4 px-5">
-                    <button
-                        class="bg-bluegray-100 p-link p-3 shadow-2 mb-3 inline-block hover:bg-white hover:text-black transition-linear transition-duration-200"
-                        style="border-radius: 10px">
-                        <i class="pi pi-shield text-4xl"></i>
-                    </button>
-                    <div class="text-bluegray-500 mb-3 font-medium">Pembayaran</div>
-                    <div class="text-900 mb-3 font-medium text-xl">Bayar dengan metode apapun</div>
-                    <span class="text-600 line-height-3">Nikmati kemudahan pembayaran dengan berbagai metode!</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Popular Items -->
-        <div class="surface-section px-4 py-2 md:px-6 lg:px-8">
-            <div class="card">
-                <h3 class="text-900 text-4xl font-semibold mb-4">🔥 Produk Terlaris</h3>
-                <Carousel :value="products" :numVisible="2" :numScroll="1" :responsiveOptions="responsiveOptions"
-                    :autoplayInterval="3000">
-                    <template #item="slotProps">
+    <div class="surface-section md:px-6 lg:px-8">
+        <div
+            class="flex flex-column md:flex-row justify-content-between align-items-center mb-4 w-full overflow-hidden	">
+            <div class="grid grid-nogutter surface-section text-800 w-full">
+                <div v-animateonscroll="{ enterClass: 'fadein' }"
+                    class="col-12 p-6 text-center md:text-left flex flex-column md:flex-row align-items-center w-full">
+                    <section class="order-2 md:order-1">
+                        <span
+                            class="block text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold mb-1 break-words">Abadikan
+                            momen</span>
                         <div
-                            class="p-4 border-1 surface-border surface-card border-round flex flex-column gap-2 product-card">
-                            <div
-                                class="surface-50 flex justify-content-center align-items-center border-round p-3 w-full h-10rem">
-                                <div class="relative mx-auto">
-                                    <img class="border-round w-full max-h-8rem"
-                                        :src="getFullImageUrl(slotProps.data.urlImg)" :alt="slotProps.data.productName"
-                                        style="max-width: 300px" />
-                                </div>
-                            </div>
-                            <div class="pt-4">
-                                <div class="flex flex-row justify-content-between align-items-start gap-2">
-                                    <div class="relative w-full">
-                                        <span class="font-semibold text-secondary text-sm">{{ slotProps.data.brandName
-                                            }}</span>
-                                        <span class="text-700 font-semibold text-sm mb-3">
-                                            | {{
-                                                slotProps.data.ctgrName }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex flex-column gap-4 mt-4">
-                                    <span class="text-2xl font-semibold text-900">{{
-                                        toCurrencyLocale(slotProps.data.price)
-                                        }}</span>
-                                    <div class="flex gap-2">
-                                        <Button icon="pi pi-shopping-cart" class="w-full" label="Lihat Detail" outlined
-                                            @click="goToProduct(slotProps.data.productCode)" />
-                                    </div>
-                                </div>
-                            </div>
+                            class="text-3xl sm:text-4xl md:text-6xl lg:text-6xl text-primary font-bold mb-3 break-words">
+                            dengan Landscapeaero!</div>
+                        <p
+                            class="mt-0 mb-4 text-700 line-height-3 text-sm sm:text-base md:text-lg lg:text-xl break-words">
+                            Murah. Terpercaya. Aman. Mudah. Lengkap!
+                        </p>
+                        <Button label="Memulai" icon="pi pi-arrow-right" iconPos="right" type="button" class="mr-3"
+                            @click="goToHome"></Button>
+                        <Button :icon="isDarkMode ? 'pi pi-sun' : 'bi bi-moon-stars'" iconPos="right" type="button"
+                            class="mr-3 p-button-text" @click="toggleTheme"></Button>
+                    </section>
+                    <div
+                        class="col-12 md:col-6 overflow-hidden md:mt-0 mt-4 order-1 md:order-2 w-auto ml-8 flex justify-center">
+                        <img :src="getFullImageUrl('rental-ukk/hero-1.png')" alt="Image"
+                            class="md:ml-auto block md:h-full"
+                            style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%);">
+                    </div>
+                </div>
+                <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                    <div class="grid">
+                        <div class="col-12 lg:col-6 p-4 flex flex-column" v-animateonscroll="{ enterClass: 'fadein' }">
+                            <p class="text-600 font-medium text-xl">Kenapa Memilih Kami?</p>
+                            <div class="text-900 font-bold text-3xl mt-2">Pengalaman Potret</div>
+                            <p class="text-600 text-xl mt-3 mb-5 line-height-3">Dapatkan pengalaman memotret terbaik
+                                dengan kamera berkualitas tinggi yang tersedia untuk disewa dengan harga terjangkau.</p>
+                            <Accordion expandIcon="pi pi-plus" collapseIcon="pi pi-minus">
+                                <AccordionTab header="Beragam Pilihan Kamera & Aksesori">
+                                    <ul class="list-none">
+                                        <li class="text-600 line-height-3 flex align-items-center mb-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Temukan
+                                            berbagai jenis kamera, mulai dari DSLR, mirrorless, hingga action cam sesuai
+                                            kebutuhan Anda.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Kami juga
+                                            menyediakan lensa, tripod, drone, dan perlengkapan lainnya.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Pilih paket
+                                            sewa fleksibel, mulai dari harian hingga bulanan.</li>
+                                    </ul>
+                                </AccordionTab>
+                                <AccordionTab header="Layanan Terpercaya & Mudah">
+                                    <ul class="list-none">
+                                        <li class="text-600 line-height-3 flex align-items-center mb-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Proses
+                                            pemesanan cepat dan tanpa ribet.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Unit selalu
+                                            dicek sebelum dikirim untuk memastikan kualitas terbaik.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Bisa dikirim
+                                            langsung ke lokasi atau diambil di store kami.</li>
+                                    </ul>
+                                </AccordionTab>
+                                <AccordionTab header="Harga Terjangkau & Promo Menarik">
+                                    <ul class="list-none">
+                                        <li class="text-600 line-height-3 flex align-items-center mb-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Nikmati harga
+                                            sewa yang kompetitif dengan berbagai pilihan paket.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Dapatkan promo
+                                            spesial untuk pelanggan baru dan langganan.</li>
+                                        <li class="text-600 line-height-3 flex align-items-center my-4"><i
+                                                class="pi pi-circle-fill mr-3" style="font-size:7px;"></i>Garansi
+                                            keamanan dan dukungan teknis selama masa sewa.</li>
+                                    </ul>
+                                </AccordionTab>
+                            </Accordion>
                         </div>
-                    </template>
-                </Carousel>
-            </div>
-        </div>
+                        <div class="col-12 lg:col-6 p-4">
+                            <img src="https://images.pexels.com/photos/821653/pexels-photo-821653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                                class="w-full border-round" alt="product">
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Google Maps -->
-        <div class="surface-section px-4 py-2 md:px-6 lg:px-8">
-            <h3 class="text-900 text-4xl font-semibold mb-4">Kunjungi Kami!</h3>
-            <div class="mapouter">
-                <div class="gmap_canvas border-round">
-                    <iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0"
-                        marginwidth="0"
-                        src="https://maps.google.com/maps?width=660&amp;height=400&amp;hl=en&amp;q=landscapeaero&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                <!-- <div v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                    <p class="text-600 font-medium text-xl text-center">Produk Populer</p>
+                    <div class="text-900 font-bold text-3xl text-center mt-4">Rekomendasi Kamera Terbaik</div>
+                    <p class="text-600 font-medium text-xl text-center mt-4">Jelajahi pilihan kamera favorit pelanggan
+                        kami yang cocok untuk berbagai kebutuhan fotografi dan videografi.</p>
+
+                    <div class="grid mt-7 -mr-3 -ml-3">
+                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
+                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-4.png"
+                                alt="product" class="w-full h-full border-round">
+                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
+                            <p class="text-600 mt-3 line-height-3">Produk kami dirancang untuk memenuhi kebutuhan Anda
+                                dengan kualitas terbaik dan harga yang kompetitif.</p>
+                        </div>
+                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
+                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-5.png"
+                                alt="product" class="w-full h-full border-round">
+                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
+                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
+                                facilisis gravida neque convallis a cras semper.</p>
+                        </div>
+                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
+                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-6.png"
+                                alt="product" class="w-full h-full border-round">
+                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
+                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
+                                facilisis gravida neque convallis a cras semper.</p>
+                        </div>
+                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
+                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-7.png"
+                                alt="product" class="w-full h-full border-round">
+                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
+                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
+                                facilisis gravida neque convallis a cras semper.</p>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div v-animateonscroll="{ enterClass: 'fadein' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                    <div class="text-900 font-bold text-3xl text-center">📍 Lokasi Kami</div>
+                    <p class="text-600 text-xl mt-3 line-height-3 text-center">Kunjungi store kami atau hubungi untuk
+                        informasi lebih lanjut. Kami siap membantu Anda dengan berbagai pilihan kamera dan perlengkapan
+                        fotografi terbaik!
+                    </p>
+                    <div class="grid mt-3 -mr-3 -ml-3">
+                        <div class="col-12 p-3">
+                            <iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0"
+                                marginwidth="0"
+                                src="https://maps.google.com/maps?width=660&amp;height=400&amp;hl=en&amp;q=landscapeaero&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,6 +147,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useLandingStore } from '@/stores/landing.store';
 import { toCurrencyLocale } from '../utils/currency';
 import { useRouter } from 'vue-router';
+import { switchTheme, initializeTheme } from '@/utils/theme-switcher';
 
 const context = useLandingStore();
 const products = ref([]);
@@ -132,6 +159,8 @@ const responsiveOptions = ref([
 ]);
 
 const router = useRouter();
+const isDarkMode = ref(false);
+const theme = ref(localStorage.getItem('theme') || 'light');
 
 function goToHome() {
     router.push({ name: 'home' });
@@ -152,6 +181,7 @@ onMounted(async () => {
     window.addEventListener('scroll', handleScroll);
     await context.getProducts();
     products.value = context.dataTable.slice(0, 9);
+    initializeTheme(isDarkMode, theme);
 });
 
 onBeforeUnmount(() => {
@@ -161,43 +191,17 @@ onBeforeUnmount(() => {
 const getFullImageUrl = (urlImg) => {
     return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
 };
+
+function toggleTheme() {
+    switchTheme(isDarkMode, theme);
+}
 </script>
 
 <style scoped>
-/* Container utama */
-.parallax-container {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.content {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 1;
-}
-
-.parallax-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 130%;
-    background-image: url('../assets/pemandangan.jpg');
-    background-size: cover;
-    background-position: center;
-    transition: transform 0.1s linear;
-}
-
-/* Add margin to product cards */
 .product-card {
     margin: 0 0.5rem;
 }
 
-/* Google Maps styling */
 .mapouter {
     position: relative;
     text-align: right;

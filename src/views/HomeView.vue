@@ -7,9 +7,9 @@
                         class="border-circle w-3rem h-3rem flex align-items-center justify-content-center surface-100 mr-2">
                         <i class="pi pi-warehouse text-900 text-3xl"></i>
                     </span>
-                    <span class="text-900 text-3xl font-medium">Sewa Barang</span>
+                    <span class="text-900 text-3xl font-medium">Sewa Kamera & Aksesori</span>
                 </div>
-                <span class="text-600 text-xl">Yuk, cari barang yang mau kamu sewa!😋</span>
+                <span class="text-600 text-xl">Temukan kamera terbaik untuk setiap momen spesial! ✨</span>
             </div>
             <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
                 <IconField iconPosition="left">

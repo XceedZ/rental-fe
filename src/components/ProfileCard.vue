@@ -16,7 +16,7 @@
                 </a>
                 <div class="border-top-1 surface-border my-3" style="height:1px"></div>
                 <ul id="pb_profile_submenu" class="list-none p-0 m-0 overflow-hidden">
-                    <li class="mb-2" v-if="hasAccess('manageAdmin')">
+                    <li class="mb-2" v-if="hasAccess('manageProduct') || hasAccess('manageAdmin')">
                         <a v-ripple
                             class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
                             @click="goToDashboard">
@@ -72,8 +72,8 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a v-ripple
-                            class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple">
+                        <a v-ripple class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
+                            @click="goToSettings">
                             <i class="pi pi-cog text-500 mr-3 text-xl"></i>
                             <span>
                                 <span class="block text-700 font-medium">Pengaturan</span>
@@ -129,6 +129,10 @@ const goToAdminRoles = () => {
     if (hasAccess('manageAdmin')) {
         router.push({ name: 'adminRoles' });
     }
+};
+
+const goToSettings = () => {
+    router.push({ name: 'settings' });
 };
 
 const goToBrandCtgr = () => {
