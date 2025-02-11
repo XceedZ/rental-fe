@@ -34,8 +34,8 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import local from '@/utils/local-storage';
 import { useAuthStore } from '@/stores/auth.store';
+import { switchTheme, initializeTheme } from '@/utils/theme-switcher';
 
 const router = useRouter();
 const context = useAuthStore();
@@ -47,14 +47,14 @@ const theme = ref(localStorage.getItem('theme') || 'light');
 
 const articles = computed(() => {
     return [
-        { name: 'Sewa Barang', description: 'Cari barang untuk disewa', iconClass: 'pi pi-warehouse', onClick: () => router.push({ name: 'home' }) },
-        { name: 'Riwayat Sewa', description: 'Lihat riwayat barang yang sudah disewa', iconClass: 'bi bi-receipt-cutoff', onClick: () => router.push({ name: 'history' }) },
+        { name: 'Sewa Kamera & Aksesori', description: 'Temukan kamera & aksesori', iconClass: 'pi pi-warehouse', onClick: () => router.push({ name: 'home' }) },
+        { name: 'Riwayat Sewa', description: 'Lihat riwayat penyewaan', iconClass: 'bi bi-receipt-cutoff', onClick: () => router.push({ name: 'history' }) },
         { name: 'Pengaturan', description: 'Ubah data pribadi', iconClass: 'pi pi-cog' },
         {
             name: isDarkMode.value ? 'Mode Terang' : 'Mode Gelap',
             description: isDarkMode.value ? 'Beralih ke mode terang agar tampilan lebih cerah' : 'Beralih ke mode gelap supaya mata terlindungi',
             iconClass: isDarkMode.value ? 'pi pi-sun' : 'pi pi-moon',
-            onClick: switchTheme
+            onClick: () => switchTheme(isDarkMode, theme)
         },
         { name: 'Keluar', description: 'Akhiri sesi', iconClass: 'pi pi-sign-out', onClick: logout }
     ];
@@ -71,25 +71,6 @@ const filteredArticles = computed(() => {
     );
 });
 
-function switchTheme() {
-    isDarkMode.value = !isDarkMode.value;
-
-    const themeLink = document.getElementById('theme-link');
-    const primeflexLink = document.getElementById('primeflex-link');
-
-    if (isDarkMode.value) {
-        themeLink.href = 'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-dark-blue/theme.css';
-        // primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
-        local.set('theme', 'dark'); 
-        theme.value = 'dark';
-    } else {
-        themeLink.href = 'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-light-blue/theme.css';
-        // primeflexLink.href = 'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-light.css';
-        local.set('theme', 'light');
-        theme.value = 'light';
-    }
-}
-
 function handleArticleClick(article) {
     visible.value = false;
     article.onClick();
@@ -97,18 +78,6 @@ function handleArticleClick(article) {
 }
 
 onMounted(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        isDarkMode.value = true;
-        theme.value = 'dark';
-        document.getElementById('theme-link').href =
-            'https://cdn.jsdelivr.net/npm/primevue/resources/themes/aura-dark-blue/theme.css';
-        // document.getElementById('primeflex-link').href =
-        //     'https://cdn.jsdelivr.net/npm/primeflex/themes/primeone-dark.css';
-    }
-});
-
-watch(theme, (newTheme) => {
-  document.documentElement.setAttribute('data-theme', newTheme);
+    initializeTheme(isDarkMode, theme);
 });
 </script>

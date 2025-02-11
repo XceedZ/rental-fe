@@ -19,6 +19,7 @@ import Badge from 'primevue/badge';
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast';
+import AnimateOnScroll from 'primevue/animateonscroll';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -86,5 +87,6 @@ app.directive('styleclass', StyleClass);
 app.directive('ripple', Ripple);
 app.directive('focustrap', FocusTrap);
 app.directive('tooltip', Tooltip);
+app.directive('animateonscroll', AnimateOnScroll);
 
 app.mount('#app')

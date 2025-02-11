@@ -3,6 +3,7 @@ import local from "../utils/local-storage";
 import Dashboard from "@/views/dashboard/Dashboard.vue";
 import Landing from "@/views/Landing.vue";
 import HomeView from "../views/HomeView.vue";
+import Profile from "../views/settings/Profile.vue";
 import History from "../views/HistoryView.vue";
 import NotFound from "../views/NotFoundView.vue";
 import Product from "../views/ProductDetail.vue";
@@ -29,7 +30,7 @@ const routes = [
     },
   },
   {
-    path: "/rent",
+    path: "/rental",
     name: "home",
     component: HomeView,
   },
@@ -50,6 +51,14 @@ const routes = [
     name: "resetPassword",
     component: ResetPassword,
     meta: { hideNavbarFooter: true },
+  },
+  {
+    path: "/settings/profile",
+    name: "settings",
+    component: Profile,
+    meta: {
+      taskNames: [],
+    },
   },
   {
     path: "/history",
