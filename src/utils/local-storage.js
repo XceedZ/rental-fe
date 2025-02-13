@@ -5,8 +5,7 @@ const local = reactive({
     get: (e) => get(e),
     set: (k, v) => set(k, v),
     getUser: () => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        return Array.isArray(user) && user.length > 0 ? user : [{}];
+        return JSON.parse(localStorage.getItem('user')) || {};
     },
     remove: (e) => remove(e),
     removeExcept: (e) => removeExcept(e),

@@ -41,15 +41,16 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import { useAddProductStore } from '@/stores/add-roles.store';
+import { useAddRolesStore } from '@/stores/add-roles.store';
 
-const context = useAddProductStore();
+const context = useAddRolesStore();
+const emit = defineEmits();
 
 const submitRole = async () => {
     const response = await context.addRolePermissions();
     if (response.isOk) {
         context.resetInput();
-        $emit('update:visible', false);
+        emit('update:visible', false);
     }
 };
 

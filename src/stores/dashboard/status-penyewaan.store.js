@@ -23,7 +23,7 @@ export const useStatusPenyewaanStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: {},
-    user: local.getUser()[0],
+    user: local.getUser(),
     trxProductList: [],
     totalRentals: 0,
     growthPercentage: 0,

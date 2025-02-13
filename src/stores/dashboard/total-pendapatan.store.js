@@ -24,7 +24,7 @@ export const useTotalPendapatanStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: {},
-    user: local.getUser()[0],
+    user: local.getUser(),
     trxProductList: [],
     totalPendapatan: 0,
     growthPercentage: 0,

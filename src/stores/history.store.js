@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { GeneralConstants } from "@/utils/general-constants";
 import { useToast } from "primevue/usetoast";
-import { showSuccessCancel } from "@/utils/toast-service";
+import { showSuccessCancel, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
@@ -25,7 +25,7 @@ export const useHistoryStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: {},
-    user: local.getUser()[0],
+    user: local.getUser(),
     trxProductList: [],
     createInvoiceApi: ApiConstant.CREATE_INVOICE,
     getInvoiceByIdApi: ApiConstant.GET_INVOICE_BY_ID,
@@ -93,7 +93,7 @@ export const useHistoryStore = defineStore({
           amount: amount,
           payer_email: payerEmail,
           description: description,
-          customer: customer
+          customer: customer,
         },
       };
       const result = await callApi(payload);
@@ -115,6 +115,9 @@ export const useHistoryStore = defineStore({
       const result = await callApi(payload);
       if (result.isOk) {
         await this.getTrxProductList();
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["login"] = false;
       }
       this.loading["getInvoiceById"] = false;
       return result;

@@ -23,7 +23,7 @@ export const useTotalPenyewaanStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: {},
-    user: local.getUser()[0],
+    user: local.getUser(),
     trxProductList: [],
     totalRentals: 0,
     growthPercentage: 0,
@@ -41,12 +41,6 @@ export const useTotalPenyewaanStore = defineStore({
         this.growthPercentage = result.body.growthPercentage;
         this.dailyRentals = result.body.dailyRentals;
         this.currentDate = result.body.currentDate;
-      } else {
-        this.toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to fetch data",
-        });
       }
       this.loading = false;
     },

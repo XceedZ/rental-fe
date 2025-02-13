@@ -23,7 +23,8 @@
                     </section>
                     <div
                         class="col-12 md:col-6 overflow-hidden md:mt-0 mt-4 order-1 md:order-2 w-auto ml-8 flex justify-center">
-                        <img :src="getFullImageUrl('rental-ukk/hero-1.png')" alt="Image"
+                        <img v-animateonscroll="{ enterClass: 'fadein' }"
+                            :src="getFullImageUrl('rental-ukk/hero-1.png')" alt="Image"
                             class="md:ml-auto block md:h-full"
                             style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%);">
                     </div>
@@ -78,50 +79,91 @@
                                 </AccordionTab>
                             </Accordion>
                         </div>
-                        <div class="col-12 lg:col-6 p-4">
-                            <img src="https://images.pexels.com/photos/821653/pexels-photo-821653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        <div class="col-12 lg:col-6 p-4" v-animateonscroll="{ enterClass: 'fadein' }">
+                            <img v-animateonscroll="{ enterClass: 'fadein' }"
+                                src="https://images.pexels.com/photos/821653/pexels-photo-821653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 class="w-full border-round" alt="product">
                         </div>
                     </div>
                 </div>
 
-                <!-- <div v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
-                    <p class="text-600 font-medium text-xl text-center">Produk Populer</p>
-                    <div class="text-900 font-bold text-3xl text-center mt-4">Rekomendasi Kamera Terbaik</div>
-                    <p class="text-600 font-medium text-xl text-center mt-4">Jelajahi pilihan kamera favorit pelanggan
-                        kami yang cocok untuk berbagai kebutuhan fotografi dan videografi.</p>
+                <div class="surface-section w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8">
+                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein' }">
+                        Produk Populer</p>
+                    <div class="text-900 font-bold text-3xl text-center mt-4"
+                        v-animateonscroll="{ enterClass: 'fadein' }">Rekomendasi Kamera Terbaik</div>
+                    <p class="text-600 font-medium text-xl text-center mt-4"
+                        v-animateonscroll="{ enterClass: 'fadein' }">Jelajahi pilihan kamera favorit yang cocok untuk
+                        berbagai kebutuhan fotografi dan videografi.</p>
 
-                    <div class="grid mt-7 -mr-3 -ml-3">
-                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
-                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-4.png"
-                                alt="product" class="w-full h-full border-round">
-                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
-                            <p class="text-600 mt-3 line-height-3">Produk kami dirancang untuk memenuhi kebutuhan Anda
-                                dengan kualitas terbaik dan harga yang kompetitif.</p>
+                    <Carousel :value="products" :numVisible="4" :numScroll="1" :autoplayInterval="3000"
+                        :responsiveOptions="responsiveOptions" class="flex">
+                        <template #item="slotProps">
+                            <div class="p-4 flex flex-column text-center">
+                                <img v-animateonscroll="{ enterClass: 'fadein' }" :src="slotProps.data.image"
+                                    alt="product" class="w-full h-full border-round">
+                                <div class="text-900 text-xl mt-4">{{ slotProps.data.title }}</div>
+                                <p class="text-600 mt-3 line-height-3">{{ slotProps.data.description }}</p>
+                            </div>
+                        </template>
+                    </Carousel>
+                </div>
+
+                <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein' }">
+                        Kemudahan Dalam</p>
+                    <div class="text-900 font-bold text-3xl text-center mt-4"
+                        v-animateonscroll="{ enterClass: 'fadein' }">Transaksi &
+                        Pembayaran</div>
+                    <p class="text-600 font-medium text-xl text-center mt-4"
+                        v-animateonscroll="{ enterClass: 'fadein' }">Nikmati
+                        pengalaman transaksi yang aman, cepat, dan praktis untuk mendukung kebutuhan fotografi dan
+                        videografi Anda.</p>
+
+                    <div class="grid mt-8">
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3 mb-3">
+                                <img src="../assets/bca.png" alt="Image" height="50" class="payment-img">
+                            </div>
                         </div>
-                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
-                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-5.png"
-                                alt="product" class="w-full h-full border-round">
-                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
-                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
-                                facilisis gravida neque convallis a cras semper.</p>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/mandiri.png" alt="Image" height="50" class="payment-img">
+                            </div>
                         </div>
-                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
-                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-6.png"
-                                alt="product" class="w-full h-full border-round">
-                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
-                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
-                                facilisis gravida neque convallis a cras semper.</p>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/bni.png" alt="Image" height="50" class="payment-img">
+                            </div>
                         </div>
-                        <div class="xs:col-12 sm:col-6 lg:col-3 p-4 flex flex-column text-center">
-                            <img src="http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-7.png"
-                                alt="product" class="w-full h-full border-round">
-                            <div class="text-900 text-xl mt-4">Facilisis gravida neque</div>
-                            <p class="text-600 mt-3 line-height-3">Potenti nullam ac tortor vitae. Aliquet bibendum enim
-                                facilisis gravida neque convallis a cras semper.</p>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/bri.png" alt="Image" height="50" class="payment-img">
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/qris.png" alt="Image" height="50" class="payment-img">
+
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/ovo.png" alt="Image" height="50" class="payment-img">
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/dana.png" alt="Image" height="50" class="payment-img">
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-3 payment-img-container">
+                            <div class="flex align-items-center justify-content-center p-3">
+                                <img src="../assets/gopay.png" alt="Image" height="50" class="payment-img">
+                            </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <div v-animateonscroll="{ enterClass: 'fadein' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
                     <div class="text-900 font-bold text-3xl text-center">📍 Lokasi Kami</div>
@@ -150,18 +192,17 @@ import { useRouter } from 'vue-router';
 import { switchTheme, initializeTheme } from '@/utils/theme-switcher';
 
 const context = useLandingStore();
-const products = ref([]);
 const responsiveOptions = ref([
-    { breakpoint: '1400px', numVisible: 2, numScroll: 1 },
+    { breakpoint: '1400px', numVisible: 4, numScroll: 1 },
     { breakpoint: '1199px', numVisible: 3, numScroll: 1 },
     { breakpoint: '767px', numVisible: 2, numScroll: 1 },
-    { breakpoint: '575px', numVisible: 1, numScroll: 1 }
+    { breakpoint: '575px', numVisible: 1, numScroll: 1 } 
 ]);
 
 const router = useRouter();
 const isDarkMode = ref(false);
 const theme = ref(localStorage.getItem('theme') || 'light');
-
+const products = ref([]);
 function goToHome() {
     router.push({ name: 'home' });
 }
@@ -179,8 +220,30 @@ function handleScroll() {
 
 onMounted(async () => {
     window.addEventListener('scroll', handleScroll);
-    await context.getProducts();
-    products.value = context.dataTable.slice(0, 9);
+    // await context.getProducts();
+    // products.value = context.dataTable.slice(0, 9);
+    products.value = [
+        {
+            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-4.png",
+            title: "Facilisis gravida neque",
+            description: "Produk kami dirancang untuk memenuhi kebutuhan Anda dengan kualitas terbaik dan harga yang kompetitif."
+        },
+        {
+            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-5.png",
+            title: "Facilisis gravida neque",
+            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
+        },
+        {
+            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-6.png",
+            title: "Facilisis gravida neque",
+            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
+        },
+        {
+            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-7.png",
+            title: "Facilisis gravida neque",
+            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
+        }
+    ];
     initializeTheme(isDarkMode, theme);
 });
 
@@ -194,6 +257,7 @@ const getFullImageUrl = (urlImg) => {
 
 function toggleTheme() {
     switchTheme(isDarkMode, theme);
+    document.body.classList.toggle('dark-theme', isDarkMode.value);
 }
 </script>
 
@@ -218,5 +282,49 @@ function toggleTheme() {
 
 .gmap_iframe {
     height: 400px !important;
+}
+
+.payment-img {
+    transition: filter 0.2s ease-in-out;
+}
+
+.dark-theme .payment-img {
+    filter: grayscale(100%);
+}
+
+.dark-theme .payment-img:hover {
+    filter: grayscale(0%);
+}
+
+@media (max-width: 767px) {
+    .payment-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-img {
+    height: 50px; /* Default height */
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .grid.mt-8 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .payment-img-container {
+        width: 50%; /* Mengatur agar gambar tetap menyamping */
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .payment-img {
+        height: 35px; /* Ukuran lebih kecil di layar kecil */
+    }
+}
 }
 </style>

@@ -14,8 +14,8 @@ export const useManageCtgrBrandStore = defineStore({
     manageBrandApi: ApiConstant.GET_MANAGE_BRAND,
     manageCtgrApi: ApiConstant.GET_MANAGE_CTGR,
     toast: useToast(),
-    brandKeyword: '',
-    ctgrKeyword: '',
+    brandKeyword: "",
+    ctgrKeyword: "",
     loading: {},
     dataTableBrand: [],
     dataTableCtgr: [],
@@ -27,6 +27,11 @@ export const useManageCtgrBrandStore = defineStore({
     ctgrOffset: 0,
     brandLimit: GeneralConstants.DEFAULT_ROWS,
     ctgrLimit: GeneralConstants.DEFAULT_ROWS,
+    brandStatus: "",
+    statusOptions: [
+      { name: "AKTIF", code: "Y" },
+      { name: "NONAKTIF", code  : "N" },
+    ],
   }),
   actions: {
     onBrandPage(event) {
@@ -45,6 +50,7 @@ export const useManageCtgrBrandStore = defineStore({
         api: this.manageBrandApi,
         body: {
           keyword: this.brandKeyword,
+          status: this.brandStatus,
           limit: this.brandLimit,
           offset: this.brandOffset,
         },
@@ -52,7 +58,7 @@ export const useManageCtgrBrandStore = defineStore({
       const result = await callApi(payload);
       if (result.isOk) {
         const brands = result.body.brands.map((data) => ({
-          productBrandId: data.productBrandId,
+          id: data.productBrandId,
           brandName: data.brandName,
           active: data.active,
           createdAt: data.createdAt,

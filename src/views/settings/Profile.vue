@@ -59,25 +59,23 @@
                     </li>
                 </ul>
                 <div class="surface-card p-5 shadow-2 border-round flex-auto xl:ml-5">
-                    <div class="text-900 font-semibold text-lg mt-3">Profile</div>
-                    <Divider></Divider>
                     <div class="flex gap-5 flex-column md:flex-column">
                         <div class="flex mt-4 flex-column md:flex-row md:w-6 gap-4">
-                            <div class="flex-auto p-fluid">
+                            <div class="flex-auto p-fluid" style="min-width: 15rem;">
                                 <div class="flex flex-column border-round border-1 surface-border p-4 cursor-pointer hover:border-primary transition-duration-150"
                                     @click="selectedAddress = context.address"
-                                    :class="{ 'border-primary': selectedAddress === context.address, 'hover:border-primary': true }">
+                                    :class="{ 'border-primary': selectedAddress === context.user.address, 'hover:border-primary': true }">
                                     <div class="flex justify-content-between align-items-center mb-3">
                                         <span class="text-900 text-xl font-medium">Alamat</span>
                                         <Button id="phone" class="text-600 font-medium p-button-text w-auto"
                                             icon="pi pi-pencil" label="Edit"></Button>
                                     </div>
-                                    <span class="inline-block text-600 mb-3">{{ context.address }}</span>
+                                    <span class="inline-block text-600 mb-3">{{ context.user.address }}</span>
                                     <span class="inline-block text-600"><i class="pi pi-mobile mr-2"></i>{{
-                                        context.phone }}</span>
+                                        context.user.phone }}</span>
                                 </div>
                             </div>
-                            <div class="flex-auto p-fluid">
+                            <div class="flex-auto p-fluid" style="min-width: 15rem;">
                                 <div
                                     class="flex h-full flex-column justify-content-center align-items-center text-center py-5 border-round border-1 surface-border surface-100 cursor-pointer hover:border-primary transition-duration-150">
                                     <span
@@ -89,18 +87,24 @@
                         </div>
                         <div class="flex-auto p-fluid">
                             <div class="mb-4">
-                                <label for="name" class="block font-normal text-900 mb-2">Nama</label>
-                                <InputText id="name" type="text" v-model="context.name" />
+                                <label for="name" class="block font-normal text-900 mb-2">Nama Lengkap</label>
+                                <InputGroup>
+                                    <InputGroupAddon>
+                                        <i class="pi pi-user"></i>
+                                    </InputGroupAddon>
+                                    <InputText id="name" type="text" v-model="context.user.name" />
+                                </InputGroup>
                             </div>
                             <div class="mb-4">
                                 <label for="email" class="block font-normal text-900 mb-2">Email</label>
                                 <div class="p-inputgroup">
                                     <span class="p-inputgroup-addon"><i class="pi pi-at"></i></span>
-                                    <InputText id="email" type="text" v-model="context.email" />
+                                    <InputText readonly id="email" type="text" v-model="context.user.email" />
                                 </div>
                             </div>
                             <div class="flex gap-2 flex-wrap md:flex-nowrap mt-5">
-                                <Button icon="pi pi-save" label="Simpan"
+                                <Button icon="pi pi-check" label="Simpan" :loading="context.loading['updateProfile']"
+                                    @click="updateProfile"
                                     class="w-full md:w-auto text-base sm:text-sm mb-2 md:mb-0"></Button>
                                 <Button icon="pi pi-lock" outlined label="Setel Ulang Kata Sandi"
                                     class="w-full md:w-auto text-base sm:text-sm"></Button>
@@ -116,18 +120,15 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useProfileSettingStore } from '@/stores/settings/profile-setting.store';
-import local from '@/utils/local-storage';
 
 const activeTab3 = ref(0);
 const context = useProfileSettingStore();
-const selectedAddress = ref("");
+
+const updateProfile = async () => {
+    await context.updateProfile();
+};
 
 onMounted(() => {
-    const user = local.getUser()[0];
-    context.name = user.name || "";
-    context.email = user.email || "";
-    context.phone = user.phone || "";
-    context.address = user.address || "";
-    selectedAddress.value = context.address;
+    context.profileAccount();
 });
 </script>

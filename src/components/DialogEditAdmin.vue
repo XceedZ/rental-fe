@@ -46,11 +46,11 @@
         </section>
         <div v-if="context.dataTableRoles" class="mt-4">
             <label class="font-semibold">Peran</label>
-            <div v-for="role in context.dataTableRoles" :key="role.id"
+            <div v-for="role in context.dataTableRoles" :key="role.roleId"
                 class="surface-card border-2 p-3 mt-3 flex align-items-center cursor-pointer border-round mb-2"
-                :class="{ 'border-primary': context.selectedRole === role.id, 'surface-border': context.selectedRole !== role.id }"
-                @click="context.selectedRole = role.id">
-                <RadioButton name="role" :value="role.id" v-model="context.selectedRole" class="mr-3"></RadioButton>
+                :class="{ 'border-primary': context.selectedRole === role.roleId, 'surface-border': context.selectedRole !== role.roleId }"
+                @click="context.selectedRole = role.roleId">
+                <RadioButton name="role" :value="role.roleId" v-model="context.selectedRole" class="mr-3"></RadioButton>
                 <div class="flex flex-column">
                     <div class="font-medium text-base mb-1">{{ role.roleName }}</div>
                     <span class="text-sm text-600">{{ role.permissionName }}</span>
@@ -84,9 +84,10 @@ const saveRole = async () => {
 };
 
 onMounted(async () => {
-    await context.getRolePermission()
-    context.id = context.selectedMember.id;
-    context.selectedRole = context.selectedMember.roleId;
+    await context.getRolePermission();
+    if (context.selectedMember) {
+        context.selectedRole = context.selectedMember.roleId;
+    }
 });
 
 </script>
