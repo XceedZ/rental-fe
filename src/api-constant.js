@@ -69,6 +69,16 @@ export const ApiConstant = {
     method: "POST",
     keyList: "",
   },
+  ADD_BRAND: {
+    path: "addBrand",
+    method: "POST",
+    keyList: "",
+  },
+  EDIT_BRAND: {
+    path: "editBrand",
+    method: "POST",
+    keyList: "",
+  },
   PASSWORD_EMAIL: {
     path: "password/email",
     method: "POST",
@@ -206,6 +216,11 @@ export const ApiConstant = {
   },
   REMOVE_ROLE_PERMISSIONS: {
     path: "removeRolePermissions",
+    method: "POST",
+    keyList: "",
+  },
+  UPDATE_PROFILE: {
+    path: "updateProfile",
     method: "POST",
     keyList: "",
   },

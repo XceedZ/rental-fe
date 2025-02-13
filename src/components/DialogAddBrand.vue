@@ -19,7 +19,7 @@
             <div class="flex flex-row gap-2 mt-3">
                 <FloatLabel class="w-full">
                     <label for="rolename">Nama Merk</label>
-                    <InputText id="rolename" v-model="value1" class="w-full" @click="showCommandMenu" />
+                    <InputText id="rolename" v-model="context.brandName" class="w-full" />
                 </FloatLabel>
             </div>
         </section>
@@ -27,14 +27,23 @@
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
                 <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button icon="pi pi-check" @click="$emit('update:visible', false)" label="Selesai"
-                    class="w-full p-button-primary"></Button>
+                <Button icon="pi pi-check" @click="addBrand" label="Selesai" class="w-full p-button-primary"
+                    :loading="context.loading['addBrand']"></Button>
             </div>
         </template>
     </Dialog>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { useAddBrandStore } from '@/stores/add-brand.store';
 
+const context = useAddBrandStore();
+const emit = defineEmits();
+
+const addBrand = async () => {
+    const result = await context.addBrand();
+    if (result.isOk) {
+        emit('update:visible', false);
+    }
+};
 </script>

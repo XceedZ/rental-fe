@@ -78,7 +78,7 @@
                     </Column>
                     <Column style="min-width:13rem">
                         <template #header>
-                            <span class="font-semibold text-sm text-color-secondary">Tanggal Pembaruan</span>
+                            <span class="font-semibold text-sm text-color-secondary">Pembaruan Terakhir</span>
                         </template>
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getManageBrand']" height="2rem"></Skeleton>
@@ -88,11 +88,13 @@
                         </template>
                     </Column>
                     <Column style="min-width:8rem">
-                        <template #body="{}">
+                        <template #body="{ data }">
                             <Skeleton v-if="context.loading['getManageBrand']" height="2rem"></Skeleton>
                             <Button v-else type="button" icon="pi pi-ellipsis-v"
-                                class="p-button-text p-button-secondary" @click="$refs.menu.toggle($event)"></Button>
-                            <Menu ref="menu" appendTo="body" popup :model="items"></Menu>
+                                class="p-button-text p-button-secondary"
+                                @click="$refs['menu-' + data.id].toggle($event)"></Button>
+                            <Menu :ref="'menu-' + data.id" appendTo="body" popup :model="getMenuItemsBrand(data)">
+                            </Menu>
                         </template>
                     </Column>
                 </DataTable>
@@ -165,7 +167,7 @@
                     </Column>
                     <Column style="min-width:13rem">
                         <template #header>
-                            <span class="font-semibold text-sm text-color-secondary">Tanggal Pembaruan</span>
+                            <span class="font-semibold text-sm text-color-secondary">Pembaruan Terakhir</span>
                         </template>
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getManageCtgr']" height="2rem"></Skeleton>
@@ -187,20 +189,54 @@
                     @page="context.onCtgrPage($event)" />
             </div>
         </section>
-        <DialogAddBrand :visible="showDialogAddBrand" @update:visible="showDialogAddBrand = $event" />
-        <DialogAddCategory :visible="showDialogAddCategory" @update:visible="showDialogAddCategory = $event" />
+        <DialogAddBrand v-if="showDialogAddBrand" :visible="showDialogAddBrand" @update:visible="showDialogAddBrand = $event" />
+        <DialogAddCategory v-if="showDialogAddCategory" :visible="showDialogAddCategory" @update:visible="showDialogAddCategory = $event" />
+        <DialogEditBrand v-if="showDialogEditBrand" :visible="showDialogEditBrand" @update:visible="showDialogEditBrand = $event" />
     </div>
 </template>
 
 <script setup>
 import { defineAsyncComponent, ref, onMounted } from 'vue';
 import { useManageCtgrBrandStore } from '@/stores/manage-ctgr-brand.store';
+import { useEditBrandStore } from '@/stores/edit-brand.store';
 
 const context = useManageCtgrBrandStore();
 const DialogAddBrand = defineAsyncComponent(() => import('../components/DialogAddBrand.vue'));
 const DialogAddCategory = defineAsyncComponent(() => import('../components/DialogAddCategory.vue'));
+const DialogEditBrand = defineAsyncComponent(() => import('../components/DialogEditBrand.vue'));
 const showDialogAddBrand = ref(false);
 const showDialogAddCategory = ref(false);
+const showDialogEditBrand = ref(false);
+
+const edit = useEditBrandStore();
+
+const getMenuItemsBrand = (data) => {
+    return [
+        {
+            label: 'Pilihan',
+            items: [
+                {
+                    label: 'Edit',
+                    icon: 'pi pi-pencil',
+                    command: () => {
+                        edit.selectedBrand = data;
+                        showDialogEditBrand.value = true;
+                    }
+                },
+                {
+                    label: 'Hapus',
+                    icon: 'pi pi-trash',
+                    command: () => {
+                        selectedProductId.value = data.id;
+                        confirmHeader.value = 'Konfirmasi Hapus';
+                        confirmMessage.value = `Apakah Anda yakin ingin menghapus produk ${data.productName}?`;
+                        showDialogConfirm.value = true;
+                    }
+                }
+            ]
+        }
+    ];
+};
 
 onMounted(async () => {
     await context.getManageBrand();

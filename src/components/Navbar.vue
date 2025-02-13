@@ -40,7 +40,7 @@
                         <a v-ripple
                             class="text-900 font-medium inline-flex align-items-center cursor-pointer px-1 lg:px-3 mr-2 lg:mr-0 border-bottom-2 border-transparent select-none p-ripple"
                             v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', leaveToClass: 'hidden', leaveActiveClass: 'fadeout', hideOnOutsideClick: true }">
-                            <Avatar :name="local.getUser()?.[0]?.name || 'Tamu'" alt="User Avatar"
+                            <Avatar :name="local.getUser().name || 'Tamu'" alt="User Avatar"
                                 style="height: 2.5rem;" />
                             <span class="hidden">My Account</span>
                         </a>

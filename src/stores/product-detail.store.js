@@ -13,7 +13,7 @@ export const useProductDetailStore = defineStore({
     getApi: ApiConstant.GET_DETAIL_PRODUCTS,
     brandApi: ApiConstant.GET_BRAND_FOR_ADD_PRODUCT,
     ctgrApi: ApiConstant.GET_CTGR_FOR_ADD_PRODUCT,
-    user: local.getUser()[0],
+    user: local.getUser(),
     toast: useToast(),
     keyword: "",
     loading: {},
@@ -52,6 +52,11 @@ export const useProductDetailStore = defineStore({
       this.loading["getProducts"] = false;
     },
     async createRental(router) {
+      if (!this.user || !this.user.id) {
+        this.loading["createRental"] = false;
+        router.push({ name: "login" });
+        return;
+      }
       this.loading["createRental"] = true;
       const result = await callApi({
         api: ApiConstant.CREATE_RENTAL,

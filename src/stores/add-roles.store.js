@@ -4,14 +4,13 @@ import { useToast } from "primevue/usetoast";
 import { showSuccessAdd, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import { useManageProductStore } from "@/stores/manage-product.store";
+import { useManageAdminStore } from "@/stores/manage-admin.store";
 
-export const useAddProductStore = defineStore({
-  id: "add-product.store",
+export const useAddRolesStore = defineStore({
+  id: "add-roles.store",
   state: () => ({
-    addApi: ApiConstant.ADD_PRODUCT,
-    brandApi: ApiConstant.GET_BRAND_FOR_ADD_PRODUCT,
-    ctgrApi: ApiConstant.GET_CTGR_FOR_ADD_PRODUCT,
+    addApi: ApiConstant.ADD_ROLE_PERMISSIONS,
+    permissionsApi: ApiConstant.GET_PERMISSIONS,
     toast: useToast(),
     productId: -99,
     productName: "",
@@ -42,16 +41,17 @@ export const useAddProductStore = defineStore({
       );
 
       const result = await callApi({
-        api: ApiConstant.ADD_ROLE_PERMISSIONS,
+        api: this.addApi,
         body: {
           roleName: this.roleName,
           permissions: permissions,
           authority: this.adminAuthority,
         },
       });
-
       if (result.isOk) {
+        const context = useManageAdminStore();
         showSuccessAdd(this.toast);
+        context.getRolePermission();
         this.resetInput();
         this.loading["addRole"] = false;
         return { isOk: true };
@@ -68,7 +68,7 @@ export const useAddProductStore = defineStore({
       this.loading["getPermissions"] = true;
 
       const result = await callApi({
-        api: ApiConstant.GET_PERMISSIONS,
+        api: this.permissionsApi,
         body: {},
       });
 
@@ -81,6 +81,10 @@ export const useAddProductStore = defineStore({
         return [];
       }
     },
+    resetInput() {
+      this.roleName = "";
+      this.selectedPermissions = [];
+    },
   },
   getters: {
     isSubmitDisabled: (state) => {
@@ -92,10 +96,6 @@ export const useAddProductStore = defineStore({
         !state.price ||
         !state.fineBill
       );
-    },
-    resetInput: (state) => {
-      state.roleName = "";
-      state.selectedPermissions = [];
     },
   },
 });

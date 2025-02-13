@@ -12,7 +12,7 @@ export const useShoppingItemsStore = defineStore({
   state: () => ({
     getApi: ApiConstant.GET_DETAIL_PRODUCTS,
     addApi: ApiConstant.CREATE_RENTAL,
-    user: local.getUser()[0],
+    user: local.getUser(),
     toast: useToast(),
     loading: {},
     selectedProduct: [],
@@ -87,7 +87,6 @@ export const useShoppingItemsStore = defineStore({
       return state.cartItems.some((item) => item.qty === 0);
     },
   },
-  // Call hydrate when the store is initialized
   hydrate() {
     this.hydrate();
   }

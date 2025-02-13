@@ -5,7 +5,7 @@
                 <a v-ripple class="flex p-2 align-items-center cursor-pointer p-ripple"
                     v-styleclass="{ selector: '#pb_profile_submenu', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup' }">
                     <span class="mr-3 inline-flex">
-                        <Avatar :name="(local.getUser()?.[0]?.name || 'Tamu')" alt="User Avatar"
+                        <Avatar :name="(local.getUser().name || 'Tamu')" alt="User Avatar"
                             style="height: 2.5rem;" />
                     </span>
                     <div>
@@ -163,8 +163,8 @@ const logout = async () => {
 onMounted(() => {
     const userData = local.getUser();
     if (userData) {
-        userName.value = userData[0].name;
-        userRole.value = userData[0].roleName;
+        userName.value = userData.name;
+        userRole.value = userData.roleName;
     }
 });
 </script>

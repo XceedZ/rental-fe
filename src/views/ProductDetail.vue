@@ -129,7 +129,7 @@ const minDate = ref(new Date());
 
 const isLoggedIn = computed(() => {
     const user = local.getUser();
-    return Array.isArray(user) && user.length > 0 && user[0].id;
+    return user && user.id;
 });
 
 const getFullImageUrl = (urlImg) => {

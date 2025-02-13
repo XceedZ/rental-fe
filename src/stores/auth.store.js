@@ -57,16 +57,16 @@ export const useAuthStore = defineStore({
       if (result.isOk) {
         this.accessToken = result.body.access_token;
         this.permissions = result.body.permissions;
-        const user = result.body.user.map((data) => ({
-          id: data.user_id,
-          userCode: data.user_code,
-          address: data.address,
-          phone: data.phone,
-          name: data.name,
-          email: data.email,
-          roleName: data.role_name,
-          code: data.code,
-        }));
+        const user = {
+          id: result.body.user.user_id,
+          userCode: result.body.user.user_code,
+          address: result.body.user.address,
+          phone: result.body.user.phone,
+          name: result.body.user.name,
+          email: result.body.user.email,
+          roleName: result.body.user.role_name,
+          code: result.body.user.code,
+        };
         local.set("token", this.accessToken);
         local.set("user", JSON.stringify(user));
         local.set("permissions", JSON.stringify(this.permissions));
