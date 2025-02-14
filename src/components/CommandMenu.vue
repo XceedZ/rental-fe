@@ -6,8 +6,8 @@
             <span class="p-input-icon-left w-full">
                 <IconField iconPosition="left" class="w-full">
                     <InputIcon class="pi pi-search"> </InputIcon>
-                    <InputText ref="input1" type="text" placeholder="Cari sesuatu..."
-                        v-model="search" class="w-full border-none shadow-none outline-none" />
+                    <InputText ref="input1" type="text" placeholder="Cari sesuatu..." v-model="search"
+                        class="w-full border-none shadow-none outline-none" />
                 </IconField>
             </span>
         </div>
@@ -16,9 +16,11 @@
         </div>
         <div class="p-2">
             <article v-for="article in filteredArticles" :key="article.name"
-                class="flex w-full justify-content-between align-items-center mb-3 select-none cursor-pointer surface-border hover:surface-hover border-round-lg px-2 py-1 text-800 hover:text-primary" @click="handleArticleClick(article)">
+                class="flex w-full justify-content-between align-items-center mb-3 select-none cursor-pointer surface-border hover:surface-hover border-round-lg px-2 py-1 text-800 hover:text-primary"
+                @click="handleArticleClick(article)">
                 <div class="flex align-items-center">
-                    <span class="border-circle w-2rem h-2rem flex align-items-center justify-content-center surface-100">
+                    <span
+                        class="border-circle w-2rem h-2rem flex align-items-center justify-content-center surface-100">
                         <i :class="article.iconClass"></i>
                     </span>
                     <div class="ml-2">
@@ -49,7 +51,7 @@ const articles = computed(() => {
     return [
         { name: 'Sewa Kamera & Aksesori', description: 'Temukan kamera & aksesori', iconClass: 'pi pi-warehouse', onClick: () => router.push({ name: 'home' }) },
         { name: 'Riwayat Sewa', description: 'Lihat riwayat penyewaan', iconClass: 'bi bi-receipt-cutoff', onClick: () => router.push({ name: 'history' }) },
-        { name: 'Pengaturan', description: 'Ubah data pribadi', iconClass: 'pi pi-cog' },
+        { name: 'Pengaturan', description: 'Ubah pengaturan aplikasi', iconClass: 'pi pi-cog', onClick: () => router.push({ name: 'settings' }) },
         {
             name: isDarkMode.value ? 'Mode Terang' : 'Mode Gelap',
             description: isDarkMode.value ? 'Beralih ke mode terang agar tampilan lebih cerah' : 'Beralih ke mode gelap supaya mata terlindungi',

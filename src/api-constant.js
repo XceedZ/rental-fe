@@ -149,6 +149,11 @@ export const ApiConstant = {
     method: "POST",
     keyList: "",
   },
+  APPROVE_ALL_TRANSACTION: {
+    path: "approveAllTransaction",
+    method: "POST",
+    keyList: "",
+  },
   REJECT_TRANSACTION: {
     path: "rejectTransaction",
     method: "POST",
@@ -181,6 +186,11 @@ export const ApiConstant = {
   },
   ADD_TRX_MANUAL_WITHOUT_ACCOUNT: {
     path: "addTrxManualWithoutAccount",
+    method: "POST",
+    keyList: "",
+  },
+  EDIT_TRANSACTION: {
+    path: "editTransaction",
     method: "POST",
     keyList: "",
   },

@@ -77,7 +77,7 @@
                             <i class="pi pi-cog text-500 mr-3 text-xl"></i>
                             <span>
                                 <span class="block text-700 font-medium">Pengaturan</span>
-                                <p class="mt-1 mb-0 text-600 text-sm">Ubah data pribadi</p>
+                                <p class="mt-1 mb-0 text-600 text-sm">Ubah pengaturan aplikasi</p>
                             </span>
                         </a>
                     </li>

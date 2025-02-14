@@ -4,7 +4,7 @@
             class="flex flex-column md:flex-row justify-content-between align-items-center mb-4 w-full overflow-hidden	">
             <div class="grid grid-nogutter surface-section text-800 w-full">
                 <div class="col-12 p-6 text-center md:text-left flex flex-column md:flex-row align-items-center w-full"
-                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout'}">
+                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                     <section class="order-2 md:order-1">
                         <span
                             class="block text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold mb-1 break-words">Abadikan
@@ -30,7 +30,8 @@
                 </div>
                 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
                     <div class="grid">
-                        <div class="col-12 lg:col-6 p-4 flex flex-column" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                        <div class="col-12 lg:col-6 p-4 flex flex-column"
+                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                             <p class="text-600 font-medium text-xl">Kenapa Memilih Kami?</p>
                             <div class="text-900 font-bold text-3xl mt-2">Pengalaman Potret</div>
                             <p class="text-600 text-xl mt-3 mb-5 line-height-3">Dapatkan pengalaman memotret terbaik
@@ -78,7 +79,8 @@
                                 </AccordionTab>
                             </Accordion>
                         </div>
-                        <div class="col-12 lg:col-6 p-4" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                        <div class="col-12 lg:col-6 p-4"
+                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                             <img v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
                                 src="https://images.pexels.com/photos/821653/pexels-photo-821653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 class="w-full border-round" alt="product">
@@ -87,12 +89,15 @@
                 </div>
 
                 <div class="surface-section w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8">
-                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                    <p class="text-600 font-medium text-xl text-center"
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                         Produk Populer</p>
                     <div class="text-900 font-bold text-3xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Rekomendasi Kamera Terbaik</div>
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Rekomendasi Kamera Terbaik
+                    </div>
                     <p class="text-600 font-medium text-xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Jelajahi pilihan kamera favorit yang cocok untuk
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Jelajahi pilihan kamera
+                        favorit yang cocok untuk
                         berbagai kebutuhan fotografi dan videografi.</p>
 
                     <Carousel :value="products" :numVisible="4" :numScroll="1" :autoplayInterval="3000"
@@ -110,7 +115,8 @@
                 </div>
 
                 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                    <p class="text-600 font-medium text-xl text-center"
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                         Kemudahan Dalam</p>
                     <div class="text-900 font-bold text-3xl text-center mt-4"
                         v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Transaksi &
@@ -165,7 +171,8 @@
                     </div>
                 </div>
 
-                <div v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                <div v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
+                    class="surface-section px-4 py-8 md:px-6 lg:px-8">
                     <div class="text-900 font-bold text-3xl text-center">📍 Lokasi Kami</div>
                     <p class="text-600 text-xl mt-3 line-height-3 text-center">Kunjungi store kami atau hubungi untuk
                         informasi lebih lanjut. Kami siap membantu Anda dengan berbagai pilihan kamera dan perlengkapan
@@ -176,6 +183,108 @@
                             <iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0"
                                 marginwidth="0"
                                 src="https://maps.google.com/maps?width=660&amp;height=400&amp;hl=en&amp;q=landscapeaero&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                    <p class="text-600 font-medium text-xl"
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Seputar
+                        Tips & Trick</p>
+                    <div class="text-900 font-bold text-3xl mb-6"
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                        Postingan Artikel</div>
+                    <div class="flex flex-wrap">
+                        <div class="w-full xl:w-6 pr-0 xl:pr-6"
+                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                            <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-9.png" alt="Image"
+                                class="w-full">
+                            <div class="flex align-items-center mt-4"
+                                v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-3.png"
+                                    class="mr-3 flex-shrink-0" width="28" height="28" />
+                                <span class="text-900 font-medium text-xl white-space-nowrap">Darrel
+                                    Steward</span>
+                                <span class="text-500 font-medium text-xl mx-3">|</span>
+                                <span class="text-500 font-medium text-xl white-space-nowrap">Oct 7</span>
+                            </div>
+                            <div class="text-900 font-bold text-2xl mt-4">Circumpolar Cooperation</div>
+                            <p class="line-height-3 text-700 my-4">Purus sit amet volutpat consequat mauris nunc
+                                congue.
+                                Odio
+                                pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus.</p>
+                            <div class="flex align-items-center">
+                                <span class="text-600 text-sm font-medium">15 min read</span>
+                                <span class="text-600 font-medium text-sm mx-3">|</span>
+                                <span
+                                    class="bg-indigo-100 text-indigo-600 text-sm block py-1 px-2 border-round mr-3">Poles</span>
+                                <span
+                                    class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
+                            </div>
+                        </div>
+                        <div class="w-full xl:w-6">
+                            <div class="flex flex-wrap align-items-start mb-8 mt-8 xl:mb-6 xl:mt-0">
+                                <div class="w-full xl:w-6 pr-0 xl:pr-4 mb-4 xl:mb-0"
+                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                    <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-10.png" alt="Image"
+                                        class="w-full">
+                                </div>
+                                <div class="w-full xl:w-6"
+                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                    <div class="flex align-items-center">
+                                        <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-2.png"
+                                            class="mr-3 flex-shrink-0" width="28" height="28" />
+                                        <span class="text-900 font-medium text-xl white-space-nowrap">Bessie
+                                            Cooper</span>
+                                        <span class="text-500 font-medium text-xl mx-3">|</span>
+                                        <span class="text-500 font-medium text-xl white-space-nowrap">Oct
+                                            7</span>
+                                    </div>
+                                    <div class="text-900 font-bold text-2xl mt-4">World Famous Fish</div>
+                                    <p class="line-height-3 text-700 my-4">Quisque sagittis purus sit amet
+                                        volutpat
+                                        consequat mauris.
+                                    </p>
+                                    <div class="flex align-items-center">
+                                        <span class="text-600 text-sm font-medium">12 min read</span>
+                                        <span class="text-600 font-medium text-sm mx-3">|</span>
+                                        <span
+                                            class="bg-blue-100 text-blue-600 text-sm block py-1 px-2 border-round mr-3">Ocean</span>
+                                        <span
+                                            class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap align-items-start">
+                                <div class="w-full xl:w-6 pr-0 xl:pr-4 mb-4 xl:mb-0"
+                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                    <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-11.png" alt="Image"
+                                        class="w-full">
+                                </div>
+                                <div class="w-full xl:w-6"
+                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                    <div class="flex align-items-center">
+                                        <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-3.png"
+                                            class="mr-3 flex-shrink-0" width="28" height="28" />
+                                        <span class="text-900 font-medium text-xl white-space-nowrap">Jenna
+                                            Clark</span>
+                                        <span class="text-500 font-medium text-xl mx-3">|</span>
+                                        <span class="text-500 font-medium text-xl white-space-nowrap">Oct
+                                            10</span>
+                                    </div>
+                                    <div class="text-900 font-bold text-2xl mt-4">Extinction and Origination
+                                    </div>
+                                    <p class="line-height-3 text-700 my-4">Bibendum enim facilisis gravida neque
+                                        convallis a cras.</p>
+                                    <div class="flex align-items-center">
+                                        <span class="text-600 text-sm font-medium">10 min read</span>
+                                        <span class="text-600 font-medium text-sm mx-3">|</span>
+                                        <span
+                                            class="bg-blue-100 text-blue-600 text-sm block py-1 px-2 border-round mr-3">Ocean</span>
+                                        <span
+                                            class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -266,14 +375,6 @@ function toggleTheme() {
     transition: filter 0.2s ease-in-out;
 }
 
-.dark-theme .payment-img {
-    filter: grayscale(100%);
-}
-
-.dark-theme .payment-img:hover {
-    filter: grayscale(0%);
-}
-
 .truncate {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -286,8 +387,10 @@ function toggleTheme() {
 .carousel-image {
     width: auto;
     max-width: 100%;
-    height: 200px; /* Sesuaikan tinggi sesuai kebutuhan */
-    object-fit: contain; /* Bisa juga cover tergantung efek yang diinginkan */
+    height: 200px;
+    /* Sesuaikan tinggi sesuai kebutuhan */
+    object-fit: contain;
+    /* Bisa juga cover tergantung efek yang diinginkan */
 }
 
 

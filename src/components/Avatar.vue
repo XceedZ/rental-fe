@@ -16,6 +16,10 @@
       type: String,
       default: 'Avatar',
     },
+    radius: {
+      type: Number,
+      default: 50,
+    },
   });
 
   const avatarSvg = ref('');
@@ -23,7 +27,7 @@
   onMounted(() => {
     const avatar = createAvatar(initials, {
       seed: props.name,
-      radius: 50,
+      radius: props.radius,
       backgroundColor: [
         "039be5",
         "1e88e5",

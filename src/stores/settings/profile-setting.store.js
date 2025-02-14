@@ -24,6 +24,7 @@ export const useProfileSettingStore = defineStore({
         email: user.email,
         phone: user.phone,
         address: user.address,
+        roleName: user.roleName,
       };
     },    
     async updateProfile() {

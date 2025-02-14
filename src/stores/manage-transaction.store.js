@@ -18,6 +18,7 @@ export const useManageTransactionStore = defineStore({
     getApi: ApiConstant.GET_MANAGE_TRANSACTION,
     detailApi: ApiConstant.GET_DETAIL_MANAGE_TRANSACTION,
     approveApi: ApiConstant.APPROVE_TRANSACTION,
+    approveAllApi: ApiConstant.APPROVE_ALL_TRANSACTION,
     rejectApi: ApiConstant.REJECT_TRANSACTION,
     finishApi: ApiConstant.FINISH_TRANSACTION,
     finishAllApi: ApiConstant.FINISH_ALL_TRANSACTION,
@@ -81,6 +82,7 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         this.detailDataPerRow[trxCode] = result.body.trxProductDetails;
         this.selectedProduct = result.body.trxProductDetails;
+        console.log("Detail Data Per Row:", this.detailDataPerRow); // Debugging
         this.loading["getDetailManageTransaction"] = false;
       } else {
         this.loading["getDetailManageTransaction"] = false;
@@ -102,6 +104,22 @@ export const useManageTransactionStore = defineStore({
       }
 
       this.loading["approve"] = false;
+    },
+    async approveAllTransaction(trxCode) {
+      this.loading["approveAll"] = true;
+      const payload = {
+        api: this.approveAllApi,
+        body: {
+          trx_code: trxCode,
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessApproved(this.toast);
+        this.loading["approveAll"] = false;
+        await this.getDetailManageTransaction(trxCode);
+      }
+      this.loading["approveAll"] = false;
     },
     async rejectTransaction(trxRentProductId, trxCode) {
       this.loading["reject"] = true;

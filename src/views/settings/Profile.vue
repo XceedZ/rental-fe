@@ -31,10 +31,10 @@
                         <a v-ripple
                             class="p-ripple lg:w-15rem flex align-items-center cursor-pointer p-3 border-round hover:surface-200 transition-duration-150 transition-colors"
                             :class="{ 'surface-200': activeTab3 === 2 }" @click="activeTab3 = 2">
-                            <i class="bi bi-moon-stars md:mr-2"
+                            <i class="bi bi-person-bounding-box md:mr-2"
                                 :class="{ 'text-700': activeTab3 === 2, 'text-600': activeTab3 !== 2 }"></i>
                             <span class="font-medium hidden md:block"
-                                :class="{ 'text-800': activeTab3 === 2, 'text-700': activeTab3 !== 2 }">Tampilan</span>
+                                :class="{ 'text-800': activeTab3 === 2, 'text-700': activeTab3 !== 2 }">Verifikasi KTP</span>
                         </a>
                     </li>
                     <li class="mb-3">
@@ -59,73 +59,94 @@
                     </li>
                 </ul>
                 <div class="surface-card p-5 shadow-2 border-round flex-auto xl:ml-5">
-                    <div class="flex gap-5 flex-column md:flex-column">
-                        <div class="flex mt-4 flex-column md:flex-row md:w-6 gap-4">
-                            <div class="flex-auto p-fluid" style="min-width: 15rem;">
-                                <div class="flex flex-column border-round border-1 surface-border p-4 cursor-pointer hover:border-primary transition-duration-150"
-                                    @click="selectedAddress = context.address"
-                                    :class="{ 'border-primary': selectedAddress === context.user.address, 'hover:border-primary': true }">
-                                    <div class="flex justify-content-between align-items-center mb-3">
-                                        <span class="text-900 text-xl font-medium">Alamat</span>
-                                        <Button id="phone" class="text-600 font-medium p-button-text w-auto"
-                                            icon="pi pi-pencil" label="Edit"></Button>
-                                    </div>
-                                    <span class="inline-block text-600 mb-3">{{ context.user.address }}</span>
-                                    <span class="inline-block text-600"><i class="pi pi-mobile mr-2"></i>{{
-                                        context.user.phone }}</span>
-                                </div>
-                            </div>
-                            <div class="flex-auto p-fluid" style="min-width: 15rem;">
-                                <div
-                                    class="flex h-full flex-column justify-content-center align-items-center text-center py-5 border-round border-1 surface-border surface-100 cursor-pointer hover:border-primary transition-duration-150">
-                                    <span
-                                        class="text-600 border-circle border-2 w-2rem h-2rem flex align-items-center justify-content-center"><i
-                                            class="pi pi-fw pi-plus"></i></span>
-                                    <span class="text-600 mt-3">Tambah Alamat Baru</span>
-                                </div>
-                            </div>
+                    <div>
+                        <div
+                            style="height:200px; background: url('https://images.unsplash.com/photo-1620121692029-d088224ddc74?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat; background-size: cover">
                         </div>
-                        <div class="flex-auto p-fluid">
-                            <div class="mb-4">
-                                <label for="name" class="block font-normal text-900 mb-2">Nama Lengkap</label>
-                                <InputGroup>
-                                    <InputGroupAddon>
-                                        <i class="pi pi-user"></i>
-                                    </InputGroupAddon>
-                                    <InputText id="name" type="text" v-model="context.user.name" />
-                                </InputGroup>
+                        <div class="px-4 py-5 md:px-6 lg:px-8 surface-section">
+                            <div class="flex flex-column lg:flex-row lg:align-items-center lg:justify-content-between relative"
+                                style="margin-top:-2rem; top:-70px; margin-bottom:-70px">
+                                <div>
+                                    <div style="width:140px; height: 140px; border-radius: 10px"
+                                        class="mb-3 surface-card shadow-2 flex align-items-center justify-content-center">
+                                        <Avatar :name="local.getUser().name" :radius="10" alt="User Avatar"
+                                            style="height: 9rem;" />
+                                    </div>
+                                    <div class="text-900 text-3xl font-medium mb-3 flex align-items-center">
+                                        {{ context.user.name }}
+                                        <Button id="edit"
+                                            class="text-600 p-button-rounded font-medium p-button-text ml-2"
+                                            icon="pi pi-pencil" @click="showDialogUpdateProfile = true;
+                                            "></Button>
+                                    </div>
+                                    <p class="mt-0 mb-3 text-700 text-xl">{{ context.user.email }}</p>
+                                    <div class="text-600 font-medium">
+                                        <span>{{ context.user.roleName }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-4">
-                                <label for="email" class="block font-normal text-900 mb-2">Email</label>
-                                <div class="p-inputgroup">
-                                    <span class="p-inputgroup-addon"><i class="pi pi-at"></i></span>
-                                    <InputText readonly id="email" type="text" v-model="context.user.email" />
+                            <div class="flex gap-5 flex-column md:flex-column">
+                                <div class="flex mt-4 flex-column md:flex-row md:w-6 gap-4">
+                                    <div class="flex-auto p-fluid" style="min-width: 15rem;">
+                                        <div class="flex flex-column border-round border-1 surface-border p-4 cursor-pointer hover:border-primary transition-duration-150"
+                                            @click="selectedAddress = context.address"
+                                            :class="{ 'border-primary': selectedAddress === context.user.address, 'hover:border-primary': true }">
+                                            <div class="flex justify-content-between align-items-center mb-3">
+                                                <span class="text-900 text-xl font-medium">Rumah</span>
+                                            </div>
+                                            <span class="inline-block text-600 mb-3">{{ context.user.address }}</span>
+                                            <span class="inline-block text-600"><i class="pi pi-mobile mr-2"></i>{{
+                                                context.user.phone }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-auto p-fluid" style="min-width: 15rem;">
+                                        <div
+                                            class="flex h-full flex-column justify-content-center align-items-center text-center py-5 border-round border-1 surface-border surface-100 cursor-pointer hover:border-primary transition-duration-150">
+                                            <span
+                                                class="text-600 border-circle border-2 w-2rem h-2rem flex align-items-center justify-content-center"><i
+                                                    class="pi pi-fw pi-plus"></i></span>
+                                            <span class="text-600 mt-3">Tambah Alamat Baru</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex gap-2 flex-wrap md:flex-nowrap mt-5">
-                                <Button icon="pi pi-check" label="Simpan" :loading="context.loading['updateProfile']"
-                                    @click="updateProfile"
-                                    class="w-full md:w-auto text-base sm:text-sm mb-2 md:mb-0"></Button>
                                 <Button icon="pi pi-lock" outlined label="Setel Ulang Kata Sandi"
-                                    class="w-full md:w-auto text-base sm:text-sm"></Button>
+                                    class="w-full md:w-auto text-base sm:text-sm" @click="goToReset"></Button>
                             </div>
                         </div>
+                        <!-- <FileUpload invalidFileLimitMessage="Melewati batas unggahan maksimum file"
+                            invalidFileSizeMessage="Ukuran file terlalu besar" :showUploadButton="false"
+                            chooseLabel="Pilih" cancelLabel="Batal" name="demo[]" @select="onFileSelect"
+                            :multiple="false" accept="image/*" :maxFileSize="2000000" previewWidth="100" fileLimit="1">
+                            <template #empty>
+                                <p>Seret dan taruh file ke sini untuk mengunggah.</p>
+                            </template>
+</FileUpload> -->
                     </div>
                 </div>
             </div>
         </div>
+        <DialogUpdateProfile v-if="showDialogUpdateProfile" :visible="showDialogUpdateProfile"
+            @update:visible="showDialogUpdateProfile = $event" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { defineAsyncComponent, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useProfileSettingStore } from '@/stores/settings/profile-setting.store';
+import Avatar from '@/components/Avatar.vue';
+import local from '@/utils/local-storage';
 
+const router = useRouter();
+const DialogUpdateProfile = defineAsyncComponent(() => import('@/components/settings/DialogUpdateProfile.vue'));
+const showDialogUpdateProfile = ref(false);
 const activeTab3 = ref(0);
 const context = useProfileSettingStore();
 
-const updateProfile = async () => {
-    await context.updateProfile();
+const goToReset = async () => {
+    router.push({ name: 'resetPassword' });
 };
 
 onMounted(() => {
