@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { GeneralConstants } from '@/utils/general-constants';
-import { useToast } from 'primevue/usetoast';
-import { showSuccessRemove } from '@/utils/toast-service';
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import { showSuccessRemove } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import router from '@/router';
+import router from "@/router";
 
 export const useLandingStore = defineStore({
   id: "landing.store",
@@ -25,13 +25,14 @@ export const useLandingStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: [],
+    popularProducts: [],
   }),
   actions: {
     onPage(event) {
       this.offset = event.page * event.rows;
       this.limit = event.rows;
       this.getProducts();
-  },
+    },
     async getProducts() {
       this.loading["getProducts"] = true;
       const payload = {
@@ -42,7 +43,7 @@ export const useLandingStore = defineStore({
           brandId: this.brandId,
           priceRange: this.priceRange,
           limit: this.limit,
-          offset:this.offset
+          offset: this.offset,
         },
       };
       const result = await callApi(payload);
@@ -101,7 +102,7 @@ export const useLandingStore = defineStore({
       if (result.isOk) {
         const categories = result.body.categories.map((data) => ({
           id: data.ctgr_product_id,
-          ctgrName: data.ctgr_product_name
+          ctgrName: data.ctgr_product_name,
         }));
         this.loading["getCtgr"] = false;
         this.ctgrOptions = categories;
@@ -110,13 +111,25 @@ export const useLandingStore = defineStore({
       }
       this.loading["getCtgr"] = false;
     },
+    async getPopularProducts() {
+      this.loading["getPopularProducts"] = true;
+      const payload = {
+        api: ApiConstant.GET_POPULAR_PRODUCTS,
+        body: {},
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        this.popularProducts = result.body.popularProducts;
+      }
+      this.loading["getPopularProducts"] = false;
+    },
     resetFilter() {
       this.keyword = "";
       this.ctgrId = -99;
       this.brandId = [];
       this.priceRange = [0, 2000000];
       this.getProducts();
-      router.push({ name: 'home' });
+      router.push({ name: "home" });
     },
   },
 });

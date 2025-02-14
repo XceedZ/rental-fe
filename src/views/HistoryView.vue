@@ -9,17 +9,21 @@
                     </span>
                     <span class="text-900 text-3xl font-medium">Riwayat Penyewaan</span>
                 </div>
-                <span class="text-600 text-xl">Jangan sampai lupa untuk mengembalikan ya!😆</span>
+                <span class="text-600 text-xl mb-3">Jangan sampai lupa untuk mengembalikan ya!😆</span>
             </div>
-            <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
+        </div>
+        <Divider class="w-full"></Divider>
+        <div class="flex flex-column md:flex-row justify-content-between align-items-center mb-4">
+            <span class="p-input-icon-right mt-3 mb-2 md:mt-3 md:mb-0 w-full lg:w-25rem">
                 <IconField iconPosition="left">
                     <InputIcon class="pi pi-search"> </InputIcon>
                     <InputText v-model="context.keyword" placeholder="Nama Barang / Transaksi" class="w-full"
                         @keyup.enter="context.getTrxProductList()" />
                 </IconField>
             </span>
+            <Calendar v-model="context.dates" :manualInput="false" selectionMode="range" showIcon
+                class="mt-2 md:mt-0 ml-auto w-full sm:w-full md:w-auto md:mt-3" dateFormat="d M yy" @hide="changeDates" />
         </div>
-        <Divider class="w-full"></Divider>
         <div v-if="context.trxProductList.length === 0"
             class="flex flex-column align-items-center justify-content-center p-6">
             <i class="bi bi-clock-history text-6xl text-primary mb-4"></i>
@@ -64,7 +68,8 @@
                                         class="pi pi-info-circle transition-colors transition-duration-150 text-600 ml-1 hover:text-900 text-sm cursor-pointer"></i>
                                 </span>
                                 <span class="text-700 text-sm mb-3">
-                                    <span class="font-semibold">{{ product.brandName }}</span> | {{ product.ctgrName }}
+                                    <span class="font-semibold">{{ product.brandName }}</span> | {{ product.ctgrName
+                                    }}
                                 </span>
                                 <span class="text-700 text-sm mb-3">x{{ product.qty }}</span>
                                 <a v-ripple tabindex="0" @click="goToProduct(product.productCode)"
@@ -261,6 +266,10 @@ const checkPaymentStatus = async () => {
         await context.getInvoiceById(invoiceId);
         local.remove("invoice_id");
     }
+};
+
+const changeDates = () => {
+    context.getTrxProductList();
 };
 
 onMounted(async () => {

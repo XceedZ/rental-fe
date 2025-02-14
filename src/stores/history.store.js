@@ -5,6 +5,7 @@ import { showSuccessCancel, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
+import moment from "moment";
 
 export const useHistoryStore = defineStore({
   id: "history.store",
@@ -12,6 +13,8 @@ export const useHistoryStore = defineStore({
     getApi: ApiConstant.GET_TRX_PRODUCT_LIST,
     rejectAllApi: ApiConstant.REJECT_ALL_TRANSACTION,
     cancelAllApi: ApiConstant.CANCEL_ALL_TRANSACTION,
+    createInvoiceApi: ApiConstant.CREATE_INVOICE,
+    getInvoiceByIdApi: ApiConstant.GET_INVOICE_BY_ID,
     toast: useToast(),
     keyword: "",
     loading: {},
@@ -27,8 +30,10 @@ export const useHistoryStore = defineStore({
     selectedProduct: {},
     user: local.getUser(),
     trxProductList: [],
-    createInvoiceApi: ApiConstant.CREATE_INVOICE,
-    getInvoiceByIdApi: ApiConstant.GET_INVOICE_BY_ID,
+    dates: [
+      moment().startOf("month").toDate(),
+      moment().endOf("month").toDate(),
+    ],
   }),
   actions: {
     onPage(event) {
@@ -43,6 +48,8 @@ export const useHistoryStore = defineStore({
         body: {
           userId: this.user.id,
           keyword: this.keyword,
+          dateFrom: moment(this.dates[0]).format("YYYY-MM-DD"),
+          dateTo: moment(this.dates[1]).format("YYYY-MM-DD"),
         },
       });
       if (result.isOk) {

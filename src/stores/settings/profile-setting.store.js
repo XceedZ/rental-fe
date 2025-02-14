@@ -19,11 +19,11 @@ export const useProfileSettingStore = defineStore({
     profileAccount() {
       const user = local.getUser();
       this.user = {
-        userId: user.user_id || "",
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        address: user.address || "",
+        userId: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
       };
     },    
     async updateProfile() {

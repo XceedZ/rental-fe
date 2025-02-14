@@ -1,5 +1,5 @@
 <template>
-    <Dialog closeOnEscape v-model:visible="visible5" :modal="true" :closable="true" :showHeader="true"
+    <Dialog closeOnEscape visible="visible5" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '30vw', maxWidth: '90vw', minWidth: '380px', height: '21rem' }">
         <template #header>
@@ -14,7 +14,7 @@
         </template>
         <section class="flex flex-column w-full">
             <p class="font-semibold text-xl mt-0 mb-2 text-900">Kelola Merk</p>
-            <p class="font-normal text-base mt-0 mb-0 text-600">Tambah merk untuk memudahkan pencarian barang!</p>
+            <p class="font-normal text-base mt-0 mb-0 text-600">Tambah merk untuk memudahkan pengelolaan produk!</p>
             <Divider class="w-full"></Divider>
             <div class="flex flex-row gap-2 mt-3">
                 <FloatLabel class="w-full">

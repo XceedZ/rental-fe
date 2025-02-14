@@ -8,8 +8,10 @@
           </span>
           <span class="text-900 text-3xl font-medium">Dashboard</span>
         </div>
-        <span class="text-600 text-xl">Kamu dapat memantau statistik perusahaan!👋🏻</span>
+        <span class="text-600 text-xl mb-3">Kamu dapat memantau statistik perusahaan!👋🏻</span>
       </div>
+        <!-- <Calendar v-model="dates" :manualInput="false" selectionMode="range" showIcon dateFormat="d M yy"
+          @hide="changeDates" /> -->
     </div>
     <Divider class="w-full"></Divider>
     <div class="flex flex-wrap lg:flex-nowrap mt-5">

@@ -14,7 +14,6 @@ export const useEditBrandStore = defineStore({
     brandName: "",
     loading: {},
     selectedBrand: {},
-    active: "Y",
     statusOptions: [
       { name: "AKTIF", code: "Y" },
       { name: "NONAKTIF", code: "N" },
@@ -28,7 +27,6 @@ export const useEditBrandStore = defineStore({
         body: {
           brandId: this.brandId,
           brandName: this.brandName,
-          active: this.active,
         },
       });
       if (result.isOk) {
