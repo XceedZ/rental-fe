@@ -79,6 +79,26 @@ export const ApiConstant = {
     method: "POST",
     keyList: "",
   },
+  REMOVE_BRAND: {
+    path: "removeBrand",
+    method: "POST",
+    keyList: "",
+  },
+  ADD_CTGR: {
+    path: "addCtgr",
+    method: "POST",
+    keyList: "",
+  },
+  EDIT_CTGR: {
+    path: "editCtgr",
+    method: "POST",
+    keyList: "",
+  },
+  REMOVE_CTGR: {
+    path: "removeCtgr",
+    method: "POST",
+    keyList: "",
+  },
   PASSWORD_EMAIL: {
     path: "password/email",
     method: "POST",
@@ -222,6 +242,11 @@ export const ApiConstant = {
   UPDATE_PROFILE: {
     path: "updateProfile",
     method: "POST",
+    keyList: "",
+  },
+  GET_POPULAR_PRODUCTS: {
+    path: "getPopularProducts",
+    method: "GET",
     keyList: "",
   },
 };

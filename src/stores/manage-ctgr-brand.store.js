@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { GeneralConstants } from "@/utils/general-constants";
 import { useToast } from "primevue/usetoast";
-import { showSuccessRemove } from "@/utils/toast-service";
+import { showSuccessRemove, showErrorApi } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 
@@ -13,6 +13,8 @@ export const useManageCtgrBrandStore = defineStore({
     ctgrApi: ApiConstant.GET_CTGR_FOR_ADD_PRODUCT,
     manageBrandApi: ApiConstant.GET_MANAGE_BRAND,
     manageCtgrApi: ApiConstant.GET_MANAGE_CTGR,
+    removeBrandApi: ApiConstant.REMOVE_BRAND,
+    removeCtgrApi: ApiConstant.REMOVE_CTGR,
     toast: useToast(),
     brandKeyword: "",
     ctgrKeyword: "",
@@ -30,8 +32,10 @@ export const useManageCtgrBrandStore = defineStore({
     brandStatus: "",
     statusOptions: [
       { name: "AKTIF", code: "Y" },
-      { name: "NONAKTIF", code  : "N" },
+      { name: "NONAKTIF", code: "N" },
     ],
+    selectedBrandId: null,
+    selectedCtgrId: null,
   }),
   actions: {
     onBrandPage(event) {
@@ -85,7 +89,7 @@ export const useManageCtgrBrandStore = defineStore({
       const result = await callApi(payload);
       if (result.isOk) {
         const categories = result.body.categories.map((data) => ({
-          ctgrProductId: data.ctgrProductId,
+          id: data.ctgrProductId,
           ctgrName: data.ctgrName,
           active: data.active,
           createdAt: data.createdAt,
@@ -110,6 +114,46 @@ export const useManageCtgrBrandStore = defineStore({
       this.getProducts();
       this.loading["removeProduct"] = false;
       return result.isOk;
+    },
+    async removeBrand() {
+      this.loading["removeBrand"] = true;
+      const payload = {
+        api: this.removeBrandApi,
+        body: { brandId: this.selectedBrandId },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessRemove(this.toast);
+        this.getManageBrand();
+        this.loading["removeBrand"] = false;
+        return true;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["removeBrand"] = false;
+        return false;
+      }
+      this.loading["removeBrand"] = false;
+      return false;
+    },
+    async removeCtgr() {
+      this.loading["removeCtgr"] = true;
+      const payload = {
+        api: this.removeCtgrApi,
+        body: { ctgrId: this.selectedCtgrId },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessRemove(this.toast);
+        this.getManageCtgr();
+        this.loading["removeCtgr"] = false;
+        return true;
+      } else if (result.error && result.error.response) {
+        showErrorApi(this.toast, result.error.response.data.message);
+        this.loading["removeCtgr"] = false;
+        return false;
+      }
+      this.loading["removeCtgr"] = false;
+      return false;
     },
   },
 });

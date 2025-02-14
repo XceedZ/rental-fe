@@ -9,7 +9,8 @@ import {
 } from "@/utils/toast-service";
 import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
-import { supabase } from "@/utils/supabase-client"; // Import Supabase client
+import { supabase } from "@/utils/supabase-client";
+import moment from "moment";
 
 export const useManageTransactionStore = defineStore({
   id: "manage-transaction.store",
@@ -36,6 +37,10 @@ export const useManageTransactionStore = defineStore({
     ctgrOptions: [],
     priceRange: [0, 2000000],
     selectedProduct: {},
+    dates: [
+      moment().startOf("month").toDate(),
+      moment().endOf("month").toDate(),
+    ],
   }),
   actions: {
     onPage(event) {
@@ -51,6 +56,8 @@ export const useManageTransactionStore = defineStore({
           keyword: this.keyword,
           limit: this.limit,
           offset: this.offset,
+          dateFrom: moment(this.dates[0]).format("YYYY-MM-DD"),
+          dateTo: moment(this.dates[1]).format("YYYY-MM-DD"),
         },
       };
       const result = await callApi(payload);
@@ -91,7 +98,6 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessApproved(this.toast);
         this.loading["approve"] = false;
-        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
 
@@ -109,7 +115,6 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessReject(this.toast);
         this.loading["reject"] = false;
-        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["reject"] = false;
@@ -126,7 +131,6 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessFinish(this.toast);
         this.loading["finish"] = false;
-        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["finish"] = false;
@@ -143,7 +147,6 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         showSuccessFinish(this.toast);
         this.loading["finishAll"] = false;
-        // await this.getManageTransaction();
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["finishAll"] = false;

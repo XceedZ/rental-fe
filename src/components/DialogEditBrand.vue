@@ -1,32 +1,26 @@
 <template>
-    <Dialog :lazy="true" v-model="context.visible" :modal="true" :closable="true"
+    <Dialog closeOnEscape visible="visible5" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-        :style="{ width: '55vw', maxWidth: '90vw', minWidth: '380px' }">
+        :style="{ width: '30vw', maxWidth: '90vw', minWidth: '380px', height: '21rem' }">
         <template #header>
             <div class="flex w-full justify-content-between align-items-center">
                 <div class="flex align-items-center">
                     <span
                         class="w-3rem h-3rem border-circle flex justify-content-center align-items-center bg-blue-100 mr-3">
-                        <i class="pi pi-shopping-bag text-blue-700 text-2xl"></i>
+                        <i class="bi bi-boxes text-blue-700 text-2xl"></i>
                     </span>
                 </div>
             </div>
         </template>
         <section class="flex flex-column w-full">
             <p class="font-semibold text-xl mt-0 mb-2 text-900">Edit Merk</p>
-            <p class="font-normal text-base mt-0 mb-3 text-600">Ubah data merk untuk pengelolaan yang lebih mudah!
-            </p>
+            <p class="font-normal text-base mt-0 mb-0 text-600">Ubah merk untuk memudahkan pengelolaan produk!</p>
             <Divider class="w-full"></Divider>
-            <div class="grid formgrid p-fluid">
-                <div class="field mb-4 col-12 md:col-6">
-                    <label for="city" class="font-medium text-900">Nama Merk</label>
-                    <InputText v-model="context.brandName" id="city" type="text" placeholder="SONY" />
-                </div>
-                <div class="field mb-4 col-12 md:col-6">
-                    <label for="status" class="font-medium text-900">Status</label>
-                    <SelectButton v-model="context.active" :options="context.statusOptions" optionLabel="name"
-                        optionValue="code" :allowEmpty="false" />
-                </div>
+            <div class="flex flex-row gap-2 mt-3">
+                <FloatLabel class="w-full">
+                    <label for="brandName">Nama Merk</label>
+                    <InputText id="brandName" v-model="context.brandName" class="w-full" />
+                </FloatLabel>
             </div>
         </section>
         <template #footer>
@@ -50,7 +44,6 @@ const emit = defineEmits();
 onMounted(async () => {
     context.brandId = context.selectedBrand.id;
     context.brandName = context.selectedBrand.brandName;
-    context.active = context.selectedBrand.active;
 });
 
 const editBrand = async () => {

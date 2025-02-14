@@ -8,27 +8,35 @@
                         <i class="bi bi-ui-checks text-900 text-3xl"></i>
                     </span> <span class="text-900 text-3xl font-medium">Transaksi</span>
                 </div>
-                <span class="text-600 text-xl">Halaman untuk mengelola transaksi penyewaan!💸</span>
+                <span class="text-600 text-xl mb-3">Halaman untuk mengelola transaksi penyewaan!💸</span>
             </div>
-            <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
-                <IconField iconPosition="left">
-                    <InputIcon class="pi pi-search"> </InputIcon>
-                    <InputText v-model="context.keyword" placeholder="Nama Penyewa / Nama Barang / Transaksi"
-                        class="w-full" @keyup.enter="context.getManageTransaction()" />
-                </IconField>
-            </span>
         </div>
         <section class="flex-wrap gap-3 justify-content-between">
             <Divider class="w-full"></Divider>
-            <div class="w-full flex gap-2">
-                <Button icon="pi pi-plus" label="Transaksi" class="w-auto" @click="showDialogAddTrx = true"></Button>
-                <Button icon="pi pi-sync" outlined label="Kirim Notifikasi" class="w-auto ml-2" @click="sendNotif"
-                    :loading="context.loading['sendNotif']"></Button>
+            <div class="w-full flex flex-column md:flex-row gap-2">
+                <div class="flex mt-3">
+                    <Button icon="pi pi-plus" label="Transaksi" class="w-auto"
+                        @click="showDialogAddTrx = true"></Button>
+                    <Button icon="pi pi-sync" outlined label="Kirim Notifikasi" class="w-auto ml-2" @click="sendNotif"
+                        :loading="context.loading['sendNotif']"></Button>
+                </div>
+                <span class="p-input-icon-right mt-3 mb-2 md:mt-3 md:mb-0 w-full lg:w-25rem">
+                    <IconField iconPosition="left">
+                        <InputIcon class="pi pi-search"> </InputIcon>
+                        <InputText v-model="context.keyword" placeholder="Nama Penyewa / Nama Barang / Transaksi"
+                            class="w-full" @keyup.enter="context.getManageTransaction()" />
+                    </IconField>
+                </span>
+                <Calendar v-model="context.dates" :manualInput="false" selectionMode="range" showIcon
+                    class="md:mt-3 sm:mt-0 ml-auto w-full sm:w-full md:w-auto" dateFormat="d M yy" @hide="changeDates" />
             </div>
             <div class="mt-3">
                 <DataTable scrollable scrollHeight="500px" :value="context.dataTable"
                     v-model:expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse"
                     dataKey="trx_code" :tabStyle="{ 'min-width': '60rem' }" rowHover>
+                    <template #empty>
+                        <p class="text-center w-full">Data tidak tersedia</p>
+                    </template>
                     <template #loading>
                         <tr>
                             <td colspan="9">
@@ -334,13 +342,18 @@ const onRowExpand = async (event) => {
     context.detailDataPerRow[event.data.trx_code] = context.selectedProduct;
 };
 
+
+const changeDates = () => {
+    context.getManageTransaction();
+};
+
 onMounted(async () => {
     await context.getManageTransaction();
-    context.subscribeToRealtimeUpdates(); // Subscribe to real-time updates
+    context.subscribeToRealtimeUpdates();
 });
 
 onUnmounted(() => {
-    context.unsubscribeFromRealtimeUpdates(); // Unsubscribe from real-time updates
+    context.unsubscribeFromRealtimeUpdates();
 });
 
 const sendNotif = async () => {

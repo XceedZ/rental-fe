@@ -8,7 +8,8 @@
                         <i class="bi bi-box-seam text-900 text-3xl"></i>
                     </span> <span class="text-900 text-3xl font-medium">Barang</span>
                 </div>
-                <span class="text-600 text-xl">Kamu dapat dengan mudah mengelola barang sewa di halaman ini!🤭</span>
+                <span class="text-600 text-xl mb-3">Kamu dapat dengan mudah mengelola barang sewa di halaman
+                    ini!🤭</span>
             </div>
             <span class="p-input-icon-right mt-5 mb-2 md:mt-0 md:mb-0 w-full lg:w-25rem">
                 <IconField iconPosition="left">
@@ -21,7 +22,7 @@
         <section class="flex-wrap gap-3 justify-content-between">
             <Divider class="w-full"></Divider>
             <div class="flex-shrink-0">
-                <Button icon="pi pi-plus" label="Barang" class="w-auto"
+                <Button icon="pi pi-plus" label="Barang" class="w-auto mt-3"
                     @click="showDialogAddProduct = true"></Button>
             </div>
             <div class="mt-3">
@@ -38,8 +39,8 @@
                             <div class="flex flex-column">
                                 <div class="flex align-items-center gap-3">
                                     <Skeleton v-if="context.loading['getProducts']" size="3rem" class="mr-2"></Skeleton>
-                                    <Image v-else preview width="50" :src="getFullImageUrl(data.urlImg)" alt="Product Image"
-                                        style="height: 2.5rem;" />
+                                    <Image v-else preview width="50" :src="getFullImageUrl(data.urlImg)"
+                                        alt="Product Image" style="height: 2.5rem;" />
                                     <div>
                                         <Skeleton v-if="context.loading['getProducts']"
                                             class="mt-0 mb-2 h-1rem w-10rem"></Skeleton>
@@ -114,7 +115,7 @@
                         </template>
                         <template #body="{ data }">
                             <Skeleton v-if="context.loading['getProducts']" class="h-1rem w-full"></Skeleton>
-                            <p v-else class="font-normal text-base text-color-secondary">{{ data.desc }}</p>
+                            <ShowMore v-else :content="data.desc" :maxLength="50" />
                         </template>
                     </Column>
                     <Column style="min-width:14rem">
@@ -160,6 +161,7 @@ import { defineAsyncComponent, ref, onMounted } from 'vue';
 import { toCurrencyLocale } from '../utils/currency';
 import { useManageProductStore } from '@/stores/manage-product.store';
 import { useEditProductStore } from '@/stores/edit-product.store';
+import ShowMore from '../components/ShowMore.vue';
 
 const context = useManageProductStore();
 const edit = useEditProductStore();

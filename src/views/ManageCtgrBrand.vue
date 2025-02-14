@@ -176,11 +176,13 @@
                         </template>
                     </Column>
                     <Column style="min-width:8rem">
-                        <template #body="{}">
+                        <template #body="{ data }">
                             <Skeleton v-if="context.loading['getManageCtgr']" height="2rem"></Skeleton>
                             <Button v-else type="button" icon="pi pi-ellipsis-v"
-                                class="p-button-text p-button-secondary" @click="$refs.menu.toggle($event)"></Button>
-                            <Menu ref="menu" appendTo="body" popup :model="items"></Menu>
+                                class="p-button-text p-button-secondary"
+                                @click="$refs['menuCtgr-' + data.id].toggle($event)"></Button>
+                            <Menu :ref="'menuCtgr-' + data.id" appendTo="body" popup :model="getMenuItemsCtgr(data)">
+                            </Menu>
                         </template>
                     </Column>
                 </DataTable>
@@ -189,9 +191,20 @@
                     @page="context.onCtgrPage($event)" />
             </div>
         </section>
-        <DialogAddBrand v-if="showDialogAddBrand" :visible="showDialogAddBrand" @update:visible="showDialogAddBrand = $event" />
-        <DialogAddCategory v-if="showDialogAddCategory" :visible="showDialogAddCategory" @update:visible="showDialogAddCategory = $event" />
-        <DialogEditBrand v-if="showDialogEditBrand" :visible="showDialogEditBrand" @update:visible="showDialogEditBrand = $event" />
+        <DialogAddBrand v-if="showDialogAddBrand" :visible="showDialogAddBrand"
+            @update:visible="showDialogAddBrand = $event" />
+        <DialogAddCategory v-if="showDialogAddCategory" :visible="showDialogAddCategory"
+            @update:visible="showDialogAddCategory = $event" />
+        <DialogEditBrand v-if="showDialogEditBrand" :visible="showDialogEditBrand"
+            @update:visible="showDialogEditBrand = $event" />
+        <DialogEditCtgr v-if="showDialogEditCtgr" :visible="showDialogEditCtgr"
+            @update:visible="showDialogEditCtgr = $event" />
+        <DialogConfirm v-if="showDialogConfirm" v-model:visible="showDialogConfirm" :acceptLabel="'Hapus'"
+            :onAccept="confirmDelete" :onReject="cancelDelete" :header="confirmHeader" :message="confirmMessage"
+            :acceptLoading="context.loading['removeBrand']" />
+        <DialogConfirm v-if="showDialogConfirmCtgr" v-model:visible="showDialogConfirmCtgr" :acceptLabel="'Hapus'"
+            :onAccept="confirmDeleteCtgr" :onReject="cancelDeleteCtgr" :header="confirmHeaderCtgr"
+            :message="confirmMessageCtgr" :acceptLoading="context.loading['removeCtgr']" />
     </div>
 </template>
 
@@ -199,16 +212,25 @@
 import { defineAsyncComponent, ref, onMounted } from 'vue';
 import { useManageCtgrBrandStore } from '@/stores/manage-ctgr-brand.store';
 import { useEditBrandStore } from '@/stores/edit-brand.store';
+import { useEditCtgrStore } from '@/stores/edit-ctgr.store';
 
 const context = useManageCtgrBrandStore();
 const DialogAddBrand = defineAsyncComponent(() => import('../components/DialogAddBrand.vue'));
 const DialogAddCategory = defineAsyncComponent(() => import('../components/DialogAddCategory.vue'));
 const DialogEditBrand = defineAsyncComponent(() => import('../components/DialogEditBrand.vue'));
+const DialogEditCtgr = defineAsyncComponent(() => import('../components/DialogEditCtgr.vue'));
 const showDialogAddBrand = ref(false);
 const showDialogAddCategory = ref(false);
 const showDialogEditBrand = ref(false);
-
+const showDialogEditCtgr = ref(false);
+const showDialogConfirm = ref(false);
+const confirmHeader = ref('');
+const confirmMessage = ref('');
+const showDialogConfirmCtgr = ref(false);
+const confirmHeaderCtgr = ref('');
+const confirmMessageCtgr = ref('');
 const edit = useEditBrandStore();
+const editCtgr = useEditCtgrStore();
 
 const getMenuItemsBrand = (data) => {
     return [
@@ -227,15 +249,65 @@ const getMenuItemsBrand = (data) => {
                     label: 'Hapus',
                     icon: 'pi pi-trash',
                     command: () => {
-                        selectedProductId.value = data.id;
+                        context.selectedBrandId = data.id;
                         confirmHeader.value = 'Konfirmasi Hapus';
-                        confirmMessage.value = `Apakah Anda yakin ingin menghapus produk ${data.productName}?`;
+                        confirmMessage.value = `Apakah Anda yakin ingin menghapus merk ${data.brandName}?`;
                         showDialogConfirm.value = true;
                     }
                 }
             ]
         }
     ];
+};
+
+const getMenuItemsCtgr = (data) => {
+    return [
+        {
+            label: 'Pilihan',
+            items: [
+                {
+                    label: 'Edit',
+                    icon: 'pi pi-pencil',
+                    command: () => {
+                        editCtgr.selectedCtgr = data;
+                        showDialogEditCtgr.value = true;
+                    }
+                },
+                {
+                    label: 'Hapus',
+                    icon: 'pi pi-trash',
+                    command: () => {
+                        context.selectedCtgrId = data.id;
+                        confirmHeaderCtgr.value = 'Konfirmasi Hapus';
+                        confirmMessageCtgr.value = `Apakah Anda yakin ingin menghapus kategori ${data.ctgrName}?`;
+                        showDialogConfirmCtgr.value = true;
+                    }
+                }
+            ]
+        }
+    ];
+};
+
+const confirmDelete = async () => {
+    const result = await context.removeBrand();
+    if (result) {
+        showDialogConfirm.value = false;
+    }
+};
+
+const confirmDeleteCtgr = async () => {
+    const result = await context.removeCtgr();
+    if (result) {
+        showDialogConfirmCtgr.value = false;
+    }
+};
+
+const cancelDelete = () => {
+    showDialogConfirm.value = false;
+};
+
+const cancelDeleteCtgr = () => {
+    showDialogConfirmCtgr.value = false;
 };
 
 onMounted(async () => {

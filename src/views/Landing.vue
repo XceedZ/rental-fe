@@ -3,8 +3,8 @@
         <div
             class="flex flex-column md:flex-row justify-content-between align-items-center mb-4 w-full overflow-hidden	">
             <div class="grid grid-nogutter surface-section text-800 w-full">
-                <div v-animateonscroll="{ enterClass: 'fadein' }"
-                    class="col-12 p-6 text-center md:text-left flex flex-column md:flex-row align-items-center w-full">
+                <div class="col-12 p-6 text-center md:text-left flex flex-column md:flex-row align-items-center w-full"
+                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout'}">
                     <section class="order-2 md:order-1">
                         <span
                             class="block text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold mb-1 break-words">Abadikan
@@ -23,15 +23,14 @@
                     </section>
                     <div
                         class="col-12 md:col-6 overflow-hidden md:mt-0 mt-4 order-1 md:order-2 w-auto ml-8 flex justify-center">
-                        <img v-animateonscroll="{ enterClass: 'fadein' }"
-                            :src="getFullImageUrl('rental-ukk/hero-1.png')" alt="Image"
+                        <img :src="getFullImageUrl('rental-ukk/hero-1.png')" alt="Image"
                             class="md:ml-auto block md:h-full"
                             style="clip-path: polygon(8% 0, 100% 0%, 100% 100%, 0 100%);">
                     </div>
                 </div>
                 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
                     <div class="grid">
-                        <div class="col-12 lg:col-6 p-4 flex flex-column" v-animateonscroll="{ enterClass: 'fadein' }">
+                        <div class="col-12 lg:col-6 p-4 flex flex-column" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                             <p class="text-600 font-medium text-xl">Kenapa Memilih Kami?</p>
                             <div class="text-900 font-bold text-3xl mt-2">Pengalaman Potret</div>
                             <p class="text-600 text-xl mt-3 mb-5 line-height-3">Dapatkan pengalaman memotret terbaik
@@ -79,8 +78,8 @@
                                 </AccordionTab>
                             </Accordion>
                         </div>
-                        <div class="col-12 lg:col-6 p-4" v-animateonscroll="{ enterClass: 'fadein' }">
-                            <img v-animateonscroll="{ enterClass: 'fadein' }"
+                        <div class="col-12 lg:col-6 p-4" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                            <img v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
                                 src="https://images.pexels.com/photos/821653/pexels-photo-821653.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                                 class="w-full border-round" alt="product">
                         </div>
@@ -88,35 +87,36 @@
                 </div>
 
                 <div class="surface-section w-full max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8">
-                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein' }">
+                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                         Produk Populer</p>
                     <div class="text-900 font-bold text-3xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein' }">Rekomendasi Kamera Terbaik</div>
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Rekomendasi Kamera Terbaik</div>
                     <p class="text-600 font-medium text-xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein' }">Jelajahi pilihan kamera favorit yang cocok untuk
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Jelajahi pilihan kamera favorit yang cocok untuk
                         berbagai kebutuhan fotografi dan videografi.</p>
 
                     <Carousel :value="products" :numVisible="4" :numScroll="1" :autoplayInterval="3000"
                         :responsiveOptions="responsiveOptions" class="flex">
                         <template #item="slotProps">
                             <div class="p-4 flex flex-column text-center">
-                                <img v-animateonscroll="{ enterClass: 'fadein' }" :src="slotProps.data.image"
-                                    alt="product" class="w-full h-full border-round">
-                                <div class="text-900 text-xl mt-4">{{ slotProps.data.title }}</div>
-                                <p class="text-600 mt-3 line-height-3">{{ slotProps.data.description }}</p>
+                                <img v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
+                                    :src="getFullImageUrl(slotProps.data.urlImg)" alt="product"
+                                    class="carousel-image mx-auto">
+                                <div class="text-900 text-xl mt-4">{{ slotProps.data.productName }}</div>
+                                <p class="text-600 mt-3 line-height-3 truncate">{{ slotProps.data.desc }}</p>
                             </div>
                         </template>
                     </Carousel>
                 </div>
 
                 <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein' }">
+                    <p class="text-600 font-medium text-xl text-center" v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                         Kemudahan Dalam</p>
                     <div class="text-900 font-bold text-3xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein' }">Transaksi &
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Transaksi &
                         Pembayaran</div>
                     <p class="text-600 font-medium text-xl text-center mt-4"
-                        v-animateonscroll="{ enterClass: 'fadein' }">Nikmati
+                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Nikmati
                         pengalaman transaksi yang aman, cepat, dan praktis untuk mendukung kebutuhan fotografi dan
                         videografi Anda.</p>
 
@@ -165,7 +165,7 @@
                     </div>
                 </div>
 
-                <div v-animateonscroll="{ enterClass: 'fadein' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
+                <div v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }" class="surface-section px-4 py-8 md:px-6 lg:px-8">
                     <div class="text-900 font-bold text-3xl text-center">📍 Lokasi Kami</div>
                     <p class="text-600 text-xl mt-3 line-height-3 text-center">Kunjungi store kami atau hubungi untuk
                         informasi lebih lanjut. Kami siap membantu Anda dengan berbagai pilihan kamera dan perlengkapan
@@ -196,7 +196,7 @@ const responsiveOptions = ref([
     { breakpoint: '1400px', numVisible: 4, numScroll: 1 },
     { breakpoint: '1199px', numVisible: 3, numScroll: 1 },
     { breakpoint: '767px', numVisible: 2, numScroll: 1 },
-    { breakpoint: '575px', numVisible: 1, numScroll: 1 } 
+    { breakpoint: '575px', numVisible: 1, numScroll: 1 }
 ]);
 
 const router = useRouter();
@@ -220,30 +220,8 @@ function handleScroll() {
 
 onMounted(async () => {
     window.addEventListener('scroll', handleScroll);
-    // await context.getProducts();
-    // products.value = context.dataTable.slice(0, 9);
-    products.value = [
-        {
-            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-4.png",
-            title: "Facilisis gravida neque",
-            description: "Produk kami dirancang untuk memenuhi kebutuhan Anda dengan kualitas terbaik dan harga yang kompetitif."
-        },
-        {
-            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-5.png",
-            title: "Facilisis gravida neque",
-            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
-        },
-        {
-            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-6.png",
-            title: "Facilisis gravida neque",
-            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
-        },
-        {
-            image: "http://semar.taskhub.id:4444/images/blocks/ecommerce/productfeature/product-features-1-7.png",
-            title: "Facilisis gravida neque",
-            description: "Potenti nullam ac tortor vitae. Aliquet bibendum enim facilisis gravida neque convallis a cras semper."
-        }
-    ];
+    await context.getPopularProducts();
+    products.value = context.popularProducts;
     initializeTheme(isDarkMode, theme);
 });
 
@@ -296,35 +274,55 @@ function toggleTheme() {
     filter: grayscale(0%);
 }
 
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.carousel-image {
+    width: auto;
+    max-width: 100%;
+    height: 200px; /* Sesuaikan tinggi sesuai kebutuhan */
+    object-fit: contain; /* Bisa juga cover tergantung efek yang diinginkan */
+}
+
+
 @media (max-width: 767px) {
     .payment-img-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.payment-img {
-    height: 50px; /* Default height */
-    max-width: 100%;
-}
-
-@media (max-width: 768px) {
-    .grid.mt-8 {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .payment-img-container {
-        width: 50%; /* Mengatur agar gambar tetap menyamping */
         display: flex;
         justify-content: center;
-        margin-bottom: 10px;
+        align-items: center;
     }
 
     .payment-img {
-        height: 35px; /* Ukuran lebih kecil di layar kecil */
+        height: 50px;
+        /* Default height */
+        max-width: 100%;
     }
-}
+
+    @media (max-width: 768px) {
+        .grid.mt-8 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .payment-img-container {
+            width: 50%;
+            /* Mengatur agar gambar tetap menyamping */
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .payment-img {
+            height: 35px;
+            /* Ukuran lebih kecil di layar kecil */
+        }
+    }
 }
 </style>
