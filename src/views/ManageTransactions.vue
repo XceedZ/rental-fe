@@ -28,12 +28,13 @@
                     </IconField>
                 </span>
                 <Calendar v-model="context.dates" :manualInput="false" selectionMode="range" showIcon
-                    class="md:mt-3 sm:mt-0 ml-auto w-full sm:w-full md:w-auto" dateFormat="d M yy" @hide="changeDates" />
+                    class="md:mt-3 sm:mt-0 ml-auto w-full sm:w-full md:w-auto" dateFormat="d M yy"
+                    @hide="changeDates" />
             </div>
             <div class="mt-3">
                 <DataTable scrollable scrollHeight="500px" :value="context.dataTable"
-                    v-model:expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse"
-                    dataKey="trx_code" :tabStyle="{ 'min-width': '60rem' }" rowHover>
+                    expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse"
+                    dataKey="trxCode" :tabStyle="{ 'min-width': '60rem' }" rowHover>
                     <template #empty>
                         <p class="text-center w-full">Data tidak tersedia</p>
                     </template>
@@ -115,7 +116,7 @@
                                 class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                 data.total_qty
-                            }}
+                                }}
                             </p>
                         </template>
                     </Column>
@@ -187,10 +188,11 @@
                         </template>
                     </Column>
                     <Column style="min-width:8rem">
-                        <template #body>
+                        <template #body="{ data }">
                             <Button type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-secondary"
-                                @click="$refs.menu.toggle($event)"></Button>
-                            <Menu ref="menu" appendTo="body" popup :model="items"></Menu>
+                                @click="$refs['menu-' + data.trx_code].toggle($event)"></Button>
+                            <Menu :ref="'menu-' + data.trx_code" appendTo="body" popup :model="getMenuItems(data)">
+                            </Menu>
                         </template>
                     </Column>
                     <template #expansion="slotProps">
@@ -226,7 +228,7 @@
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                             data.qty
-                                        }}
+                                            }}
                                         </p>
                                     </template>
                                 </Column>
@@ -321,6 +323,9 @@
             </div>
         </section>
         <DialogAddTrx v-if="showDialogAddTrx" :visible="showDialogAddTrx" @update:visible="showDialogAddTrx = $event" />
+        <DialogEditTrx v-if="showDialogEditTrx" :visible="showDialogEditTrx"
+            @update:visible="showDialogEditTrx = $event" :trxCode="selectedTrxCode"
+            :transactions="selectedTransactions" />
     </div>
 </template>
 
@@ -334,14 +339,74 @@ import { YYYYMMDDtoDMMMMYYYY } from '../utils/date-convert';
 const context = useManageTransactionStore();
 const DialogAddTrx = defineAsyncComponent(() => import('../components/DialogAddTrx.vue'));
 const showDialogAddTrx = ref(false);
+const DialogEditTrx = defineAsyncComponent(() => import('../components/DialogEditTrx.vue'));
+const showDialogEditTrx = ref(false);
 const expandedRows = ref([]);
 const loading = reactive({});
+const selectedTransactions = ref([]);
+const selectedTrxCode = ref('');
 
 const onRowExpand = async (event) => {
     await context.getDetailManageTransaction(event.data.trx_code);
     context.detailDataPerRow[event.data.trx_code] = context.selectedProduct;
 };
 
+const getMenuItems = (data) => {
+    if (data.status === 'P') {
+        return [
+            {
+                label: 'Pilihan',
+                items: [
+                    {
+                        label: 'Setujui Semua',
+                        icon: 'pi pi-check',
+                        command: async () => {
+                            await context.approveAllTransaction(data.trx_code);
+                        }
+                    },
+                    {
+                        label: 'Tolak Semua',
+                        icon: 'pi pi-times',
+                        command: () => {
+                            selectedProductId.value = data.id;
+                            confirmHeader.value = 'Konfirmasi Hapus';
+                            confirmMessage.value = `Apakah Anda yakin ingin menghapus produk ${data.productName}?`;
+                            showDialogConfirm.value = true;
+                        }
+                    },
+                    {
+                        label: 'Edit',
+                        icon: 'pi pi-pencil',
+                        command: async () => {
+                            selectedTrxCode.value = data.trx_code;
+                            await context.getDetailManageTransaction(data.trx_code);
+                            selectedTransactions.value = context.detailDataPerRow[data.trx_code];
+                            showDialogEditTrx.value = true;
+                        }
+                    }
+                ]
+            }
+        ];
+    } else {
+        return [
+            {
+                label: 'Pilihan',
+                items: [
+                    {
+                        label: 'Edit',
+                        icon: 'pi pi-pencil',
+                        command: async () => {
+                            selectedTrxCode.value = data.trx_code;
+                            await context.getDetailManageTransaction(data.trx_code);
+                            selectedTransactions.value = context.detailDataPerRow[data.trx_code];
+                            showDialogEditTrx.value = true;
+                        }
+                    }
+                ]
+            }
+        ];
+    }
+};
 
 const changeDates = () => {
     context.getManageTransaction();

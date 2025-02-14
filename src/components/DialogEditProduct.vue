@@ -65,7 +65,7 @@
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="status" class="font-medium text-900">Status</label>
                     <SelectButton v-model="context.active" :options="context.statusOptions" optionLabel="label"
-                        optionValue="value" aria-labelledby="basic" />
+                        optionValue="value" aria-labelledby="basic" :allowEmpty="false" />
                 </div>
                 <div class="field mb-4 col-12">
                     <label for="desc" class="font-medium text-900">Keterangan</label>
