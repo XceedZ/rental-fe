@@ -74,3 +74,7 @@ export function calculateTotalPrice(cartItems) {
 export function toMMMDD(date) {
   return moment(date).format("MMM DD");
 }
+
+export function toDMMMYYYY(date) {
+  return moment(date).format("D MMM YYYY");
+}

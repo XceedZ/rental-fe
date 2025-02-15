@@ -6,7 +6,7 @@
             <div class="grid">
                 <div class="col lg:col-offset-2 px-5">
                     <div class="text-5xl font-bold text-white">{{ title }}</div>
-                    <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting oleh AdminDev
+                    <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting oleh {{ user.name}}
                     </p>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                 <div class="col lg:col-offset-2 px-5">
                     <div class="text-5xl font-bold text-white">{{ article?.title }}</div>
                     <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting {{
-                        toMMMDD(article?.created_at) }} oleh {{ article?.author_name }}</p>
+                        toDMMMYYYY(article?.created_at) }} oleh {{ article?.author_name }}</p>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     <div class="flex align-items-center gap-4">
                         <i class="pi pi-twitter cursor-pointer"></i>
                         <i class="pi pi-facebook cursor-pointer"></i>
-                        <i class="pi pi-link cursor-pointer"></i>
+                        <Button icon="pi pi-share-alt" class="p-button-rounded p-button-outlined" @click="handleShare"></Button>
                     </div>
                 </div>
                 <div class="article-content line-height-3 text-xl text-900 mb-5"
@@ -45,48 +45,14 @@
             <div v-if="!isPreview" class="col-12 lg:col-3 lg:border-left-1 surface-border">
                 <div class="p-3">
                     <span class="text-900 font-medium text-xl block mb-5">Postingan Lainnya</span>
-                    <div class="flex pb-4">
-                        <img src="http://semar.taskhub.id:4444/images/blocks/content/content-5.png"
-                            class="mr-3 h-5rem w-5rem" />
+                    <div v-for="otherArticle in otherArticles" :key="otherArticle.article_blog_id" class="flex pb-4">
+                        <img :src="getFullImageUrl(otherArticle.url_img)" class="mr-3 h-5rem w-5rem" />
                         <div class="flex flex-column align-items-start">
-                            <span class="text-lg text-900 font-medium mb-1">Post Title</span>
-                            <span class="text-600 font-medium mb-2">Metus aliquam eleifend mi in nulla posuere.</span>
-                        </div>
-                    </div>
-                    <div class="flex pb-4">
-                        <img src="http://semar.taskhub.id:4444/images/blocks/content/content-6.png"
-                            class="mr-3 h-5rem w-5rem" />
-                        <div class="flex flex-column align-items-start">
-                            <span class="text-lg text-900 font-medium mb-1">Post Title</span>
-                            <span class="text-600 font-medium mb-2">Metus aliquam eleifend mi in nulla posuere.</span>
-                        </div>
-                    </div>
-                    <div class="flex pb-4">
-                        <img src="http://semar.taskhub.id:4444/images/blocks/content/content-7.png"
-                            class="mr-3 h-5rem w-5rem" />
-                        <div class="flex flex-column align-items-start">
-                            <span class="text-lg text-900 font-medium mb-1">Post Title</span>
-                            <span class="text-600 font-medium mb-2">Metus aliquam eleifend mi in nulla posuere.</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-column gap-3">
-                        <div class="w-full h-full p-5 border-round"
-                            style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, #000000 100%), ('images/blocks/content/content-8.png')">
-                            <span class="text-white font-medium mb-3">Post Title</span>
-                            <span class="text-white block line-height-3">Metus aliquam eleifend mi innulla
-                                posuere.</span>
-                        </div>
-                        <div class="w-full h-full p-5 border-round"
-                            style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, #000000 100%), ('images/blocks/content/content-9.png')">
-                            <span class="text-white font-medium mb-3">Post Title</span>
-                            <span class="text-white block line-height-3">Metus aliquam eleifend mi innulla
-                                posuere.</span>
-                        </div>
-                        <div class="w-full h-full p-5 border-round"
-                            style="background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, #000000 100%), ('images/blocks/content/content-10.png')">
-                            <span class="text-white font-medium mb-3">Post Title</span>
-                            <span class="text-white block line-height-3">Metus aliquam eleifend mi in nulla
-                                posuere.</span>
+                            <span class="text-lg text-900 font-medium mb-1 hover:underline cursor-pointer"
+                                @click="goToArticleDetail(otherArticle.title, otherArticle.article_blog_id)">{{
+                                otherArticle.title }}</span>
+                            <span class="text-600 font-medium mb-2"
+                                v-html="otherArticle.content.substring(0, 150) + '...'"></span>
                         </div>
                     </div>
                 </div>
@@ -99,9 +65,13 @@
 import { ref, onMounted, defineProps, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useDetailArticleStore } from '@/stores/article/detail-article.store';
-import { toMMMDD } from '@/utils/date-convert';
-import { supabase } from '@/utils/supabase-client';
+import { toDMMMYYYY } from '@/utils/date-convert';
+import { useRouter } from 'vue-router';
+import local from '@/utils/local-storage';
+import { shareContent } from '@/utils/web-share';
 
+const user = local.getUser();
+const router = useRouter();
 const props = defineProps({
     title: {
         type: String,
@@ -124,6 +94,7 @@ const props = defineProps({
 const route = useRoute();
 const context = useDetailArticleStore();
 const article = ref(null);
+const otherArticles = ref([]);
 
 const getFullImageUrl = (urlImg) => {
     return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
@@ -134,6 +105,7 @@ onMounted(async () => {
         const articleBlogId = route.params.articleBlogId;
         await context.getArticleDetail(articleBlogId);
         article.value = context.article;
+        otherArticles.value = context.otherArticles;
     }
 });
 
@@ -142,6 +114,23 @@ watch(() => props.imageUrl, (newUrl) => {
         article.value = { ...article.value, url_img: newUrl };
     }
 });
+
+function goToArticleDetail(title, articleBlogId) {
+    router.push({ name: 'articleDetail', params: { title, articleBlogId } }).then(() => {
+        context.getArticleDetail(articleBlogId).then(() => {
+            article.value = context.article;
+            otherArticles.value = context.otherArticles;
+        });
+    });
+}
+
+function handleShare() {
+    shareContent({
+        title: props.title,
+        text: props.content,
+        url: window.location.href
+    });
+}
 </script>
 
 <style scoped>
@@ -153,7 +142,8 @@ img {
 .article-content {
     overflow: hidden;
     word-wrap: break-word;
-    width: 100%; /* Tambahkan ini */
+    width: 100%;
+    /* Tambahkan ini */
 }
 
 :deep(.article-content) img {
@@ -162,7 +152,8 @@ img {
     display: block;
     margin: 10px auto;
     object-fit: contain;
-    box-sizing: border-box; /* Tambahkan ini */
+    box-sizing: border-box;
+    /* Tambahkan ini */
 }
 
 @media screen and (max-width: 768px) {
@@ -179,5 +170,4 @@ body {
     margin: 0;
     padding: 0;
 }
-
 </style>

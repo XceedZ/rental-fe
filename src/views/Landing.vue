@@ -197,7 +197,7 @@
                         <div class="w-full xl:w-6 pr-0 xl:pr-6"
                             v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
                             v-for="article in articles" :key="article.article_blog_id">
-                            <img :src="getFullImageUrl(article.url_img)" alt="Image" class="w-full">
+                            <img :src="getFullImageUrl(article.url_img)" alt="Image" class="w-full border-round">
                             <div class="flex align-items-center mt-4"
                                 v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
                                 <span class="text-900 font-medium text-xl white-space-nowrap">{{ article.author_name
