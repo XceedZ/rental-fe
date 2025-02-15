@@ -28,6 +28,8 @@ export const useEditTrxStore = defineStore({
       if (result.isOk) {
         const context = useManageTransactionStore();
         context.getManageTransaction();
+        const trxCode = transactions[0].trx_code;
+        context.getDetailManageTransaction(trxCode);
         showSuccessEdit(this.toast);
         this.loading["editTransaction"] = false;
         return true;

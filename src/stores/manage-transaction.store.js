@@ -82,7 +82,6 @@ export const useManageTransactionStore = defineStore({
       if (result.isOk) {
         this.detailDataPerRow[trxCode] = result.body.trxProductDetails;
         this.selectedProduct = result.body.trxProductDetails;
-        console.log("Detail Data Per Row:", this.detailDataPerRow); // Debugging
         this.loading["getDetailManageTransaction"] = false;
       } else {
         this.loading["getDetailManageTransaction"] = false;

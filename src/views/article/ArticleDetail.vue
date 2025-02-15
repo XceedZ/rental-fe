@@ -6,7 +6,8 @@
             <div class="grid">
                 <div class="col lg:col-offset-2 px-5">
                     <div class="text-5xl font-bold text-white">{{ title }}</div>
-                    <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting oleh {{ user.name}}
+                    <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting oleh {{
+                        user.name}}
                     </p>
                 </div>
             </div>
@@ -36,7 +37,8 @@
                     <div class="flex align-items-center gap-4">
                         <i class="pi pi-twitter cursor-pointer"></i>
                         <i class="pi pi-facebook cursor-pointer"></i>
-                        <Button icon="pi pi-share-alt" class="p-button-rounded p-button-outlined" @click="handleShare"></Button>
+                        <Button icon="pi pi-share-alt" class="p-button-rounded p-button-outlined"
+                            @click="handleShare"></Button>
                     </div>
                 </div>
                 <div class="article-content line-height-3 text-xl text-900 mb-5"
@@ -50,7 +52,7 @@
                         <div class="flex flex-column align-items-start">
                             <span class="text-lg text-900 font-medium mb-1 hover:underline cursor-pointer"
                                 @click="goToArticleDetail(otherArticle.title, otherArticle.article_blog_id)">{{
-                                otherArticle.title }}</span>
+                                    otherArticle.title }}</span>
                             <span class="text-600 font-medium mb-2"
                                 v-html="otherArticle.content.substring(0, 150) + '...'"></span>
                         </div>
