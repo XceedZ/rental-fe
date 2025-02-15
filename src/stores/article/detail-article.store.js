@@ -10,6 +10,7 @@ export const useDetailArticleStore = defineStore({
     getArticleDetailApi: ApiConstant.GET_ARTICLE_DETAIL,
     toast: useToast(),
     article: null,
+    otherArticles: [],
     loading: {},
   }),
   actions: {
@@ -22,6 +23,7 @@ export const useDetailArticleStore = defineStore({
       const result = await callApi(payload);
       if (result.isOk) {
         this.article = result.body.article;
+        this.otherArticles = result.body.otherArticles;
       } else if (result.error && result.error.response) {
         showErrorApi(this.toast, result.error.response.data.message);
       }

@@ -266,11 +266,21 @@ export const ApiConstant = {
   },
   GET_ARTICLE_BLOG: {
     path: "getArticleBlog",
-    method: "GET",
+    method: "POST",
     keyList: "",
   },
   GET_ARTICLE_DETAIL: {
     path: "getArticleDetail",
+    method: "POST",
+    keyList: "",
+  },
+  UPDATE_ARTICLE: {
+    path: "updateArticle",
+    method: "POST",
+    keyList: "",
+  },
+  REMOVE_ARTICLE: {
+    path: "removeArticle",
     method: "POST",
     keyList: "",
   },

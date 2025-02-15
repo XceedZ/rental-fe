@@ -12,6 +12,8 @@ export const useLandingStore = defineStore({
     getApi: ApiConstant.GET_PRODUCTS,
     brandApi: ApiConstant.GET_BRAND_FOR_ADD_PRODUCT,
     ctgrApi: ApiConstant.GET_CTGR_FOR_ADD_PRODUCT,
+    popularApi: ApiConstant.GET_POPULAR_PRODUCTS,
+    articleApi: ApiConstant.GET_ARTICLE_BLOG,
     toast: useToast(),
     keyword: "",
     loading: {},
@@ -115,7 +117,7 @@ export const useLandingStore = defineStore({
     async getPopularProducts() {
       this.loading["getPopularProducts"] = true;
       const payload = {
-        api: ApiConstant.GET_POPULAR_PRODUCTS,
+        api: this.popularApi,
         body: {},
       };
       const result = await callApi(payload);
@@ -127,7 +129,7 @@ export const useLandingStore = defineStore({
     async getArticleBlog() {
       this.loading["getArticleBlog"] = true;
       const payload = {
-        api: ApiConstant.GET_ARTICLE_BLOG,
+        api: this.articleApi,
         body: {},
       };
       const result = await callApi(payload);

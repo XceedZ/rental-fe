@@ -18,26 +18,66 @@
                 </FileUpload>
             </div>
             <Editor v-model="value" editorStyle="height: 500px" />
-            <Button label="Buat Artikel" icon="pi pi-check" class="mt-4" :loading="context.loading['createArticle']"
-                @click="handleCreateArticle" />
+            <Button :label="buttonLabel" icon="pi pi-check" class="mt-4"
+                :loading="createContext.loading['createArticle']" @click="handleCreateArticle" />
         </div>
-        <div class="flex-1 border-1 border-round surface-border pl-4 mt-4 sm:mt-0">
-            <ArticleDetail :title="title" :content="value" :imageUrl="imageUrl" :isPreview="true" />
+        <div class="flex-1 border-1 border-round surface-border mt-4 sm:mt-0">
+            <div class="surface-card p-4 shadow-2 border-round">
+                <div class="mb-3 flex flex-column md:flex-row md:align-items-center md:justify-content-between">
+                    <div class="flex align-items-start">
+                        <i class="mr-3 pi pi-desktop text-2xl"></i>
+                        <div>
+                            <div class="text-xl font-medium text-900 mb-2">Pratinjau</div>
+                            <div class="font-medium text-500 mb-3 text-sm">Lihat bagaimana artikel Anda akan tampil
+                                setelah
+                                diposting.</div>
+                        </div>
+                    </div>
+                </div>
+                <Divider class="w-full"></Divider>
+            </div>
+            <ScrollPanel style="width: 100%; height: 877px; margin-top: -2rem;">
+                <ArticleDetail :title="title" :content="value" :imageUrl="imageUrl" :isPreview="true" />
+            </ScrollPanel>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 import { useCreateArticleStore } from '@/stores/article/create-article.store';
+import { useManageArticleStore } from '@/stores/article/manage-article.store';
 import ArticleDetail from './ArticleDetail.vue';
 import local from "@/utils/local-storage";
+import defaultImage from '@/assets/content-3.svg';
 
 const title = ref('');
 const selectedFiles = ref([]);
 const value = ref('');
-const imageUrl = ref('http://semar.taskhub.id:4444/images/blocks/content/content-3.svg');
-const context = useCreateArticleStore();
+const imageUrl = ref(defaultImage);
+const createContext = useCreateArticleStore();
+const manageContext = useManageArticleStore();
+const isEdit = ref(false);
+
+const getFullImageUrl = (urlImg) => {
+    return `${import.meta.env.VITE_SUPABASE_STORAGE_URL}${urlImg}`;
+};
+
+watch(
+    () => manageContext.getArticleData(),
+    (articleData) => {
+        console.log('artikel:', articleData);
+        if (articleData) {
+            isEdit.value = true;
+            title.value = articleData.title;
+            value.value = articleData.content;
+            imageUrl.value = getFullImageUrl(articleData.url_img);
+        }
+    },
+    { immediate: true }
+);
+
+const buttonLabel = computed(() => (isEdit.value ? 'Simpan Perubahan' : 'Buat Artikel'));
 
 const onFileSelect = (event) => {
     const file = event.files[0];
@@ -57,7 +97,11 @@ const handleCreateArticle = async () => {
     selectedFiles.value.forEach((file) => {
         formData.append('urlImg', file);
     });
-    await context.createArticle(formData);
+    if (isEdit.value) {
+        await createContext.updateArticle(manageContext.getArticleData().article_blog_id, formData);
+    } else {
+        await createContext.createArticle(formData);
+    }
 };
 </script>
 

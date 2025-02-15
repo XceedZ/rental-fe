@@ -15,7 +15,7 @@ import ManageTransactions from "@/views/ManageTransactions.vue";
 import ManageBrandCtgr from "@/views/ManageCtgrBrand.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
 import ArticleDetail from "@/views/article/ArticleDetail.vue";
-import ManageArticle from "@/views/article/ManageArticle.vue";
+import ManageArticle from "@/views/article/ArticleTab.vue";
 
 const routes = [
   {

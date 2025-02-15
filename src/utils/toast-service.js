@@ -65,3 +65,11 @@ export const showErrorApi = (toast, message) => {
 export const showSuccessApi = (toast, message) => {
   toast.add({ severity: 'success', summary: 'Sukses', detail: message, life: 4000 });
 };
+
+export const showSuccessCreateArticle = (toast) => {
+  toast.add({ severity: 'success', summary: 'Sukses', detail: 'Berhasil membuat artikel', life: 1000 });
+};
+
+export const showSuccessUpdateArticle = (toast) => {
+  toast.add({ severity: 'success', summary: 'Sukses', detail: 'Berhasil memperbarui artikel', life: 1000 });
+};
