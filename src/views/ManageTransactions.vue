@@ -255,7 +255,7 @@
                                 </Column>
                                 <Column style="width: 10rem">
                                     <template #header>
-                                        <span class="font-semibold text-sm text-color-secondary">Terlambat (hari)
+                                        <span class="font-semibold text-sm text-color-secondary">Durasi (hari)
                                         </span>
                                     </template>
                                     <template #body="{ data }">
