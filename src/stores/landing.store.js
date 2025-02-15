@@ -26,6 +26,7 @@ export const useLandingStore = defineStore({
     priceRange: [0, 2000000],
     selectedProduct: [],
     popularProducts: [],
+    articles: [],
   }),
   actions: {
     onPage(event) {
@@ -122,6 +123,18 @@ export const useLandingStore = defineStore({
         this.popularProducts = result.body.popularProducts;
       }
       this.loading["getPopularProducts"] = false;
+    },
+    async getArticleBlog() {
+      this.loading["getArticleBlog"] = true;
+      const payload = {
+        api: ApiConstant.GET_ARTICLE_BLOG,
+        body: {},
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        this.articles = result.body.articles;
+      }
+      this.loading["getArticleBlog"] = false;
     },
     resetFilter() {
       this.keyword = "";

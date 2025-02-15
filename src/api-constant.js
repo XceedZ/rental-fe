@@ -259,4 +259,19 @@ export const ApiConstant = {
     method: "GET",
     keyList: "",
   },
+  CREATE_ARTICLE: {
+    path: "createArticle",
+    method: "POST",
+    keyList: "",
+  },
+  GET_ARTICLE_BLOG: {
+    path: "getArticleBlog",
+    method: "GET",
+    keyList: "",
+  },
+  GET_ARTICLE_DETAIL: {
+    path: "getArticleDetail",
+    method: "POST",
+    keyList: "",
+  },
 };
