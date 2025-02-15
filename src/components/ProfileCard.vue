@@ -5,8 +5,7 @@
                 <a v-ripple class="flex p-2 align-items-center cursor-pointer p-ripple"
                     v-styleclass="{ selector: '#pb_profile_submenu', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup' }">
                     <span class="mr-3 inline-flex">
-                        <Avatar :name="(local.getUser().name || 'Tamu')" alt="User Avatar"
-                            style="height: 2.5rem;" />
+                        <Avatar :name="(local.getUser().name || 'Tamu')" alt="User Avatar" style="height: 2.5rem;" />
                     </span>
                     <div>
                         <span class="font-medium text-900 mb-2">{{ userName }}</span>
@@ -71,8 +70,20 @@
                             </span>
                         </a>
                     </li>
+                    <li class="mb-2" v-if="hasAccess('manageProduct') || hasAccess('manageAdmin')">
+                        <a v-ripple
+                            class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
+                            @click="goToArticle">
+                            <i class="bi bi-pencil-square text-500 mr-3 text-xl"></i>
+                            <span>
+                                <span class="block text-700 font-medium">Artikel</span>
+                                <p class="mt-1 mb-0 text-600 text-sm">Buat dan kelola artikel</p>
+                            </span>
+                        </a>
+                    </li>
                     <li class="mb-2">
-                        <a v-ripple class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
+                        <a v-ripple
+                            class="flex p-2 align-items-center hover:surface-50 border-transparent border-1 hover:border-100 border-round cursor-pointer transition-colors transition-duration-150 p-ripple"
                             @click="goToSettings">
                             <i class="pi pi-cog text-500 mr-3 text-xl"></i>
                             <span>
@@ -151,6 +162,12 @@ const goToProduct = () => {
 const goToTransaction = () => {
     if (hasAccess('manageProduct') || hasAccess('manageAdmin')) {
         router.push({ name: 'manageTransactions' });
+    }
+};
+
+const goToArticle = () => {
+    if (hasAccess('manageProduct') || hasAccess('manageAdmin')) {
+        router.push({ name: 'manageArticle' });
     }
 };
 

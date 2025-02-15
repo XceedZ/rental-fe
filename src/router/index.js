@@ -14,6 +14,8 @@ import Register from "../views/Register.vue";
 import ManageTransactions from "@/views/ManageTransactions.vue";
 import ManageBrandCtgr from "@/views/ManageCtgrBrand.vue";
 import ResetPassword from "@/views/ResetPassword.vue";
+import ArticleDetail from "@/views/article/ArticleDetail.vue";
+import ManageArticle from "@/views/article/ManageArticle.vue";
 
 const routes = [
   {
@@ -98,6 +100,22 @@ const routes = [
     path: "/manage-brand-categories",
     name: "manageBrandCtgr",
     component: ManageBrandCtgr,
+    meta: {
+      taskNames: [],
+    },
+  },
+  {
+    path: "/article/:title-:articleBlogId",
+    name: "articleDetail",
+    component: ArticleDetail,
+    meta: {
+      taskNames: [],
+    },
+  },
+  {
+    path: "/manage-article",
+    name: "manageArticle",
+    component: ManageArticle,
     meta: {
       taskNames: [],
     },

@@ -195,23 +195,22 @@
                         Postingan Artikel</div>
                     <div class="flex flex-wrap">
                         <div class="w-full xl:w-6 pr-0 xl:pr-6"
-                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                            <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-9.png" alt="Image"
-                                class="w-full">
+                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
+                            v-for="article in articles" :key="article.article_blog_id">
+                            <img :src="getFullImageUrl(article.url_img)" alt="Image" class="w-full">
                             <div class="flex align-items-center mt-4"
                                 v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-3.png"
-                                    class="mr-3 flex-shrink-0" width="28" height="28" />
-                                <span class="text-900 font-medium text-xl white-space-nowrap">Darrel
-                                    Steward</span>
+                                <span class="text-900 font-medium text-xl white-space-nowrap">{{ article.author_name
+                                    }}</span>
                                 <span class="text-500 font-medium text-xl mx-3">|</span>
-                                <span class="text-500 font-medium text-xl white-space-nowrap">Oct 7</span>
+                                <span class="text-500 font-medium text-xl white-space-nowrap">{{
+                                    toMMMDD(article.created_at) }}</span>
                             </div>
-                            <div class="text-900 font-bold text-2xl mt-4">Circumpolar Cooperation</div>
-                            <p class="line-height-3 text-700 my-4">Purus sit amet volutpat consequat mauris nunc
-                                congue.
-                                Odio
-                                pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus.</p>
+                            <div class="text-900 font-bold text-2xl mt-4 hover:underline cursor-pointer"
+                                @click="goToArticleDetail(article.title, article.article_blog_id)">{{ article.title }}
+                            </div>
+                            <p class="line-height-3 text-700 my-4" v-html="article.content.substring(0, 500) + '...'">
+                            </p>
                             <div class="flex align-items-center">
                                 <span class="text-600 text-sm font-medium">15 min read</span>
                                 <span class="text-600 font-medium text-sm mx-3">|</span>
@@ -297,6 +296,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useLandingStore } from '@/stores/landing.store';
 import { toCurrencyLocale } from '../utils/currency';
+import { toMMMDD } from '@/utils/date-convert';
 import { useRouter } from 'vue-router';
 import { switchTheme, initializeTheme } from '@/utils/theme-switcher';
 
@@ -312,6 +312,8 @@ const router = useRouter();
 const isDarkMode = ref(false);
 const theme = ref(localStorage.getItem('theme') || 'light');
 const products = ref([]);
+const articles = ref([]);
+
 function goToHome() {
     router.push({ name: 'home' });
 }
@@ -331,6 +333,8 @@ onMounted(async () => {
     window.addEventListener('scroll', handleScroll);
     await context.getPopularProducts();
     products.value = context.popularProducts;
+    await context.getArticleBlog();
+    articles.value = context.articles;
     initializeTheme(isDarkMode, theme);
 });
 
@@ -345,6 +349,10 @@ const getFullImageUrl = (urlImg) => {
 function toggleTheme() {
     switchTheme(isDarkMode, theme);
     document.body.classList.toggle('dark-theme', isDarkMode.value);
+}
+
+function goToArticleDetail(title, articleBlogId) {
+    router.push({ name: 'articleDetail', params: { title, articleBlogId } });
 }
 </script>
 
