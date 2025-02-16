@@ -106,7 +106,7 @@
                             <div class="p-4 flex flex-column text-center">
                                 <img v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
                                     :src="getFullImageUrl(slotProps.data.urlImg)" alt="product"
-                                    class="carousel-image mx-auto">
+                                    class="carousel-image mx-auto cursor-pointer" @click="goToProduct(slotProps.data.productCode)">
                                 <div class="text-900 text-xl mt-4">{{ slotProps.data.productName }}</div>
                                 <p class="text-600 mt-3 line-height-3 truncate">{{ slotProps.data.desc }}</p>
                             </div>
@@ -186,104 +186,59 @@
                         </div>
                     </div>
                 </div>
-                <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-                    <p class="text-600 font-medium text-xl"
-                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">Seputar
-                        Tips & Trick</p>
-                    <div class="text-900 font-bold text-3xl mb-6"
-                        v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                        Postingan Artikel</div>
-                    <div class="flex flex-wrap">
-                        <div class="w-full xl:w-6 pr-0 xl:pr-6"
-                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
-                            v-for="article in articles" :key="article.article_blog_id">
-                            <img :src="getFullImageUrl(article.url_img)" alt="Image" class="w-full border-round">
-                            <div class="flex align-items-center mt-4"
-                                v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                <span class="text-900 font-medium text-xl white-space-nowrap">{{ article.author_name
+                <div class="surface-section px-4 py-8 md:px-6 lg:px-8 min-w-full">
+                    <div class="flex justify-content-between align-items-center flex-wrap">
+                        <p class="text-600 font-medium text-xl"
+                            v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                            Seputar Tips & Trick
+                        </p>
+                    </div>
+                    <div class="text-900 font-bold text-3xl mb-6 md:mb-6 sm:mb-4 flex items-center flex-wrap">
+                        <span>Postingan Artikel</span>
+                        <div class="ml-auto w-full sm:w-auto xl:pr-6">
+                            <IconField iconPosition="left" class="w-full mt-4 lg:mt-0 sm:mt-4">
+                                <InputIcon class="pi pi-search"></InputIcon>
+                                <InputText v-model="context.keyword" placeholder="Penulis / Judul Artikel"
+                                    class="w-full" @keyup.enter="searchArticle" />
+                            </IconField>
+                        </div>
+                    </div>
+                    <div v-if="articles.length === 0"
+                        class="flex flex-column align-items-center justify-content-center p-6 min-h-20rem">
+                        <i class="pi pi-globe text-6xl text-primary mb-4"></i>
+                        <h3 class="text-900 font-medium text-xl text-center mb-2">Tidak ada artikel yang ditemukan</h3>
+                        <p class="text-600 mb-4 text-center">Coba ubah filter pencarian atau cari dengan kata kunci
+                            lain.</p>
+                        <Button label="Reset Filter" icon="pi pi-refresh" outlined @click="resetFilter" />
+                    </div>
+                    <div v-else>
+                        <div class="flex flex-wrap">
+                            <div class="w-full xl:w-6 pr-0 xl:pr-6"
+                                v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }"
+                                v-for="article in articles" :key="article.article_blog_id">
+                                <img :src="getFullImageUrl(article.url_img)" alt="Image"
+                                    class="w-full border-round cursor-pointer" style="height: 250px; object-fit: cover;"
+                                    @click="goToArticleDetail(article.title, article.article_blog_id)" />
+                                <div class="flex align-items-center mt-4"
+                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
+                                    <span class="text-900 font-medium text-xl white-space-nowrap">{{ article.author_name
                                     }}</span>
-                                <span class="text-500 font-medium text-xl mx-3">|</span>
-                                <span class="text-500 font-medium text-xl white-space-nowrap">{{
-                                    toMMMDD(article.created_at) }}</span>
-                            </div>
-                            <div class="text-900 font-bold text-2xl mt-4 hover:underline cursor-pointer"
-                                @click="goToArticleDetail(article.title, article.article_blog_id)">{{ article.title }}
-                            </div>
-                            <p class="line-height-3 text-700 my-4" v-html="article.content.substring(0, 500) + '...'">
-                            </p>
-                            <div class="flex align-items-center">
-                                <span class="text-600 text-sm font-medium">15 min read</span>
-                                <span class="text-600 font-medium text-sm mx-3">|</span>
-                                <span
-                                    class="bg-indigo-100 text-indigo-600 text-sm block py-1 px-2 border-round mr-3">Poles</span>
-                                <span
-                                    class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
+                                    <span class="text-500 font-medium text-xl mx-3">|</span>
+                                    <span class="text-500 font-medium text-xl white-space-nowrap">{{
+                                        toMMMDD(article.created_at) }}</span>
+                                </div>
+                                <div class="text-900 font-bold text-2xl mt-4 hover:underline cursor-pointer"
+                                    @click="goToArticleDetail(article.title, article.article_blog_id)">{{ article.title
+                                    }}
+                                </div>
+                                <p class="line-height-3 text-700 my-4"
+                                    v-html="article.content.substring(0, 500) + '...'">
+                                </p>
                             </div>
                         </div>
-                        <div class="w-full xl:w-6">
-                            <div class="flex flex-wrap align-items-start mb-8 mt-8 xl:mb-6 xl:mt-0">
-                                <div class="w-full xl:w-6 pr-0 xl:pr-4 mb-4 xl:mb-0"
-                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                    <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-10.png" alt="Image"
-                                        class="w-full">
-                                </div>
-                                <div class="w-full xl:w-6"
-                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                    <div class="flex align-items-center">
-                                        <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-2.png"
-                                            class="mr-3 flex-shrink-0" width="28" height="28" />
-                                        <span class="text-900 font-medium text-xl white-space-nowrap">Bessie
-                                            Cooper</span>
-                                        <span class="text-500 font-medium text-xl mx-3">|</span>
-                                        <span class="text-500 font-medium text-xl white-space-nowrap">Oct
-                                            7</span>
-                                    </div>
-                                    <div class="text-900 font-bold text-2xl mt-4">World Famous Fish</div>
-                                    <p class="line-height-3 text-700 my-4">Quisque sagittis purus sit amet
-                                        volutpat
-                                        consequat mauris.
-                                    </p>
-                                    <div class="flex align-items-center">
-                                        <span class="text-600 text-sm font-medium">12 min read</span>
-                                        <span class="text-600 font-medium text-sm mx-3">|</span>
-                                        <span
-                                            class="bg-blue-100 text-blue-600 text-sm block py-1 px-2 border-round mr-3">Ocean</span>
-                                        <span
-                                            class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap align-items-start">
-                                <div class="w-full xl:w-6 pr-0 xl:pr-4 mb-4 xl:mb-0"
-                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                    <img src="http://semar.taskhub.id:4444/images/blocks/blog/blog-11.png" alt="Image"
-                                        class="w-full">
-                                </div>
-                                <div class="w-full xl:w-6"
-                                    v-animateonscroll="{ enterClass: 'fadein', leaveClass: 'fadeout' }">
-                                    <div class="flex align-items-center">
-                                        <img src="http://semar.taskhub.id:4444/images/blocks/avatars/circle/avatar-f-3.png"
-                                            class="mr-3 flex-shrink-0" width="28" height="28" />
-                                        <span class="text-900 font-medium text-xl white-space-nowrap">Jenna
-                                            Clark</span>
-                                        <span class="text-500 font-medium text-xl mx-3">|</span>
-                                        <span class="text-500 font-medium text-xl white-space-nowrap">Oct
-                                            10</span>
-                                    </div>
-                                    <div class="text-900 font-bold text-2xl mt-4">Extinction and Origination
-                                    </div>
-                                    <p class="line-height-3 text-700 my-4">Bibendum enim facilisis gravida neque
-                                        convallis a cras.</p>
-                                    <div class="flex align-items-center">
-                                        <span class="text-600 text-sm font-medium">10 min read</span>
-                                        <span class="text-600 font-medium text-sm mx-3">|</span>
-                                        <span
-                                            class="bg-blue-100 text-blue-600 text-sm block py-1 px-2 border-round mr-3">Ocean</span>
-                                        <span
-                                            class="bg-green-100 text-green-600 text-sm block py-1 px-2 border-round">Nature</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="flex justify-content-center mt-6" v-if="!allArticlesLoaded">
+                            <Button outlined icon="pi pi-sync" label="Muat Lebih Banyak"
+                                :loading="context.loading['getArticleBlog']" @click="loadMoreArticles"></Button>
                         </div>
                     </div>
                 </div>
@@ -295,7 +250,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useLandingStore } from '@/stores/landing.store';
-import { toCurrencyLocale } from '../utils/currency';
 import { toMMMDD } from '@/utils/date-convert';
 import { useRouter } from 'vue-router';
 import { switchTheme, initializeTheme } from '@/utils/theme-switcher';
@@ -313,6 +267,7 @@ const isDarkMode = ref(false);
 const theme = ref(localStorage.getItem('theme') || 'light');
 const products = ref([]);
 const articles = ref([]);
+const allArticlesLoaded = ref(false);
 
 function goToHome() {
     router.push({ name: 'home' });
@@ -322,24 +277,12 @@ function goToProduct(productCode) {
     router.push({ name: 'product', params: { productCode } });
 }
 
-function handleScroll() {
-    const bg = document.querySelector(".parallax-background");
-    if (bg) {
-        bg.style.transform = `translateY(${window.scrollY * 0.4}px)`;
-    }
-}
-
 onMounted(async () => {
-    window.addEventListener('scroll', handleScroll);
     await context.getPopularProducts();
     products.value = context.popularProducts;
     await context.getArticleBlog();
     articles.value = context.articles;
     initializeTheme(isDarkMode, theme);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('scroll', handleScroll);
 });
 
 const getFullImageUrl = (urlImg) => {
@@ -353,6 +296,23 @@ function toggleTheme() {
 
 function goToArticleDetail(title, articleBlogId) {
     router.push({ name: 'articleDetail', params: { title, articleBlogId } });
+}
+
+async function searchArticle() {
+    await context.getArticleBlog();
+    articles.value = context.articles;
+}
+
+async function loadMoreArticles() {
+    context.limit = 999;
+    await context.getArticleBlog();
+    articles.value = context.articles;
+    allArticlesLoaded.value = true;
+}
+
+function resetFilter() {
+    context.keyword = "";
+    searchArticle();
 }
 </script>
 
@@ -396,9 +356,7 @@ function goToArticleDetail(title, articleBlogId) {
     width: auto;
     max-width: 100%;
     height: 200px;
-    /* Sesuaikan tinggi sesuai kebutuhan */
     object-fit: contain;
-    /* Bisa juga cover tergantung efek yang diinginkan */
 }
 
 
@@ -411,7 +369,6 @@ function goToArticleDetail(title, articleBlogId) {
 
     .payment-img {
         height: 50px;
-        /* Default height */
         max-width: 100%;
     }
 
@@ -424,7 +381,6 @@ function goToArticleDetail(title, articleBlogId) {
 
         .payment-img-container {
             width: 50%;
-            /* Mengatur agar gambar tetap menyamping */
             display: flex;
             justify-content: center;
             margin-bottom: 10px;
@@ -432,7 +388,6 @@ function goToArticleDetail(title, articleBlogId) {
 
         .payment-img {
             height: 35px;
-            /* Ukuran lebih kecil di layar kecil */
         }
     }
 }

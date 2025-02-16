@@ -7,7 +7,7 @@
                 <div class="col lg:col-offset-2 px-5">
                     <div class="text-5xl font-bold text-white">{{ title }}</div>
                     <p class="line-height-3 text-white text-lg text-center md:text-left mt-3">Diposting oleh {{
-                        user.name}}
+                        user.name }}
                     </p>
                 </div>
             </div>
@@ -41,14 +41,27 @@
                             @click="handleShare"></Button>
                     </div>
                 </div>
-                <div class="article-content line-height-3 text-xl text-900 mb-5"
+                <div v-if="context.loading['getArticleDetail']"
+                    class="article-content line-height-3 text-xl text-900 mb-5">
+                    <Skeleton width="100%" height="200px" />
+                </div>
+                <div v-else class="article-content line-height-3 text-xl text-900 mb-5"
                     v-html="isPreview ? content : article?.content"></div>
             </div>
             <div v-if="!isPreview" class="col-12 lg:col-3 lg:border-left-1 surface-border">
                 <div class="p-3">
                     <span class="text-900 font-medium text-xl block mb-5">Postingan Lainnya</span>
-                    <div v-for="otherArticle in otherArticles" :key="otherArticle.article_blog_id" class="flex pb-4">
-                        <img :src="getFullImageUrl(otherArticle.url_img)" class="mr-3 h-5rem w-5rem" />
+                    <div v-if="context.loading['getArticleDetail']" v-for="n in 3" :key="n" class="flex pb-4">
+                        <Skeleton width="5rem" height="5rem" class="mr-3" />
+                        <div class="flex flex-column align-items-start">
+                            <Skeleton width="100%" height="1.5rem" class="mb-1" />
+                            <Skeleton width="100%" height="1rem" />
+                        </div>
+                    </div>
+                    <div v-else v-for="otherArticle in otherArticles" :key="otherArticle.article_blog_id"
+                        class="flex pb-4">
+                        <img :src="getFullImageUrl(otherArticle.url_img)" class="mr-3 h-5rem w-5rem cursor-pointer"
+                            @click="goToArticleDetail(otherArticle.title, otherArticle.article_blog_id)" />
                         <div class="flex flex-column align-items-start">
                             <span class="text-lg text-900 font-medium mb-1 hover:underline cursor-pointer"
                                 @click="goToArticleDetail(otherArticle.title, otherArticle.article_blog_id)">{{
@@ -71,6 +84,7 @@ import { toDMMMYYYY } from '@/utils/date-convert';
 import { useRouter } from 'vue-router';
 import local from '@/utils/local-storage';
 import { shareContent } from '@/utils/web-share';
+import Skeleton from 'primevue/skeleton';
 
 const user = local.getUser();
 const router = useRouter();

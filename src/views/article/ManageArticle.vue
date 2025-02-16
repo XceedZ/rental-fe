@@ -170,6 +170,7 @@ const confirmDelete = async () => {
     const result = await context.removeArticle(selectedArticleId.value);
     if (result.isOk) {
         emit('update:visible', false);
+        showDialogConfirm.value = false;
     }
 };
 

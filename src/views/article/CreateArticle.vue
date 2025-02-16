@@ -3,7 +3,7 @@
         <div class="flex-1">
             <div class="mb-4 mt-4">
                 <FloatLabel>
-                    <InputText id="header" v-model="title" />
+                    <InputText id="header" v-model="title" class="w-full "/>
                     <label for="header">Judul Artikel</label>
                 </FloatLabel>
             </div>
@@ -22,7 +22,7 @@
                 :loading="createContext.loading['createArticle']" @click="handleCreateArticle" />
         </div>
         <div class="flex-1 border-1 border-round surface-border mt-4 sm:mt-0">
-            <div class="surface-card p-4 shadow-2 border-round">
+            <div class="surface-card p-4 border-round">
                 <div class="mb-3 flex flex-column md:flex-row md:align-items-center md:justify-content-between">
                     <div class="flex align-items-start">
                         <i class="mr-3 pi pi-desktop text-2xl"></i>
@@ -66,7 +66,6 @@ const getFullImageUrl = (urlImg) => {
 watch(
     () => manageContext.getArticleData(),
     (articleData) => {
-        console.log('artikel:', articleData);
         if (articleData) {
             isEdit.value = true;
             title.value = articleData.title;
