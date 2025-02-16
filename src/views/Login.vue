@@ -3,7 +3,7 @@
         <!-- Bagian Kiri (Form Login) -->
         <div class="surface-section w-full md:w-6 p-6 md:p-8 flex flex-column align-items-start">
             <div class="flex align-items-center gap-2 mb-5">
-                <img src="../assets/logo2.jpg" alt="Logo" height="50" class="border-circle object-cover shadow-md">
+                <img src="../assets/logo2.png" alt="Logo" height="50" class="border-circle object-cover shadow-md">
                 <span class="philosopher-regular text-2xl">Landscape Aero</span>
             </div>
 

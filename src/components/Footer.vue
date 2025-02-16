@@ -4,7 +4,7 @@
     <div class="py-6 flex flex-column sm:flex-row sm:align-items-center justify-content-between">
         <div class="flex flex-column align-items-center sm:align-items-start">
             <div class="flex align-items-center mb-3">
-                <img src="../assets/logo2.jpg" alt="Image" height="40" class="mr-2" style="border-radius: 50%; object-fit: cover;">
+                <img src="../assets/logo2.png" alt="Image" height="40" class="mr-2" style="border-radius: 50%; object-fit: cover;">
                 <span class="philosopher-regular text-2xl">Landscape Aero</span>
             </div>
             <div class="line-height-3">&copy; 2025 Landscape Aero Bali, Inc. All rights reserved</div>

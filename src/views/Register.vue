@@ -3,7 +3,7 @@
         <div class="surface-section w-full md:w-6 p-6 md:p-8">
             <div class="mb-5">
                 <div class="flex align-items-center gap-2 mb-3">
-                    <img src="../assets/logo2.jpg" alt="Image" height="50"
+                    <img src="../assets/logo2.png" alt="Image" height="50"
                         style="border-radius: 50%; object-fit: cover;">
                     <span class="philosopher-regular text-2xl">Landscape Aero</span>
                 </div>

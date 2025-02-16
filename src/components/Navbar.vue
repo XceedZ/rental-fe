@@ -2,9 +2,9 @@
     <div class="surface-section sticky top-0 px-3 lg:px-6 flex align-items-stretch relative border-bottom-1 surface-border"
         style="min-height: 80px;">
         <div class="flex align-items-center justify-content-center">
-            <img src="../assets/logo2.jpg" alt="Image" height="50" class="hidden lg:inline mr-3 lg:mr-6"
+            <img src="../assets/logo2.png" alt="Image" height="50" class="hidden lg:inline mr-3 lg:mr-6"
                 style="border-radius: 50%; object-fit: cover;">
-            <img src="../assets/logo2.jpg" alt="Image" height="40" class="inline lg:hidden mr-3 lg:mr-6"
+            <img src="../assets/logo2.png" alt="Image" height="40" class="inline lg:hidden mr-3 lg:mr-6"
                 style="border-radius: 50%; object-fit: cover;">
         </div>
         <div class="flex align-items-center flex-auto">
