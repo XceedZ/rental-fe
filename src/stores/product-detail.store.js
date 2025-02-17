@@ -7,6 +7,7 @@ import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
 import moment from "moment";
 import { YYYYMMDDtoDMMMMYYYY } from "@/utils/date-convert";
+import { toCurrencyLocale } from "@/utils/currency";
 
 export const useProductDetailStore = defineStore({
   id: "product-detail.store",
@@ -77,25 +78,25 @@ export const useProductDetailStore = defineStore({
       });
       if (result.isOk) {
         const rental = result.body.trxRentProducts[0];
+        const totalPayment = toCurrencyLocale(rental.total_amount);
         const message = `
-          *Konfirmasi Checkout & Permintaan Informasi*
+*Konfirmasi Checkout & Permintaan Informasi*
 
-          Halo Admin Landscapeaero,
+Halo Admin Landscapeaero,
 
-          Saya baru saja menyelesaikan proses checkout dan ingin mengonfirmasi beberapa hal terkait pesanan saya. Berikut detail pesanan:
+Saya baru saja menyelesaikan proses checkout dan ingin mengonfirmasi beberapa hal terkait pesanan saya. Berikut detail pesanan:
 
-          📌 Detail Pesanan
+Detail Pesanan
+No. Transaksi: ${rental.trx_code}
+Total Pembayaran: ${totalPayment}
+Tanggal Sewa: ${YYYYMMDDtoDMMMMYYYY(this.startDate)}
+Tanggal Kembali: ${YYYYMMDDtoDMMMMYYYY(this.endDate)}
 
-          No. Transaksi: ${rental.trx_code}
-          Total Pembayaran: 
-          Tanggal Sewa: ${YYYYMMDDtoDMMMMYYYY(this.startDate)}
-          Tanggal Kembali: ${YYYYMMDDtoDMMMMYYYY(this.endDate)}
+Mohon bantuannya untuk memberikan informasi terkait:
+1. Konfirmasi status pembayaran
+2. Jadwal dan prosedur pengambilan barang
 
-          Mohon bantuannya untuk memberikan informasi terkait:
-          1. Konfirmasi status pembayaran
-          2. Jadwal dan prosedur pengambilan barang
-
-          Terima kasih atas bantuannya. Saya menantikan informasi lebih lanjut. 🙏
+Terima kasih atas bantuannya. Saya menantikan informasi lebih lanjut.
         `;
         const whatsappUrl = `https://wa.me/6281229530843?text=${encodeURIComponent(
           message
