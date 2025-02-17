@@ -97,7 +97,7 @@ export const useProductDetailStore = defineStore({
 
           Terima kasih atas bantuannya. Saya menantikan informasi lebih lanjut. 🙏
         `;
-        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(
+        const whatsappUrl = `https://wa.me/6281229530843?text=${encodeURIComponent(
           message
         )}`;
         showSuccessRental(this.toast);
