@@ -1,5 +1,5 @@
 <template>
-    <Dialog closeOnEscape v-model:visible="visible5" :modal="true" :closable="true" :showHeader="true"
+    <Dialog closeOnEscape :visible="localVisible" @hide="closeDialog" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '40vw', maxWidth: '90vw', minWidth: '380px', height: '21rem' }">
         <template #header>
@@ -22,35 +22,47 @@
                     <InputText id="rolename" v-model="context.roleName" class="w-full" @click="showCommandMenu" />
                 </FloatLabel>
                 <FloatLabel class="w-6">
-                    <MultiSelect :loading="context.loading['getPermissions']" display="chip" id="ms-permissions" v-model="context.selectedPermissions"
-                        :options="context.permissionsOptions" optionLabel="permissionName" :maxSelectedLabels="3"
-                        class="w-full" />
+                    <MultiSelect :loading="context.loading['getPermissions']" display="chip" id="ms-permissions"
+                        v-model="context.selectedPermissions" :options="context.permissionsOptions"
+                        optionLabel="permissionName" dataKey="permissionName" class="w-full" />
                     <label for="ms-permissions">Pilih Izin</label>
                 </FloatLabel>
             </div>
         </section>
         <template #footer>
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
-                <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
+                <Button icon="pi pi-times" @click="closeDialog" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button icon="pi pi-check" @click="submitRole" label="Selesai" :loading="context.loading['addRole']" class="w-full p-button-primary"></Button>
+                <Button icon="pi pi-check" @click="submitRole" label="Selesai" :loading="context.loading['addRole']"
+                    class="w-full p-button-primary"></Button>
             </div>
         </template>
     </Dialog>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useAddRolesStore } from '@/stores/add-roles.store';
 
 const context = useAddRolesStore();
-const emit = defineEmits();
+const emit = defineEmits(['update:visible']);
+const props = defineProps(['visible']);
+const localVisible = ref(props.visible);
+
+watch(() => props.visible, (newVal) => {
+    localVisible.value = newVal;
+});
+
+const closeDialog = () => {
+    localVisible.value = false;
+    emit('update:visible', false);
+};
 
 const submitRole = async () => {
     const response = await context.addRolePermissions();
     if (response.isOk) {
         context.resetInput();
-        emit('update:visible', false);
+        closeDialog();
     }
 };
 

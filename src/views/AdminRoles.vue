@@ -184,13 +184,16 @@
                     @page="context.onRolePage($event)" />
             </div>
         </section>
-        <DialogInviteAdmin v-if="showDialogInvite" v-model:visible="showDialogInvite" />
-        <DialogAddRoles v-if="showDialogAddRoles" v-model:visible="showDialogAddRoles" />
-        <DialogEditAdmin v-if="showDialogEditAdmin" v-model:visible="showDialogEditAdmin" />
-        <DialogConfirm v-if="showDialogConfirm" v-model:visible="showDialogConfirm" :acceptLabel="'Keluarkan'"
+        <DialogInviteAdmin v-if="showDialogInvite" :visible="showDialogInvite"
+            @update:visible="handleDialogInviteClose" />
+        <DialogAddRoles v-if="showDialogAddRoles" :visible="showDialogAddRoles"
+            @update:visible="handleDialogAddRolesClose" />
+        <DialogEditAdmin v-if="showDialogEditAdmin" :visible="showDialogEditAdmin"
+            @update:visible="handleDialogEditAdminClose" />
+        <DialogConfirm v-if="showDialogConfirm" visible="showDialogConfirm" :acceptLabel="'Keluarkan'"
             :onAccept="confirmDelete" :onReject="cancelDelete" :header="confirmHeader" :message="confirmMessage"
             :acceptLoading="context.loading['removeAdmin']" />
-        <DialogConfirm v-if="showDialogConfirmRole" v-model:visible="showDialogConfirmRole" :acceptLabel="'Hapus'"
+        <DialogConfirm v-if="showDialogConfirmRole" visible="showDialogConfirmRole" :acceptLabel="'Hapus'"
             :onAccept="confirmDeleteRole" :onReject="cancelDeleteRole" :header="confirmHeader" :message="confirmMessage"
             :acceptLoading="context.loading['removeRole']" />
 
@@ -222,7 +225,19 @@ const showDialogEditRole = ref(false);
 onMounted(async () => {
     await context.getManageAdmin();
     await context.getRolePermission();
-})
+});
+
+const handleDialogInviteClose = (value) => {
+    showDialogInvite.value = value;
+};
+
+const handleDialogAddRolesClose = (value) => {
+    showDialogAddRoles.value = value;
+};
+
+const handleDialogEditAdminClose = (value) => {
+    showDialogEditAdmin.value = value;
+};
 
 const confirmDelete = () => {
     context.removeUserAdmin(selectedUserId.value);

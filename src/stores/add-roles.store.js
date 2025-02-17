@@ -40,26 +40,37 @@ export const useAddRolesStore = defineStore({
         (permission) => permission.permissionName
       );
 
-      const result = await callApi({
-        api: this.addApi,
-        body: {
-          roleName: this.roleName,
-          permissions: permissions,
-          authority: this.adminAuthority,
-        },
-      });
-      if (result.isOk) {
-        const context = useManageAdminStore();
-        showSuccessAdd(this.toast);
-        context.getRolePermission();
-        this.resetInput();
-        this.loading["addRole"] = false;
-        return { isOk: true };
-      } else if (result.error && result.error.response) {
-        showErrorApi(this.toast, result.error.response.data.message);
+      try {
+        const result = await callApi({
+          api: this.addApi,
+          body: {
+            roleName: this.roleName,
+            permissions: permissions,
+            authority: this.adminAuthority,
+          },
+        });
+
+        if (result.isOk) {
+          const context = useManageAdminStore();
+          showSuccessAdd(this.toast);
+          context.getRolePermission();
+          this.resetInput();
+          this.loading["addRole"] = false;
+          return { isOk: true };
+        } else if (result.error && result.error.response) {
+          showErrorApi(
+            this.toast,
+            result.error.response.data.message
+          );
+          this.loading["addRole"] = false;
+          return { isOk: false };
+        }
+      } catch (error) {
+        showErrorApi(this.toast);
         this.loading["addRole"] = false;
         return { isOk: false };
       }
+
       this.loading["addRole"] = false;
       return { isOk: false };
     },

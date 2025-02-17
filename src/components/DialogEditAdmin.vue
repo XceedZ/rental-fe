@@ -1,5 +1,5 @@
 <template>
-    <Dialog closeOnEscape v-model:visible="visible5" :modal="true" :closable="true" :showHeader="true"
+    <Dialog closeOnEscape :visible="localVisible" @hide="closeDialog" :modal="true" :closable="true" :showHeader="true"
         :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
         :style="{ width: '40vw', maxWidth: '90vw', minWidth: '380px', height: '35rem' }">
         <template #header>
@@ -59,27 +59,38 @@
         </div>
         <template #footer>
             <div class="pt-2 flex border-top-1 surface-border gap-2 w-full">
-                <Button icon="pi pi-times" @click="$emit('update:visible', false)" label="Batal"
+                <Button icon="pi pi-times" @click="closeDialog" label="Batal"
                     class="p-button-text w-full p-button-secondary"></Button>
-                <Button :loading="context.loading['editUser']" :disabled="context.isInviteAdminDisabled" icon="pi pi-check" @click="saveRole" label="Selesai"
-                    class="w-full p-button-primary"></Button>
+                <Button :loading="context.loading['editUser']" :disabled="context.isInviteAdminDisabled"
+                    icon="pi pi-check" @click="saveRole" label="Selesai" class="w-full p-button-primary"></Button>
             </div>
         </template>
     </Dialog>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useManageAdminStore } from '@/stores/manage-admin.store';
 import Avatar from './Avatar.vue';
 
-const emit = defineEmits();
+const emit = defineEmits(['update:visible']);
+const props = defineProps(['visible']);
 const context = useManageAdminStore();
+const localVisible = ref(props.visible);
+
+watch(() => props.visible, (newVal) => {
+    localVisible.value = newVal;
+});
+
+const closeDialog = () => {
+    localVisible.value = false;
+    emit('update:visible', false);
+};
 
 const saveRole = async () => {
     await context.editUserAdmin(context.selectedMember.id, context.selectedRole)
     if (!context.loading['editUser']) {
-        emit('update:visible', false);
+        closeDialog();
     }
 };
 
@@ -89,5 +100,4 @@ onMounted(async () => {
         context.selectedRole = context.selectedMember.roleId;
     }
 });
-
 </script>

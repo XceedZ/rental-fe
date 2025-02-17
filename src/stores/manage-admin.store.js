@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import callApi from "@/utils/api-connect";
 import { GeneralConstants } from "@/utils/general-constants";
 import { useToast } from "primevue/usetoast";
-import { showSuccessEdit, showSuccessRemove, showErrorApi } from "@/utils/toast-service";
+import {
+  showSuccessEdit,
+  showSuccessRemove,
+  showErrorApi,
+} from "@/utils/toast-service";
 import { ApiConstant } from "@/api-constant";
 import { useRouter } from "vue-router";
 
@@ -16,6 +20,7 @@ export const useManageAdminStore = defineStore({
     toast: useToast(),
     roleUser: 3,
     keyword: "",
+    keywordRoles: "",
     dataTableAdmin: [],
     dataTableRoles: [],
     userOptions: null,
@@ -81,6 +86,7 @@ export const useManageAdminStore = defineStore({
       const payload = {
         api: this.roleApi,
         body: {
+          keyword: this.keywordRoles,
           limit: this.roleLimit,
           offset: this.roleOffset,
         },

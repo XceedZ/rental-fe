@@ -20,6 +20,7 @@ export const useManageTransactionStore = defineStore({
     approveApi: ApiConstant.APPROVE_TRANSACTION,
     approveAllApi: ApiConstant.APPROVE_ALL_TRANSACTION,
     rejectApi: ApiConstant.REJECT_TRANSACTION,
+    rejectAllApi: ApiConstant.REJECT_ALL_TRANSACTION,
     finishApi: ApiConstant.FINISH_TRANSACTION,
     finishAllApi: ApiConstant.FINISH_ALL_TRANSACTION,
     sendNotifApi: ApiConstant.SEND_LATE_RETURN_NOTIFICATION,
@@ -135,6 +136,22 @@ export const useManageTransactionStore = defineStore({
         await this.getDetailManageTransaction(trxCode);
       }
       this.loading["reject"] = false;
+    },
+    async rejectAllTransaction(trxCode) {
+      this.loading["rejectAll"] = true;
+      const payload = {
+        api: this.rejectAllApi,
+        body: {
+          trx_code: trxCode,
+        },
+      };
+      const result = await callApi(payload);
+      if (result.isOk) {
+        showSuccessReject(this.toast);
+        this.loading["rejectAll"] = false;
+        await this.getDetailManageTransaction(trxCode);
+      }
+      this.loading["rejectAll"] = false;
     },
     async finishTransaction(trxRentProductId, trxCode) {
       this.loading["finish"] = true;

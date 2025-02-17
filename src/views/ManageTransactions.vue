@@ -32,9 +32,9 @@
                     @hide="changeDates" />
             </div>
             <div class="mt-3">
-                <DataTable scrollable scrollHeight="500px" :value="context.dataTable"
-                    expandedRows="expandedRows" @rowExpand="onRowExpand" @rowCollapse="onRowCollapse"
-                    dataKey="trxCode" :tabStyle="{ 'min-width': '60rem' }" rowHover>
+                <DataTable scrollable scrollHeight="500px" :value="context.dataTable" expandedRows="expandedRows"
+                    @rowExpand="onRowExpand" @rowCollapse="onRowCollapse" dataKey="trxCode"
+                    :tabStyle="{ 'min-width': '60rem' }" rowHover>
                     <template #empty>
                         <p class="text-center w-full">Data tidak tersedia</p>
                     </template>
@@ -74,7 +74,7 @@
                                     <Skeleton v-if="context.loading['getManageTransaction']" width="8rem" height="1rem"
                                         class="mb-2" />
                                     <p v-else class="mt-0 mb-2 font-normal text-base text-color-secondary">{{ data.email
-                                        }}</p>
+                                    }}</p>
                                 </div>
                             </div>
                         </template>
@@ -116,7 +116,7 @@
                                 class="mb-2" />
                             <p v-else class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                 data.total_qty
-                                }}
+                            }}
                             </p>
                         </template>
                     </Column>
@@ -206,7 +206,7 @@
                                     </template>
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-medium text-color-primary">{{ data.trx_code
-                                            }}</p>
+                                        }}</p>
                                     </template>
                                 </Column>
                                 <Column style="min-width:15rem">
@@ -216,7 +216,7 @@
                                     </template>
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-medium text-lg text-color-primary">{{ data.product_name
-                                            }}</p>
+                                        }}</p>
                                         <p class="mt-0 mb-2 font-normal text-base text-color-secondary">{{
                                             data.brand_name }} | {{ data.ctgr_product_name }}</p>
                                     </template>
@@ -228,7 +228,7 @@
                                     <template #body="{ data }">
                                         <p class="mt-0 mb-2 font-normal text-right text-base text-color-secondary">{{
                                             data.qty
-                                            }}
+                                        }}
                                         </p>
                                     </template>
                                 </Column>
@@ -367,11 +367,8 @@ const getMenuItems = (data) => {
                     {
                         label: 'Tolak Semua',
                         icon: 'pi pi-times',
-                        command: () => {
-                            selectedProductId.value = data.id;
-                            confirmHeader.value = 'Konfirmasi Hapus';
-                            confirmMessage.value = `Apakah Anda yakin ingin menghapus produk ${data.productName}?`;
-                            showDialogConfirm.value = true;
+                        command: async () => {
+                            await context.rejectAllTransaction(data.trx_code);
                         }
                     },
                     {

@@ -21,7 +21,7 @@ export const ApiConstant = {
   },
   GET_ROLE_PERMISSION: {
     path: "getRolePermission",
-    method: "GET",
+    method: "POST",
     keyList: "",
   },
   GET_USER_FOR_ADD_ADMIN: {
@@ -221,6 +221,11 @@ export const ApiConstant = {
   },
   GET_WIDGET_TOTAL_PENDAPATAN: {
     path: "getWidgetTotalPendapatan",
+    method: "GET",
+    keyList: "",
+  },
+  GET_WIDGET_PENDAPATAN_CTGR: {
+    path: "getWidgetPendapatanCtgr",
     method: "GET",
     keyList: "",
   },

@@ -199,10 +199,10 @@
             @update:visible="showDialogEditBrand = $event" />
         <DialogEditCtgr v-if="showDialogEditCtgr" :visible="showDialogEditCtgr"
             @update:visible="showDialogEditCtgr = $event" />
-        <DialogConfirm v-if="showDialogConfirm" v-model:visible="showDialogConfirm" :acceptLabel="'Hapus'"
+        <DialogConfirm v-if="showDialogConfirm" visible="showDialogConfirm" :acceptLabel="'Hapus'"
             :onAccept="confirmDelete" :onReject="cancelDelete" :header="confirmHeader" :message="confirmMessage"
             :acceptLoading="context.loading['removeBrand']" />
-        <DialogConfirm v-if="showDialogConfirmCtgr" v-model:visible="showDialogConfirmCtgr" :acceptLabel="'Hapus'"
+        <DialogConfirm v-if="showDialogConfirmCtgr" visible="showDialogConfirmCtgr" :acceptLabel="'Hapus'"
             :onAccept="confirmDeleteCtgr" :onReject="cancelDeleteCtgr" :header="confirmHeaderCtgr"
             :message="confirmMessageCtgr" :acceptLoading="context.loading['removeCtgr']" />
     </div>

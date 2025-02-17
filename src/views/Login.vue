@@ -1,6 +1,5 @@
 <template>
     <div class="flex flex-column md:flex-row bg-gray-100">
-        <!-- Bagian Kiri (Form Login) -->
         <div class="surface-section w-full md:w-6 p-6 md:p-8 flex flex-column align-items-start">
             <div class="flex align-items-center gap-2 mb-5">
                 <img src="../assets/logo2.png" alt="Logo" height="50" class="border-circle object-cover shadow-md">
@@ -41,7 +40,6 @@
             </div>
         </div>
 
-        <!-- Bagian Kanan (Background Gambar) -->
         <div class="hidden md:flex w-6 bg-cover bg-no-repeat justify-content-center align-items-center"
             style="background-image: url('http://semar.taskhub.id:4444/images/blocks/signin/signin.jpg');">
         </div>

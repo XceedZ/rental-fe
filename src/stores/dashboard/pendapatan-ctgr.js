@@ -1,0 +1,74 @@
+import { defineStore } from "pinia";
+import { GeneralConstants } from "@/utils/general-constants";
+import { useToast } from "primevue/usetoast";
+import callApi from "@/utils/api-connect";
+import { ApiConstant } from "@/api-constant";
+import local from "@/utils/local-storage";
+import { supabase } from "@/utils/supabase-client";
+import { useTotalPenyewaanStore } from "./total-penyewaan.store";
+
+export const usePendapatanCtgrStore = defineStore({
+  id: "pendapata-ctgr.store",
+  state: () => ({
+    getApi: ApiConstant.GET_WIDGET_TOTAL_PENDAPATAN,
+    getApiCtgr: ApiConstant.GET_WIDGET_PENDAPATAN_CTGR,
+    toast: useToast(),
+    keyword: "",
+    loading: false,
+    dataTable: [],
+    totalRecords: 0,
+    rowPerPageOptions: GeneralConstants.ROW_PERPAGE_OPTION,
+    defaultRows: GeneralConstants.DEFAULT_ROWS,
+    offset: 0,
+    limit: GeneralConstants.DEFAULT_ROWS,
+    brandOptions: [],
+    ctgrOptions: [],
+    priceRange: [0, 2000000],
+    selectedProduct: {},
+    user: local.getUser(),
+    trxProductList: [],
+    totalPendapatan: 0,
+    growthPercentage: 0,
+    dailyPendapatan: [],
+    currentDate: "",
+    categories: [],
+  }),
+  actions: {
+    async getWidgetPendapatanCtgr() {
+      this.loading = true;
+      const result = await callApi({
+        api: this.getApiCtgr,
+      });
+      if (result.isOk) {
+        this.categories = result.body.categories;
+        this.currentDate = result.body.currentDate;
+      } else {
+        this.toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: "Failed to fetch category data",
+        });
+      }
+      this.loading = false;
+    },
+    // subscribeToRealtimeUpdates() {
+    //   const totalPenyewaanStore = useTotalPenyewaanStore();
+    //   this.subscription = supabase
+    //     .channel("public:trx_rent_products")
+    //     .on(
+    //       "postgres_changes",
+    //       { event: "*", schema: "public", table: "trx_rent_products" },
+    //       async (payload) => {
+    //         await this.getWidgetTotalPendapatan();
+    //         await totalPenyewaanStore.getWidgetTotalPenyewaan();
+    //       }
+    //     )
+    //     .subscribe();
+    // },
+    // unsubscribeFromRealtimeUpdates() {
+    //   if (this.subscription) {
+    //     supabase.removeChannel(this.subscription);
+    //   }
+    // },
+  },
+});

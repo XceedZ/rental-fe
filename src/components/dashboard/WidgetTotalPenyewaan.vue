@@ -126,17 +126,24 @@ watch(() => context.dailyRentals, (newData) => {
     <div class="text-900 card-header flex justify-content-between align-items-center mb-3">
       <span>Total Transaksi</span>
       <div class="header-right flex align-items-center gap-2">
-        <span class="growth font-bold text-sm" style="color: #6B46C1">
-          <span class="icon">↑</span> {{ context.growthPercentage }}%
-        </span>
-        <button class="chart-toolbar p-button p-component p-button-text hidden sm:inline-block" v-tooltip.top="'Unduh CSV'" @click="downloadCSV">
-          <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
-        </button>
+        <!-- Add loading spinner -->
+        <div v-if="context.loading" class="loading-spinner">
+          <i class="pi pi-spinner pi-spin"></i>
+        </div>
+        <template v-else>
+          <span class="growth font-bold text-sm" style="color: #6B46C1">
+            <span class="icon">↑</span> {{ context.growthPercentage }}%
+          </span>
+          <button class="chart-toolbar p-button p-component p-button-text hidden sm:inline-block"
+            v-tooltip.top="'Unduh CSV'" @click="downloadCSV">
+            <i class="pi pi-cloud-download text-600 hover:text-900 transition-duration-100"></i>
+          </button>
+        </template>
       </div>
     </div>
     <div class="card-body text-900 text-left">
       <div class="total text-4xl font-bold mb-3">{{ context.totalRentals }}</div>
-      <div ref="chartRef" class="chart w-full h-8"></div>
+      <div ref="chartRef" class="chart w-full h-8" :class="{ 'loading': context.loading }"></div>
     </div>
   </div>
 </template>
@@ -150,5 +157,15 @@ watch(() => context.dailyRentals, (newData) => {
 .chart {
   width: 100%;
   height: 50px;
+}
+
+.loading-spinner {
+  font-size: 1.2em;
+  color: #6366F1;
+}
+
+.chart.loading {
+  opacity: 0.5;
+  pointer-events: none;
 }
 </style>

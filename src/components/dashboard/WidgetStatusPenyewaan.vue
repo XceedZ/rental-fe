@@ -19,7 +19,7 @@ onMounted(() => {
       const textColor = getTextColor();
       const statusKeys = Object.keys(context.statusRentals);
       const statusValues = Object.values(context.statusRentals);
-      
+
       const colors = {
         'Dibatalkan': '#f97316', // Orange
         'Ditolak': '#ef4444', // Red
@@ -27,7 +27,7 @@ onMounted(() => {
         'Pending': '#a855f7', // Purple
         'Selesai': '#10b981' // Green
       };
-      
+
       const mappedColors = statusKeys.map(label => colors[label] || '#999');
 
       const options = {
@@ -59,7 +59,7 @@ onMounted(() => {
             shade: 'light',
             type: 'diagonal1',
             shadeIntensity: 0.6,
-            gradientToColors: mappedColors.map(color => color + 'AA'), // Efek gradient lebih smooth
+            gradientTo: mappedColors.map(color => color + 'AA'),
             opacityFrom: 0.5,
             opacityTo: 0.8,
             stops: [0, 100]
@@ -94,8 +94,12 @@ watch(theme, (newTheme) => {
   <div class="card p-4 h-full">
     <div class="text-900 card-header flex justify-content-between align-items-center mb-3">
       <span>Status Transaksi</span>
+      <!-- Add loading spinner -->
+      <div v-if="context.loading" class="loading-spinner">
+        <i class="pi pi-spinner pi-spin"></i>
+      </div>
     </div>
-    <div ref="chartRef" class="chart w-full h-25rem"></div>
+    <div ref="chartRef" class="chart w-full h-25rem" :class="{ 'loading': context.loading }"></div>
   </div>
 </template>
 
@@ -103,10 +107,20 @@ watch(theme, (newTheme) => {
 .card {
   width: 100%;
   padding: 16px;
-  
+
 }
 
 .chart {
   width: 100%;
+}
+
+.loading-spinner {
+  font-size: 1.2em;
+  color: #6366F1;
+}
+
+.chart.loading {
+  opacity: 0.5;
+  pointer-events: none;
 }
 </style>
