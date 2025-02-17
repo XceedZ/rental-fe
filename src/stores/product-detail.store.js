@@ -6,6 +6,7 @@ import callApi from "@/utils/api-connect";
 import { ApiConstant } from "@/api-constant";
 import local from "@/utils/local-storage";
 import moment from "moment";
+import { YYYYMMDDtoDMMMMYYYY } from "@/utils/date-convert";
 
 export const useProductDetailStore = defineStore({
   id: "product-detail.store",
@@ -75,9 +76,34 @@ export const useProductDetailStore = defineStore({
         },
       });
       if (result.isOk) {
+        const rental = result.body.trxRentProducts[0];
+        const message = `
+          *Konfirmasi Checkout & Permintaan Informasi*
+
+          Halo Admin Landscapeaero,
+
+          Saya baru saja menyelesaikan proses checkout dan ingin mengonfirmasi beberapa hal terkait pesanan saya. Berikut detail pesanan:
+
+          📌 Detail Pesanan
+
+          No. Transaksi: ${rental.trx_code}
+          Total Pembayaran: 
+          Tanggal Sewa: ${YYYYMMDDtoDMMMMYYYY(this.startDate)}
+          Tanggal Kembali: ${YYYYMMDDtoDMMMMYYYY(this.endDate)}
+
+          Mohon bantuannya untuk memberikan informasi terkait:
+          1. Konfirmasi status pembayaran
+          2. Jadwal dan prosedur pengambilan barang
+
+          Terima kasih atas bantuannya. Saya menantikan informasi lebih lanjut. 🙏
+        `;
+        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(
+          message
+        )}`;
         showSuccessRental(this.toast);
         this.loading["createRental"] = false;
         router.push({ name: "history" });
+        window.open(whatsappUrl, "_blank");
         return result;
       } else if (result.error && result.error.response) {
         showErrorApi(this.toast, result.error.response.data.message);
